@@ -1,0 +1,57 @@
+{
+  "version": "1.0",
+  "routes": ["standard", "fast"],
+  "defaultRoute": "standard",
+  "rules": [
+    {
+      "id": "dev-high-complex",
+      "priority": 1,
+      "condition": {
+        "field": "intentResult.primaryIntent",
+        "operator": "equals",
+        "value": "development"
+      },
+      "then": { "routeTo": "standard" }
+    },
+    {
+      "id": "complexity-high",
+      "priority": 2,
+      "condition": {
+        "field": "intentResult.complexity",
+        "operator": "equals",
+        "value": "high"
+      },
+      "then": { "routeTo": "standard" }
+    },
+    {
+      "id": "not-clear",
+      "priority": 3,
+      "condition": {
+        "field": "taskOrAmbiguityResult.isClear",
+        "operator": "equals",
+        "value": false
+      },
+      "then": { "routeTo": "standard" }
+    },
+    {
+      "id": "content-clear",
+      "priority": 4,
+      "condition": {
+        "field": "intentResult.primaryIntent",
+        "operator": "in",
+        "value": ["content", "skill", "operation"]
+      },
+      "then": { "routeTo": "fast" }
+    },
+    {
+      "id": "suggested-fast",
+      "priority": 5,
+      "condition": {
+        "field": "intentResult.suggestedRoute",
+        "operator": "equals",
+        "value": "fast"
+      },
+      "then": { "routeTo": "fast" }
+    }
+  ]
+}
