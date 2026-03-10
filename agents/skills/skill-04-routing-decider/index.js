@@ -1,5 +1,5 @@
 /**
- * Skill-04: 动态路由决策器 - 核心路由决策逻辑
+ * Skill-04: 动态路由决策器 (Routing Decider) - 核心实现
  * 纯 JavaScript (Node.js 18+)，无外部依赖（仅 fs/path）
  * 响应时间 <1 秒，导出 decider 单例
  */
@@ -7,67 +7,167 @@
 const fs = require('fs');
 const path = require('path');
 
-const SUPPORTED_ROUTES = ['standard', 'fast'];
+// ---------------------------------------------------------------------------
+// 常量与错误码
+// ---------------------------------------------------------------------------
+
+const ERROR_CODES = {
+  ROUTING_INVALID_INPUT: 'ROUTING_INVALID_INPUT',
+  ROUTING_NO_MATCH: 'ROUTING_NO_MATCH',
+  ROUTING_CONFIG_ERROR: 'ROUTING_CONFIG_ERROR',
+  ROUTING_DECIDE_FAILED: 'ROUTING_DECIDE_FAILED',
+};
+
 const VALID_OPERATORS = ['equals', 'notEquals', 'contains', 'greaterThan', 'lessThan', 'in'];
+
+const VALID_TARGET_AGENTS = [
+  'requirement-understanding',
+  'requirement-clarification',
+  'requirement-resolution',
+  'requirement-acceptance',
+  'requirement-delivery',
+  'standard',
+  'fast',
+];
+
 const CONFIG_FILENAME = 'routing-rules.json';
 const CONFIG_DIR = 'config';
+
+// ---------------------------------------------------------------------------
+// ConfigLoader - 配置加载器（从 config/routing-rules.json 加载）
+// ---------------------------------------------------------------------------
+
+class ConfigLoader {
+  /**
+   * @param {string} [skillRootDir] - 技能根目录，默认 __dirname
+   * @returns {{ rules: Array, defaultRoute: string }}
+   */
+  load(skillRootDir = __dirname) {
+    const configPath = path.join(skillRootDir, CONFIG_DIR, CONFIG_FILENAME);
+    let raw;
+    try {
+      raw = fs.readFileSync(configPath, 'utf8');
+    } catch (err) {
+      if (err.code === 'ENOENT') {
+        const e = new Error(`Config file not found: ${configPath}`);
+        e.code = ERROR_CODES.ROUTING_CONFIG_ERROR;
+        e.cause = err;
+        throw e;
+      }
+      const e = new Error(`Failed to read config: ${err.message}`);
+      e.code = ERROR_CODES.ROUTING_CONFIG_ERROR;
+      e.cause = err;
+      throw e;
+    }
+
+    let data;
+    try {
+      data = JSON.parse(raw);
+    } catch (err) {
+      const e = new Error(`Invalid JSON in config: ${err.message}`);
+      e.code = ERROR_CODES.ROUTING_CONFIG_ERROR;
+      e.cause = err;
+      throw e;
+    }
+
+    if (data == null || typeof data !== 'object') {
+      const e = new Error('Config must be a non-null object');
+      e.code = ERROR_CODES.ROUTING_CONFIG_ERROR;
+      throw e;
+    }
+
+    const rules = Array.isArray(data.rules) ? data.rules : [];
+    const defaultRoute =
+      typeof data.defaultRoute === 'string' && data.defaultRoute !== ''
+        ? data.defaultRoute
+        : 'standard';
+
+    return { rules, defaultRoute };
+  }
+}
 
 // ---------------------------------------------------------------------------
 // InputValidator - 输入验证器
 // ---------------------------------------------------------------------------
 
+function getValueByPath(obj, fieldPath) {
+  if (obj == null || typeof fieldPath !== 'string' || fieldPath === '') return undefined;
+  const parts = fieldPath.split('.');
+  let current = obj;
+  for (const key of parts) {
+    if (current == null || typeof current !== 'object') return undefined;
+    current = current[key];
+  }
+  return current;
+}
+
 class InputValidator {
   /**
-   * 验证 decide() 的输入，抛出带 code 的 Error 便于上层处理
-   * @param {object} input - 原始输入
+   * 验证 decide() 的输入
+   * @param {object} input - { skill01, skill03?, userOverride? }
    * @returns {{ valid: boolean, errors: string[] }}
    */
   validate(input) {
     const errors = [];
 
     if (input == null || typeof input !== 'object') {
-      errors.push('INPUT_INVALID: input must be a non-null object');
+      errors.push('input must be a non-null object');
       return { valid: false, errors };
     }
 
-    if (typeof input.user_input !== 'string' || input.user_input.trim() === '') {
-      errors.push('USER_INPUT_REQUIRED: user_input must be a non-empty string');
-    }
-
-    if (!input.intentResult || typeof input.intentResult !== 'object') {
-      errors.push('INTENT_RESULT_REQUIRED: intentResult must be a non-null object');
+    if (!input.skill01 || typeof input.skill01 !== 'object') {
+      errors.push('skill01 is required and must be an object');
     } else {
-      const ir = input.intentResult;
-      if (ir.primaryIntent != null && typeof ir.primaryIntent !== 'string') {
-        errors.push('INTENT_RESULT_INVALID: intentResult.primaryIntent must be a string');
+      const s1 = input.skill01;
+      if (typeof s1.intent !== 'string' || s1.intent.trim() === '') {
+        errors.push('skill01.intent must be a non-empty string');
       }
-      if (ir.complexity != null && !['high', 'medium', 'low'].includes(ir.complexity)) {
-        errors.push('INTENT_RESULT_INVALID: intentResult.complexity must be high|medium|low');
+      const conf = s1.confidence;
+      if (conf != null && (typeof conf !== 'number' || conf < 0 || conf > 1)) {
+        errors.push('skill01.confidence must be a number in [0, 1] when present');
       }
-      if (ir.suggestedRoute != null && !SUPPORTED_ROUTES.includes(ir.suggestedRoute)) {
-        errors.push('INTENT_RESULT_INVALID: intentResult.suggestedRoute must be standard|fast');
+      if (s1.entities != null && !Array.isArray(s1.entities)) {
+        errors.push('skill01.entities must be an array when present');
       }
     }
 
-    if (input.taskOrAmbiguityResult != null) {
-      if (typeof input.taskOrAmbiguityResult !== 'object') {
-        errors.push('TASK_RESULT_INVALID: taskOrAmbiguityResult must be an object when present');
-      } else if (
-        input.taskOrAmbiguityResult.isClear !== undefined &&
-        typeof input.taskOrAmbiguityResult.isClear !== 'boolean'
-      ) {
-        errors.push('TASK_RESULT_INVALID: taskOrAmbiguityResult.isClear must be boolean when present');
+    if (input.skill03 != null) {
+      if (typeof input.skill03 !== 'object') {
+        errors.push('skill03 must be an object when present');
+      } else {
+        const s3 = input.skill03;
+        if (s3.taskType != null && typeof s3.taskType !== 'string') {
+          errors.push('skill03.taskType must be a string when present');
+        }
+        if (
+          s3.complexity != null &&
+          !['high', 'medium', 'low'].includes(s3.complexity)
+        ) {
+          errors.push('skill03.complexity must be one of high|medium|low when present');
+        }
+        if (s3.requiresTools != null && typeof s3.requiresTools !== 'boolean') {
+          errors.push('skill03.requiresTools must be a boolean when present');
+        }
+        if (
+          s3.estimatedSteps != null &&
+          (typeof s3.estimatedSteps !== 'number' || s3.estimatedSteps < 0)
+        ) {
+          errors.push('skill03.estimatedSteps must be a non-negative number when present');
+        }
       }
     }
 
     if (input.userOverride != null) {
       if (typeof input.userOverride !== 'object') {
-        errors.push('USER_OVERRIDE_INVALID: userOverride must be an object when present');
-      } else if (
-        input.userOverride.route !== undefined &&
-        !SUPPORTED_ROUTES.includes(input.userOverride.route)
-      ) {
-        errors.push('USER_OVERRIDE_INVALID: userOverride.route must be standard|fast when present');
+        errors.push('userOverride must be an object when present');
+      } else {
+        const uo = input.userOverride;
+        if (uo.enabled != null && typeof uo.enabled !== 'boolean') {
+          errors.push('userOverride.enabled must be a boolean when present');
+        }
+        if (uo.targetAgent != null && typeof uo.targetAgent !== 'string') {
+          errors.push('userOverride.targetAgent must be a string when present');
+        }
       }
     }
 
@@ -79,39 +179,21 @@ class InputValidator {
 }
 
 // ---------------------------------------------------------------------------
-// RuleEngine - 规则引擎核心（6 种运算符）
+// RuleEngine - 规则引擎核心（支持 6 种运算符）
 // ---------------------------------------------------------------------------
 
-/**
- * 从 input 对象按点分路径取值，如 "intentResult.primaryIntent"
- */
-function getValueByPath(obj, fieldPath) {
-  if (obj == null || typeof fieldPath !== 'string' || fieldPath === '') {
-    return undefined;
-  }
-  const parts = fieldPath.split('.');
-  let current = obj;
-  for (const key of parts) {
-    if (current == null || typeof current !== 'object') return undefined;
-    current = current[key];
-  }
-  return current;
-}
-
 class RuleEngine {
-  constructor(rulesConfig) {
-    this.config = rulesConfig || { rules: [], defaultRoute: 'standard' };
+  /**
+   * @param {{ rules: Array, defaultRoute: string }} config
+   */
+  constructor(config) {
+    this.config = config || { rules: [], defaultRoute: 'standard' };
   }
 
-  /**
-   * 单条件求值：支持 equals, notEquals, contains, greaterThan, lessThan, in
-   */
   _evaluateCondition(input, condition) {
     if (!condition || typeof condition !== 'object') return false;
     const { field, operator, value } = condition;
-    if (!field || !operator || !VALID_OPERATORS.includes(operator)) {
-      return false;
-    }
+    if (!field || !operator || !VALID_OPERATORS.includes(operator)) return false;
 
     const actual = getValueByPath(input, field);
 
@@ -122,6 +204,7 @@ class RuleEngine {
         return actual !== value;
       case 'contains': {
         if (actual == null) return false;
+        if (Array.isArray(actual)) return actual.includes(value);
         const str = String(actual);
         const search = value != null ? String(value) : '';
         return str.includes(search);
@@ -148,21 +231,37 @@ class RuleEngine {
   }
 
   /**
-   * 对 input 应用规则列表，返回第一个匹配的 routeTo，否则返回 defaultRoute
+   * 按优先级降序匹配，第一条全部条件满足的规则生效。
+   * 规则支持 conditions (数组，AND) 或 condition (单条，兼容)。
+   * @returns {{ routeTo: string, matchedRule: object|null, matchedRules: string[], noMatch: boolean }}
    */
   evaluate(input) {
     const rules = Array.isArray(this.config.rules) ? this.config.rules : [];
-    const sorted = [...rules].sort((a, b) => (a.priority ?? 999) - (b.priority ?? 999));
+    const sorted = [...rules].sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0));
 
     for (const rule of sorted) {
-      const cond = rule.condition;
-      if (!cond) continue;
-      if (this._evaluateCondition(input, cond) && rule.then && rule.then.routeTo) {
-        return rule.then.routeTo;
+      const conds = Array.isArray(rule.conditions)
+        ? rule.conditions
+        : rule.condition != null
+          ? [rule.condition]
+          : [];
+      const allMatch = conds.every((c) => this._evaluateCondition(input, c));
+      if (allMatch && rule.then && rule.then.routeTo != null) {
+        return {
+          routeTo: rule.then.routeTo,
+          matchedRule: rule,
+          matchedRules: [rule.id || rule.then.routeTo].filter(Boolean),
+          noMatch: false,
+        };
       }
     }
 
-    return this.config.defaultRoute || 'standard';
+    return {
+      routeTo: this.config.defaultRoute || 'standard',
+      matchedRule: null,
+      matchedRules: [],
+      noMatch: true,
+    };
   }
 }
 
@@ -172,61 +271,94 @@ class RuleEngine {
 
 class OutputGenerator {
   /**
-   * 从 input 提取决策因子（factors）
+   * 从输入与命中规则生成 factors：name, value, weight, matchedRule
    */
-  extractFactors(input) {
+  buildFactors(input, matchedRule) {
     const factors = [];
-    const ir = input.intentResult || {};
-    const task = input.taskOrAmbiguityResult;
+    const ruleId = matchedRule && (matchedRule.id || matchedRule.then?.routeTo);
 
-    if (ir.primaryIntent != null) {
+    if (input.skill01) {
+      const weight = 0.4;
       factors.push({
-        name: '意图类型',
-        value: ir.primaryIntent,
-        weight: 'high',
-        effect: ir.primaryIntent === 'development' ? '倾向标准构建流' : '可走快速流',
+        name: 'intent',
+        value: input.skill01.intent,
+        weight,
+        matchedRule: ruleId || null,
       });
+      if (input.skill01.confidence != null) {
+        factors.push({
+          name: 'confidence',
+          value: input.skill01.confidence,
+          weight: 0.2,
+          matchedRule: ruleId || null,
+        });
+      }
     }
-    if (ir.complexity != null) {
-      factors.push({
-        name: '复杂度',
-        value: ir.complexity,
-        weight: ir.complexity === 'high' ? 'high' : 'medium',
-        effect: ir.complexity === 'high' ? '倾向标准构建流' : '可考虑快速流',
-      });
-    }
-    if (task && task.isClear === false) {
-      factors.push({
-        name: '模糊性',
-        value: 'isClear: false',
-        weight: 'high',
-        effect: '需澄清后再进入需求理解',
-      });
-    }
-    if (ir.suggestedRoute != null) {
-      factors.push({
-        name: '意图建议路由',
-        value: ir.suggestedRoute,
-        weight: 'medium',
-        effect: `意图引擎建议${ir.suggestedRoute === 'fast' ? '快速流' : '标准流'}`,
-      });
+
+    if (input.skill03) {
+      if (input.skill03.complexity != null) {
+        factors.push({
+          name: 'complexity',
+          value: input.skill03.complexity,
+          weight: 0.3,
+          matchedRule: ruleId || null,
+        });
+      }
+      if (input.skill03.estimatedSteps != null) {
+        factors.push({
+          name: 'estimatedSteps',
+          value: input.skill03.estimatedSteps,
+          weight: 0.1,
+          matchedRule: ruleId || null,
+        });
+      }
+      if (input.skill03.requiresTools != null) {
+        factors.push({
+          name: 'requiresTools',
+          value: input.skill03.requiresTools,
+          weight: 0.1,
+          matchedRule: ruleId || null,
+        });
+      }
     }
 
     return factors;
   }
 
   /**
-   * 根据 routeTo 生成 suggestedNextStep
+   * 生成 reasoning 文案
    */
-  getSuggestedNextStep(routeTo, userOverrideApplied) {
-    if (userOverrideApplied) {
-      return routeTo === 'standard'
-        ? '按用户指定走标准构建流，可生成《澄清提案》或进入需求理解'
-        : '按用户指定走快速流，用户确认后进入需求解决';
+  buildReasoning(options) {
+    const {
+      routeTo,
+      isOverride,
+      matchedRules,
+      noMatch,
+      input,
+    } = options;
+
+    if (isOverride) {
+      return `采纳用户指定路由：${routeTo}。`;
     }
-    return routeTo === 'standard'
-      ? '调用需求澄清生成《澄清提案》'
-      : '用户确认快速流后进入需求解决';
+    if (noMatch || matchedRules.length === 0) {
+      return `无规则命中，使用默认路由「${routeTo}」。`;
+    }
+    const parts = [];
+    if (input.skill01?.intent) parts.push(`意图 ${input.skill01.intent}`);
+    if (input.skill03?.complexity) parts.push(`复杂度 ${input.skill03.complexity}`);
+    const desc = parts.length ? parts.join('、') + '，' : '';
+    return `${desc}匹配规则 ${matchedRules.join(', ')}，路由至「${routeTo}」。`;
+  }
+
+  /**
+   * 计算决策置信度
+   */
+  buildConfidence(input, isOverride, noMatch, matchedRules) {
+    if (isOverride) return Math.min(1, (input.skill01?.confidence ?? 0.9) + 0.05);
+    if (noMatch || matchedRules.length === 0) return 0.7;
+    const base = input.skill01?.confidence;
+    const c = typeof base === 'number' ? base : 0.9;
+    return Math.min(1, Math.max(0, c));
   }
 
   /**
@@ -235,50 +367,33 @@ class OutputGenerator {
   build(options) {
     const {
       routeTo,
+      isOverride,
       reasoning,
       factors,
-      userOverrideApplied,
-      userOverrideReason,
+      matchedRules,
+      noMatch,
+      input,
     } = options;
 
-    const suggestedNextStep = this.getSuggestedNextStep(routeTo, userOverrideApplied);
+    const confidence = this.buildConfidence(input, isOverride, noMatch, matchedRules);
 
-    const result = {
-      routeTo,
-      reasoning,
+    return {
+      decision: {
+        routeTo,
+        confidence,
+        isOverride: Boolean(isOverride),
+      },
+      reasoning: reasoning || this.buildReasoning({
+        routeTo,
+        isOverride,
+        matchedRules,
+        noMatch,
+        input,
+      }),
       factors: Array.isArray(factors) ? factors : [],
-      userOverrideApplied: Boolean(userOverrideApplied),
-      suggestedNextStep,
+      matchedRules: Array.isArray(matchedRules) ? matchedRules : [],
+      timestamp: new Date().toISOString(),
     };
-
-    if (userOverrideApplied && userOverrideReason) {
-      result.reasoning = result.reasoning + (result.reasoning ? ' ' : '') + `用户原因：${userOverrideReason}`;
-    }
-
-    return result;
-  }
-}
-
-// ---------------------------------------------------------------------------
-// 配置加载器 - 从 config/routing-rules.json 加载规则
-// ---------------------------------------------------------------------------
-
-function loadRoutingRules(skillRootDir) {
-  const baseDir = skillRootDir || __dirname;
-  const configPath = path.join(baseDir, CONFIG_DIR, CONFIG_FILENAME);
-
-  try {
-    const raw = fs.readFileSync(configPath, 'utf8');
-    const data = JSON.parse(raw);
-    if (data && (Array.isArray(data.rules) || data.defaultRoute != null)) {
-      return data;
-    }
-    return { rules: [], defaultRoute: 'standard' };
-  } catch (err) {
-    if (err.code === 'ENOENT') {
-      return { rules: [], defaultRoute: 'standard' };
-    }
-    throw new Error(`ROUTING_CONFIG_LOAD_FAILED: ${err.message}`);
   }
 }
 
@@ -289,6 +404,7 @@ function loadRoutingRules(skillRootDir) {
 class RoutingDecider {
   constructor(options = {}) {
     this.skillRootDir = options.skillRootDir || __dirname;
+    this.configLoader = new ConfigLoader();
     this.validator = new InputValidator();
     this.outputGenerator = new OutputGenerator();
     this._rulesConfig = null;
@@ -297,56 +413,67 @@ class RoutingDecider {
 
   _getRulesConfig() {
     if (!this._configLoaded) {
-      this._rulesConfig = loadRoutingRules(this.skillRootDir);
+      try {
+        this._rulesConfig = this.configLoader.load(this.skillRootDir);
+      } catch (err) {
+        if (err.code === ERROR_CODES.ROUTING_CONFIG_ERROR) throw err;
+        const e = new Error(err.message);
+        e.code = ERROR_CODES.ROUTING_CONFIG_ERROR;
+        e.cause = err;
+        throw e;
+      }
       this._configLoaded = true;
     }
     return this._rulesConfig;
   }
 
-  /**
-   * 用户覆盖是否有效：存在 userOverride.route 且在支持枚举内
-   */
   _isUserOverrideValid(input) {
     const uo = input.userOverride;
     if (!uo || typeof uo !== 'object') return false;
-    const route = uo.route;
-    return route != null && SUPPORTED_ROUTES.includes(route);
+    if (uo.enabled !== true) return false;
+    const target = uo.targetAgent;
+    return (
+      typeof target === 'string' &&
+      target.trim() !== '' &&
+      VALID_TARGET_AGENTS.includes(target)
+    );
   }
 
   /**
    * 主方法：执行路由决策
-   * @param {object} input - 见 SKILL.md 输入规范
-   * @returns {Promise<object>} 见 SKILL.md 输出规范
+   * @param {object} input - { skill01: { intent, confidence, entities? }, skill03?: {...}, userOverride?: { enabled, targetAgent } }
+   * @returns {Promise<object>} { decision, reasoning, factors, matchedRules, timestamp }
    */
   async decide(input) {
     const start = Date.now();
 
+    const validation = this.validator.validate(input);
+    if (!validation.valid) {
+      const err = new Error(validation.errors.join('; '));
+      err.code = ERROR_CODES.ROUTING_INVALID_INPUT;
+      err.details = validation.errors;
+      throw err;
+    }
+
     try {
-      const validation = this.validator.validate(input);
-      if (!validation.valid) {
-        const err = new Error(validation.errors.join('; '));
-        err.code = 'INPUT_VALIDATION_FAILED';
-        err.details = validation.errors;
-        throw err;
-      }
-
-      const factors = this.outputGenerator.extractFactors(input);
-
       // 1. 用户覆盖优先
       if (this._isUserOverrideValid(input)) {
-        const routeTo = input.userOverride.route;
-        const reasoning = '采纳用户指定路由';
-        const userReason = input.userOverride.reason;
-        const factorsWithOverride = [
-          ...factors,
-          { name: '用户指定', value: routeTo, weight: 'high', effect: '覆盖规则引擎结果' },
-        ];
+        const routeTo = input.userOverride.targetAgent;
+        const factors = this.outputGenerator.buildFactors(input, null);
+        factors.push({
+          name: 'userOverride',
+          value: routeTo,
+          weight: 1,
+          matchedRule: null,
+        });
         const result = this.outputGenerator.build({
           routeTo,
-          reasoning,
-          factors: factorsWithOverride,
-          userOverrideApplied: true,
-          userOverrideReason: userReason,
+          isOverride: true,
+          reasoning: `采纳用户指定路由：${routeTo}。`,
+          factors,
+          matchedRules: [],
+          noMatch: false,
+          input,
         });
         if (Date.now() - start > 1000) {
           console.warn('[Skill-04] decide() exceeded 1s');
@@ -354,21 +481,28 @@ class RoutingDecider {
         return result;
       }
 
-      // 2. 规则引擎
+      // 2. 加载规则并匹配
       const config = this._getRulesConfig();
       const ruleEngine = new RuleEngine(config);
-      const routeTo = ruleEngine.evaluate(input);
+      const { routeTo, matchedRule, matchedRules, noMatch } = ruleEngine.evaluate(input);
 
-      const reasoning =
-        factors.length > 0
-          ? `基于规则引擎：意图与复杂度等因素匹配到路由「${routeTo}」`
-          : `规则引擎默认路由「${routeTo}」`;
+      const factors = this.outputGenerator.buildFactors(input, matchedRule);
+      const reasoning = this.outputGenerator.buildReasoning({
+        routeTo,
+        isOverride: false,
+        matchedRules,
+        noMatch,
+        input,
+      });
 
       const result = this.outputGenerator.build({
         routeTo,
+        isOverride: false,
         reasoning,
         factors,
-        userOverrideApplied: false,
+        matchedRules,
+        noMatch,
+        input,
       });
 
       if (Date.now() - start > 1000) {
@@ -376,64 +510,68 @@ class RoutingDecider {
       }
       return result;
     } catch (err) {
-      if (err.code === 'INPUT_VALIDATION_FAILED' || err.message.startsWith('ROUTING_CONFIG_LOAD_FAILED')) {
-        throw err;
-      }
+      if (err.code === ERROR_CODES.ROUTING_CONFIG_ERROR) throw err;
       const wrap = new Error(`ROUTING_DECIDE_FAILED: ${err.message}`);
-      wrap.code = 'ROUTING_DECIDE_FAILED';
+      wrap.code = ERROR_CODES.ROUTING_DECIDE_FAILED;
       wrap.cause = err;
       throw wrap;
     }
   }
 
   /**
-   * 同步版本（便于测试或无 async 环境）
+   * 同步版本
    */
   decideSync(input) {
     const validation = this.validator.validate(input);
     if (!validation.valid) {
       const err = new Error(validation.errors.join('; '));
-      err.code = 'INPUT_VALIDATION_FAILED';
+      err.code = ERROR_CODES.ROUTING_INVALID_INPUT;
       err.details = validation.errors;
       throw err;
     }
 
     if (this._isUserOverrideValid(input)) {
-      const routeTo = input.userOverride.route;
-      const factors = this.outputGenerator.extractFactors(input);
-      const factorsWithOverride = [
-        ...factors,
-        { name: '用户指定', value: routeTo, weight: 'high', effect: '覆盖规则引擎结果' },
-      ];
+      const routeTo = input.userOverride.targetAgent;
+      const factors = this.outputGenerator.buildFactors(input, null);
+      factors.push({
+        name: 'userOverride',
+        value: routeTo,
+        weight: 1,
+        matchedRule: null,
+      });
       return this.outputGenerator.build({
         routeTo,
-        reasoning: '采纳用户指定路由',
-        factors: factorsWithOverride,
-        userOverrideApplied: true,
-        userOverrideReason: input.userOverride.reason,
+        isOverride: true,
+        reasoning: `采纳用户指定路由：${routeTo}。`,
+        factors,
+        matchedRules: [],
+        noMatch: false,
+        input,
       });
     }
 
     const config = this._getRulesConfig();
     const ruleEngine = new RuleEngine(config);
-    const routeTo = ruleEngine.evaluate(input);
-    const factors = this.outputGenerator.extractFactors(input);
-    const reasoning =
-      factors.length > 0
-        ? `基于规则引擎：意图与复杂度等因素匹配到路由「${routeTo}」`
-        : `规则引擎默认路由「${routeTo}」`;
-
+    const { routeTo, matchedRule, matchedRules, noMatch } = ruleEngine.evaluate(input);
+    const factors = this.outputGenerator.buildFactors(input, matchedRule);
+    const reasoning = this.outputGenerator.buildReasoning({
+      routeTo,
+      isOverride: false,
+      matchedRules,
+      noMatch,
+      input,
+    });
     return this.outputGenerator.build({
       routeTo,
+      isOverride: false,
       reasoning,
       factors,
-      userOverrideApplied: false,
+      matchedRules,
+      noMatch,
+      input,
     });
   }
 
-  /**
-   * 重新加载配置（用于用户覆盖机制或热更新）
-   */
   reloadConfig() {
     this._configLoaded = false;
     this._rulesConfig = null;
@@ -450,10 +588,11 @@ const decider = new RoutingDecider();
 module.exports = {
   decider,
   RoutingDecider,
-  InputValidator,
   RuleEngine,
+  InputValidator,
   OutputGenerator,
-  loadRoutingRules,
-  SUPPORTED_ROUTES,
+  ConfigLoader,
+  ERROR_CODES,
   VALID_OPERATORS,
+  VALID_TARGET_AGENTS,
 };

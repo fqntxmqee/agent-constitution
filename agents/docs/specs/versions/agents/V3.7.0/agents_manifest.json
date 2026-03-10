@@ -1,0 +1,77 @@
+{
+  "version": "V3.7.0",
+  "backup_date": "2026-03-10T13:28:02+08:00",
+  "agents": [
+    {
+      "id": "requirement-clarification",
+      "name": "需求澄清智能体",
+      "version": "V1.0.0",
+      "file": "requirement-clarification/AGENTS.md",
+      "status": "completed",
+      "skills": ["skill-01", "skill-03", "skill-04"]
+    },
+    {
+      "id": "requirement-understanding",
+      "name": "需求理解智能体",
+      "version": "V1.0.0",
+      "file": "requirement-understanding/AGENTS.md",
+      "status": "completed",
+      "skills": ["skill-05", "skill-06-blueprint"]
+    },
+    {
+      "id": "requirement-resolution",
+      "name": "需求解决智能体",
+      "version": "V1.0.0",
+      "file": "requirement-resolution/AGENTS.md",
+      "status": "completed",
+      "skills": ["skill-06-resolution", "skill-07", "skill-08", "skill-09", "skill-10"]
+    },
+    {
+      "id": "requirement-acceptance",
+      "name": "需求验收智能体",
+      "version": "V1.0.0",
+      "file": "requirement-acceptance/AGENTS.md",
+      "status": "completed",
+      "skills": ["skill-16"]
+    },
+    {
+      "id": "requirement-delivery",
+      "name": "需求交付智能体",
+      "version": "V1.0.0",
+      "file": "requirement-delivery/AGENTS.md",
+      "status": "completed",
+      "skills": ["skill-25"]
+    },
+    {
+      "id": "progress-tracking",
+      "name": "进展跟进智能体",
+      "version": "V1.0.0",
+      "file": "progress-tracking/AGENTS.md",
+      "status": "completed",
+      "skills": []
+    },
+    {
+      "id": "audit",
+      "name": "审计智能体",
+      "version": "V1.0.0",
+      "file": "audit/AGENTS.md",
+      "status": "completed",
+      "skills": ["audit-log-analyzer"]
+    },
+    {
+      "id": "summary-reflection",
+      "name": "总结反思智能体",
+      "version": "V1.0.0",
+      "file": "summary-reflection/AGENTS.md",
+      "status": "completed",
+      "skills": ["constitution-iterator"]
+    }
+  ],
+  "statistics": {
+    "total_agents": 8,
+    "completed": 8,
+    "in_progress": 0,
+    "pending": 0,
+    "total_skills": 14
+  }
+}
