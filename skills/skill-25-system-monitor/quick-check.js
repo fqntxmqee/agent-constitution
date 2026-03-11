@@ -1,0 +1,12 @@
+const { monitor, ERRORS } = require('./index.js');
+const r1 = monitor({ action: 'health', target: 'skill-04-routing-decider', options: { threshold: 0.95 } });
+const r2 = monitor({ action: 'performance', target: 'gateway' });
+const r3 = monitor({ action: 'alert', target: 'skill-04-routing-decider' });
+const r4 = monitor({ action: 'log', target: 'skill-07-acceptance-tester' });
+const bad = monitor({ action: 'invalid', target: 'x' });
+console.log('health:', r1.success, r1.status);
+console.log('performance:', r2.success, !!r2.metrics?.resourceUsage);
+console.log('alert:', r3.success, Array.isArray(r3.alerts));
+console.log('log:', r4.success, Array.isArray(r4.logs));
+console.log('invalid:', !bad.success, bad.error === ERRORS.MONITOR_INVALID_ACTION);
+console.log('durations < 1000ms:', [r1,r2,r3,r4].every(r => r.metadata.durationMs < 1000));

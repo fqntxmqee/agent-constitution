@@ -1,0 +1,9 @@
+{
+  "name": "cursor-cli-skill",
+  "version": "1.0.0",
+  "description": "Cursor CLI 集成 Skill for OpenClaw",
+  "main": "index.js",
+  "keywords": ["openclaw", "skill", "cursor", "cli", "code-generation"],
+  "author": "OpenClaw Community",
+  "license": "MIT"
+}
