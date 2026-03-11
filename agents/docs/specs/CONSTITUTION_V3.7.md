@@ -368,6 +368,96 @@
 
 ---
 
-**规范版本：** V3.7  
-**生效日期：** 2026-03-09  
-**创建者：** 伏开 (Fukai)
+---
+
+## 第七章 仓库治理规范 (V3.7.4 新增)
+
+### 1. 仓库内容边界
+
+**`agent-constitution` 仓库** 仅包含以下内容：
+
+| 类别 | 说明 | 示例路径 |
+|------|------|----------|
+| ✅ 宪法规范文档 | 宪法主规范、智能体配置、架构文档 | `agents/docs/specs/`, `agents/constitution/` |
+| ✅ 技能规范 | 技能模板、SKILL.md、测试脚本 | `agents/skills/`, `skills/` |
+| ✅ 通用工具 | 审计脚本、任务追踪器、自动化脚本 | `scripts/` |
+| ✅ 配置模板 | 智能体配置模板、OpenClaw 配置示例 | `agents/constitution/*/AGENTS.md` |
+| ✅ 通用文档 | 架构说明、工作流程、使用指南 | `agents/docs/` |
+| ✅ 宪法版本规约 | 宪法版本相关的规约文档 | `openspec/changes/constitution-v*/` |
+
+**禁止内容**：
+
+| 类别 | 说明 | 处理方式 |
+|------|------|----------|
+| ❌ 项目应用代码 | 具体项目的源代码、实现 | 移至独立项目仓库 |
+| ❌ 项目规约 | 特定项目的 OpenSpec 规约 | 归档或移至项目仓库 |
+| ❌ 大型资源文件 | 前端构建产物、node_modules | 加入 `.gitignore` |
+| ❌ 临时文件 | 日志、缓存、备份 | 加入 `.gitignore` |
+
+### 2. 定期审查机制
+
+**责任人**: audit 智能体  
+**频率**: 每次宪法版本升级前
+
+**检查项**:
+```bash
+# 检查 agents/ 目录下是否有非 constitution 内容
+find agents/ -maxdepth 2 -type d | grep -v "constitution\|docs\|skills"
+
+# 检查 openspec/changes/ 目录下是否有非宪法相关规约
+ls openspec/changes/ | grep -v "constitution"
+
+# 检查大文件（>10MB）
+find . -type f -size +10M | grep -v ".git"
+```
+
+### 3. 清理与归档流程
+
+```
+1. audit 智能体生成《仓库治理报告》
+   ↓
+2. 列出所有违规内容（路径 + 大小 + 建议处理）
+   ↓
+3. 用户确认清理方案
+   ↓
+4. 执行清理（移动至 `.archive/projects/`）
+   ↓
+5. 更新 `.gitignore`（防止再次污染）
+   ↓
+6. Git 提交（conventional commits: `chore: archive project-specific content`）
+   ↓
+7. 更新本规范（如有新发现）
+```
+
+### 4. 归档目录结构
+
+```
+.archive/
+├── ARCHIVE_LOG.md           # 归档日志（记录每次归档）
+└── projects/
+    └── YYYYMMDD/            # 按日期归档
+        ├── fitbot/
+        ├── fitbot-pro/
+        └── ...
+```
+
+### 5. 违规等级与处理时限
+
+| 等级 | 说明 | 处理时限 |
+|------|------|----------|
+| 🔴 严重 | 大型项目代码（>10MB） | 立即处理 |
+| 🟡 警告 | 项目规约文档 | 24 小时内 |
+| ℹ️ 提示 | 临时文件、日志 | 下次提交前 |
+
+### 6. 参考文档
+
+- `agents/docs/specs/REPOSITORY_GOVERNANCE.md` - 仓库治理详细规范
+- `.gitignore` - 忽略规则配置
+
+---
+
+**规范版本：** V3.7.4  
+**生效日期：** 2026-03-12  
+**创建者：** 伏开 (Fukai)  
+**升级记录:**
+- V3.7.4 (2026-03-12): 新增第七章仓库治理规范，清理项目特定内容（~364MB）

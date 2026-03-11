@@ -1,9 +1,9 @@
 /**
  * Skill-01: 全域意图分类引擎
  * 
- * 功能：将用户请求分类为开发类/内容类/技能类/运维类
+ * 功能：将用户请求分类为开发类/内容类/技能类/运维类/研究类/学习类
  * 归属：需求澄清智能体
- * 版本：1.0
+ * 版本：2.0 · V3.7.5
  */
 
 const fs = require('fs');
@@ -77,8 +77,9 @@ function parseOutput(output) {
  * 验证分类结果
  */
 function validateResult(result) {
-  const validIntents = ['development', 'content', 'skill', 'operation'];
-  const validRoutes = ['standard', 'fast'];
+  // V3.7.5 新增：research 和 learning 意图
+  const validIntents = ['development', 'content', 'skill', 'operation', 'research', 'learning'];
+  const validRoutes = ['standard', 'fast', 'research', 'learning', 'hybrid'];
   const validComplexity = ['high', 'medium', 'low'];
   
   if (!validIntents.includes(result.primaryIntent)) {

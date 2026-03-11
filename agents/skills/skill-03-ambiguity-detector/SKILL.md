@@ -5,12 +5,27 @@ description: Cross-domain ambiguity detector for requirement clarification. Dete
 
 # Skill-03: 跨域模糊性探测器 (Ambiguity Detector)
 
-**版本号**: 2.0  
+**版本号**: 3.1 · V3.7.4  
 **创建日期**: 2026-03-09  
-**更新日期**: 2026-03-10  
+**更新日期**: 2026-03-11 21:15  
 **归属**: 需求澄清流程  
 **归属智能体**: 需求澄清智能体  
-**状态**: 📋 规约中
+**状态**: ✅ 已实现（V3.7.4 增强版）
+
+---
+
+## 🆕 V3.7.4 新增（2026-03-11）
+
+### 新增检测维度
+- ✅ `timeline` - 时间约束（截止日期/交付时间）
+- ✅ `resources` - 资源约束（预算/人力/工具许可）
+
+**检测维度**: 6 维度 → **8 维度**
+
+### 多轮对话优化
+- ✅ **追问优先级排序** - 按严重程度排序（high → medium → low）
+- ✅ **分批追问** - 每次最多 3 个问题，避免用户压力
+- ✅ **动态调整** - 根据用户回答决定是否继续追问
 
 ---
 
@@ -61,7 +76,9 @@ description: Cross-domain ambiguity detector for requirement clarification. Dete
 | `options` | 否 | object | 检测选项 |
 | `options.detectionDepth` | 否 | string | 检测深度：`full` 全量 / `standard` 标准 / `quick` 快速 |
 | `options.domains` | 否 | string[] | 限定分析领域，见「检测领域」 |
-| `options.scope` | 否 | string[] | 限定检测维度（与六维度兼容），见「检测维度」 |
+| `options.scope` | 否 | string[] | 限定检测维度（与八维度兼容），见「检测维度」 |
+| `options.batchSize` | 否 | number | V3.7.4 每批问题数（默认 3） |
+| `options.sortByPriority` | 否 | boolean | V3.7.4 是否按优先级排序（默认 true） |
 
 ### 检测领域（跨域）
 
@@ -71,7 +88,7 @@ description: Cross-domain ambiguity detector for requirement clarification. Dete
 | `business` | 业务 | 用户角色、优先级、MVP 范围、验收标准等 |
 | `user_experience` | 用户体验 | 交互、可访问性、性能预期等 |
 
-### 检测维度（六维度，与领域可映射）
+### 检测维度（八维度，与领域可映射）
 
 | 维度 ID | 名称 | 说明 | 常见领域 |
 |---------|------|------|----------|
@@ -81,6 +98,8 @@ description: Cross-domain ambiguity detector for requirement clarification. Dete
 | `user_role` | 用户角色 | 目标用户、权限划分、多角色未明确 | business |
 | `priority` | 功能优先级 | MVP 范围、分期规划、必选/可选功能未明确 | business |
 | `acceptance` | 验收标准 | 完成定义、成功指标、测试范围、上线条件未明确 | business |
+| `timeline` | 时间约束 | 截止日期、交付时间、时间预算未明确 | business |
+| `resources` | 资源约束 | 预算、人力、工具许可、基础设施未明确 | business |
 
 ---
 
@@ -99,6 +118,22 @@ description: Cross-domain ambiguity detector for requirement clarification. Dete
       "field": "tech_stack"
     },
     {
+      "type": "missing",
+      "description": "未说明时间约束或交付日期",
+      "severity": "medium",
+      "suggestion": "明确项目截止日期或期望交付时间",
+      "domain": "business",
+      "field": "timeline"
+    },
+    {
+      "type": "missing",
+      "description": "未说明资源约束（预算/人力/工具）",
+      "severity": "low",
+      "suggestion": "明确项目预算、可用人员及工具许可情况",
+      "domain": "business",
+      "field": "resources"
+    },
+    {
       "type": "ambiguous",
       "description": "「先做核心功能」存在歧义，未定义核心范围",
       "severity": "medium",
@@ -109,8 +144,25 @@ description: Cross-domain ambiguity detector for requirement clarification. Dete
   ],
   "clarificationQuestions": [
     "前端希望用 React 还是 Vue？后端语言有偏好吗？",
+    "首期 MVP 需要包含哪些功能？哪些可以后续迭代？",
+    "这个项目期望什么时候完成？有截止日期或交付时间吗？",
+    "项目预算是多少？有现成的开发团队或工具许可吗？"
+  ],
+  "clarificationQuestionsBatches": [
+    [
+      "前端希望用 React 还是 Vue？后端语言有偏好吗？",
+      "首期 MVP 需要包含哪些功能？哪些可以后续迭代？"
+    ],
+    [
+      "这个项目期望什么时候完成？有截止日期或交付时间吗？",
+      "项目预算是多少？有现成的开发团队或工具许可吗？"
+    ]
+  ],
+  "firstBatch": [
+    "前端希望用 React 还是 Vue？后端语言有偏好吗？",
     "首期 MVP 需要包含哪些功能？哪些可以后续迭代？"
   ],
+  "hasMoreQuestions": true,
   "confidence": 0.92,
   "domains": ["technical", "business"],
   "reasoning": "可选：简短检测理由"
@@ -123,7 +175,10 @@ description: Cross-domain ambiguity detector for requirement clarification. Dete
 |------|------|------|------|
 | `isClear` | boolean | 是 | 是否清晰无模糊：无关键模糊项时为 `true` |
 | `ambiguities` | array | 是 | 模糊性列表，见下表 |
-| `clarificationQuestions` | string[] | 是 | 可直接面向用户的澄清问题列表 |
+| `clarificationQuestions` | string[] | 是 | 可直接面向用户的澄清问题列表（扁平，向后兼容） |
+| `clarificationQuestionsBatches` | string[][] | V3.7.4 | 分批问题列表，每批最多 3 个问题 |
+| `firstBatch` | string[] | V3.7.4 | 第一批问题（优先级最高，建议先问） |
+| `hasMoreQuestions` | boolean | V3.7.4 | 是否还有后续问题（用于决定是否继续追问） |
 | `confidence` | number | 是 | 检测结果置信度，区间 [0, 1] |
 | `domains` | string[] | 是 | 本次检测涉及的领域列表 |
 | `reasoning` | string | 否 | 检测结论的简短理由 |

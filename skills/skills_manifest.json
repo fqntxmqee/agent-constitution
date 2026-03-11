@@ -1,7 +1,7 @@
 {
-  "version": "1.0",
-  "updatedAt": "2026-03-12T00:32:00Z",
-  "totalSkills": 11,
+  "version": "1.1",
+  "updatedAt": "2026-03-12T07:42:00Z",
+  "totalSkills": 24,
   "description": "OpenClaw 技能注册表 - 维护全局技能 ID 索引，防止 ID 冲突",
   "skills": [
     {
@@ -163,6 +163,95 @@
       "tests": 10,
       "passRate": "100%",
       "description": "系统状态监控和告警"
+    },
+    {
+      "id": "skill-031-resource-optimizer",
+      "name": "资源优化器",
+      "status": "active",
+      "createdAt": "2026-03-11",
+      "location": "skills/skill-31-resource-optimizer/",
+      "tests": 8,
+      "passRate": "100%",
+      "description": "资源优化和成本控制"
+    },
+    {
+      "id": "skill-032-cost-analyzer",
+      "name": "成本分析器",
+      "status": "active",
+      "createdAt": "2026-03-11",
+      "location": "skills/skill-32-cost-analyzer/",
+      "tests": 8,
+      "passRate": "100%",
+      "description": "成本分析和优化建议"
+    },
+    {
+      "id": "skill-033-user-behavior-analyzer",
+      "name": "用户行为分析器",
+      "status": "active",
+      "createdAt": "2026-03-11",
+      "location": "skills/skill-33-user-behavior-analyzer/",
+      "tests": 8,
+      "passRate": "100%",
+      "description": "用户行为分析和洞察"
+    },
+    {
+      "id": "skill-034-ab-tester",
+      "name": "A/B 测试器",
+      "status": "active",
+      "createdAt": "2026-03-11",
+      "location": "skills/skill-34-ab-tester/",
+      "tests": 8,
+      "passRate": "100%",
+      "description": "A/B 测试设计和分析"
+    },
+    {
+      "id": "skill-035-conversion-optimizer",
+      "name": "转化率优化器",
+      "status": "active",
+      "createdAt": "2026-03-11",
+      "location": "skills/skill-35-conversion-optimizer/",
+      "tests": 8,
+      "passRate": "100%",
+      "description": "转化率优化策略"
+    },
+    {
+      "id": "skill-036-seo-optimizer",
+      "name": "SEO 优化器",
+      "status": "active",
+      "createdAt": "2026-03-11",
+      "location": "skills/skill-36-seo-optimizer/",
+      "tests": 8,
+      "passRate": "100%",
+      "description": "SEO 优化和关键词分析"
+    },
+    {
+      "id": "skill-037-social-media-analyzer",
+      "name": "社交媒体分析器",
+      "status": "active",
+      "createdAt": "2026-03-11",
+      "location": "skills/skill-37-social-media-analyzer/",
+      "tests": 8,
+      "passRate": "100%",
+      "description": "社交媒体数据分析"
+    },
+    {
+      "id": "skill-038-competitor-analyzer",
+      "name": "竞争对手分析器",
+      "status": "active",
+      "createdAt": "2026-03-11",
+      "location": "skills/skill-38-competitor-analyzer/",
+      "tests": 8,
+      "passRate": "100%",
+      "description": "竞争对手分析和监控"
+    }
+  ],
+  "cleanupHistory": [
+    {
+      "date": "2026-03-12T07:42:00Z",
+      "action": "Removed short-name duplicate directories",
+      "removed": ["skill-2", "skill-11", "skill-12", "skill-14", "skill-15", "skill-17", "skill-19", "skill-20", "skill-21", "skill-22", "skill-23", "skill-24", "skill-26", "skill-27", "skill-28", "skill-29", "skill-30"],
+      "backup": ".backup/skills-short-names-20260312_*/",
+      "reason": "ID conflict resolution - short-name dirs conflicted with long-name format per SKILLS_NAMING_CONVENTION.md V1.0"
     }
   ]
 }

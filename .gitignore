@@ -34,3 +34,34 @@ logs/
 tmp/
 temp/
 *.tmp
+
+# 归档目录（不提交）
+.archive/
+.backup/
+
+# 项目特定规约（防止污染）
+openspec/changes/fitbot-*/
+openspec/changes/xiaohongshu-*/
+openspec/changes/agent-monitor-dashboard/
+openspec/changes/ai-content-generator/
+openspec/changes/p0-skills-development/
+openspec/changes/all-skills-delivery/
+openspec/changes/constitution-*/
+
+# 应用代码（非宪法智能体）
+agents/fitbot/
+agents/*/src/
+agents/*/dist/
+agents/*/implementation/
+
+# 大型构建产物
+node_modules/
+dist/
+build/
+*.min.js
+*.min.css
+
+# 数据文件
+*.sqlite
+*.db
+data/
