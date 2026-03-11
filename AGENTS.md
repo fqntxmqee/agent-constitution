@@ -224,27 +224,60 @@ The goal: Be helpful without being annoying. Check in a few times a day, do usef
 
 ---
 
-### ⚠️ ACP Harness 强制规范（V3.7 · 2026-03-09）
+### ⚠️ ACP Harness 强制规范（V3.7.2 · 2026-03-12 更新）
 
-**核心规则：** 需求解决智能体必须使用 `runtime="acp"`，禁止使用 `runtime="subagent"`。
+**核心规则：** 需求理解、需求解决、需求验收、需求交付智能体必须使用 `runtime="acp"`，禁止使用 `runtime="subagent"`。
+
+**适用智能体：**
+- ✅ `requirement-understanding`（需求理解）- 需要读取项目上下文生成规约
+- ✅ `requirement-resolution`（需求解决）- 需要完整项目上下文编写代码
+- ✅ `requirement-acceptance`（需求验收）- 需要运行测试、代码审查
+- ✅ `requirement-delivery`（需求交付）- 需要 Git 操作、环境检查
 
 **正确用法：**
 ```python
+# 需求理解
 sessions_spawn(
-    runtime="acp",           # ← 必须用 acp，不是 subagent
+    runtime="acp",                    # ← 必须用 acp，不是 subagent
+    agentId="requirement-understanding",
+    label="requirement-understanding-xxx",
+    task="按澄清提案产出 OpenSpec 规约"
+)
+
+# 需求解决
+sessions_spawn(
+    runtime="acp",                    # ← 必须用 acp，不是 subagent
     agentId="requirement-resolution",
     label="requirement-resolution-xxx",
     task="按 tasks.md 执行，使用 Cursor CLI"
 )
+
+# 需求验收
+sessions_spawn(
+    runtime="acp",                    # ← 必须用 acp，不是 subagent
+    agentId="requirement-acceptance",
+    label="requirement-acceptance-xxx",
+    task="按 AC 逐项验收，独立验证"
+)
+
+# 需求交付
+sessions_spawn(
+    runtime="acp",                    # ← 必须用 acp，不是 subagent
+    agentId="requirement-delivery",
+    label="requirement-delivery-xxx",
+    task="Git 提交、部署、交付报告"
+)
 ```
-若 OpenClaw 3.8 报错 `spawnedBy is only supported for subagent:* sessions`，改用方式 A：在对话中发送 `/acp spawn cursor --mode oneshot -t "任务"`。**需求解决智能体完整 ACP 变更步骤**（配置 + 调用方式 + 任务模板）见 `docs/OpenClaw-ACP-Cursor-集成方案（官方版）.md` 第四节。
+
+若 OpenClaw 3.8 报错 `spawnedBy is only supported for subagent:* sessions`，改用方式 A：在对话中发送 `/acp spawn cursor --mode oneshot -t "任务"`。**完整 ACP 变更步骤**（配置 + 调用方式 + 任务模板）见 `docs/OpenClaw-ACP-Cursor-集成方案（官方版）.md` 第四节。
 
 **错误用法（禁止）：**
 ```python
 # ❌ 禁止这样用！
 sessions_spawn(
     runtime="subagent",      # ← 错误！subagent 没有 Cursor 上下文
-    label="requirement-resolution-xxx",
+    agentId="requirement-understanding",  # 或其他三个智能体
+    label="requirement-xxx",
     task="..."
 )
 ```
@@ -252,14 +285,24 @@ sessions_spawn(
 **为什么必须用 ACP：**
 1. ACP 在 Cursor IDE 中执行，有完整项目上下文
 2. 支持 `cursor agent --print` 原生用法
-3. 符合宪法规范要求（需求解决必须用 Cursor CLI）
+3. 符合宪法规范要求（开发类任务必须用 Cursor CLI）
 4. Subagent 没有 Cursor 环境，无法正确执行开发任务
 
-**V3.7 审计检查点：**
-- [ ] 检查 `sessions_spawn` 调用是否使用 `runtime="acp"`
+**各智能体使用 Cursor CLI 的原因：**
+| 智能体 | 为什么需要 Cursor CLI |
+|--------|----------------------|
+| 需求理解 | 读取项目代码结构、技术栈、依赖关系，生成贴合实际的规约 |
+| 需求解决 | 编写代码、运行自测、修复循环 |
+| 需求验收 | 运行测试套件、代码审查、安全扫描、一致性比对 |
+| 需求交付 | Git 操作、环境检查、敏感信息扫描 |
+
+**V3.7.2 审计检查点：**
+- [ ] 检查 `sessions_spawn` 调用是否使用 `runtime="acp"`（适用于理解/解决/验收/交付）
 - [ ] 发现使用 `subagent` 执行开发任务 → 标记为**严重违规**，必须重做
+- [ ] 检查需求理解是否读取项目上下文后再生成规约
 - [ ] 检查需求解决是否仅用 Cursor CLI（`cursor agent --print`）
 - [ ] 检查需求验收是否独立验证（严禁采信解决智能体自查报告）
+- [ ] 检查需求交付是否做安全终检和用户二次确认（生产部署）
 - [ ] 检查用户确认节点是否执行（意图/蓝图/部署）
 
 **子 Agent 工作区与职责**（详见 `agents/constitution/README.md`）：

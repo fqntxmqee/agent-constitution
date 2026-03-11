@@ -1,0 +1,168 @@
+{
+  "version": "1.0",
+  "updatedAt": "2026-03-12T00:32:00Z",
+  "totalSkills": 11,
+  "description": "OpenClaw 技能注册表 - 维护全局技能 ID 索引，防止 ID 冲突",
+  "skills": [
+    {
+      "id": "skill-001-intent-classifier",
+      "name": "全域意图分类引擎",
+      "status": "active",
+      "createdAt": "2026-03-09",
+      "location": "agents/skills/skill-01-intent-classifier/",
+      "tests": 10,
+      "passRate": "100%",
+      "description": "全域意图分类引擎，支持 8 类意图识别（开发/内容/技能/运维等）"
+    },
+    {
+      "id": "skill-002-requirement-clarification",
+      "name": "需求澄清智能体",
+      "status": "active",
+      "createdAt": "2026-03-09",
+      "location": "agents/skills/skill-02-requirement-clarification/",
+      "tests": 8,
+      "passRate": "100%",
+      "description": "需求澄清智能体，意图识别与路由决策"
+    },
+    {
+      "id": "skill-003-ambiguity-detector",
+      "name": "跨域模糊性探测器",
+      "status": "active",
+      "createdAt": "2026-03-09",
+      "location": "agents/skills/skill-03-ambiguity-detector/",
+      "tests": 10,
+      "passRate": "100%",
+      "description": "六维度模糊性检测（技术栈/部署/数据源/用户角色/优先级/验收标准）"
+    },
+    {
+      "id": "skill-004-routing-decider",
+      "name": "动态路由决策器",
+      "status": "active",
+      "createdAt": "2026-03-09",
+      "location": "agents/skills/skill-04-routing-decider/",
+      "tests": 10,
+      "passRate": "100%",
+      "description": "基于意图和上下文的动态路由决策"
+    },
+    {
+      "id": "skill-005-requirement-understanding",
+      "name": "需求理解智能体",
+      "status": "active",
+      "createdAt": "2026-03-09",
+      "location": "agents/skills/skill-05-requirement-understanding/",
+      "tests": 8,
+      "passRate": "100%",
+      "description": "将已确认需求转化为标准化执行方案（OpenSpec 规约）"
+    },
+    {
+      "id": "skill-006-blueprint-converter",
+      "name": "多模态蓝图转换器",
+      "status": "active",
+      "createdAt": "2026-03-09",
+      "location": "agents/skills/skill-06-blueprint-converter/",
+      "tests": 10,
+      "passRate": "100%",
+      "description": "多模态蓝图转换（开发/内容/技能/运维）"
+    },
+    {
+      "id": "skill-007-requirement-resolution",
+      "name": "需求解决智能体",
+      "status": "active",
+      "createdAt": "2026-03-09",
+      "location": "agents/skills/skill-07-requirement-resolution/",
+      "tests": 10,
+      "passRate": "100%",
+      "description": "按蓝图执行开发/创作/技能任务，使用 Cursor CLI"
+    },
+    {
+      "id": "skill-008-memory-manager",
+      "name": "记忆管理器",
+      "status": "active",
+      "createdAt": "2026-03-10",
+      "location": "agents/skills/skill-08-memory-manager/",
+      "tests": 10,
+      "passRate": "100%",
+      "description": "MEMORY.md 和 daily notes 的读写管理"
+    },
+    {
+      "id": "skill-009-tool-caller",
+      "name": "工具调用器",
+      "status": "active",
+      "createdAt": "2026-03-09",
+      "location": "agents/skills/skill-09-tool-caller/",
+      "tests": 10,
+      "passRate": "100%",
+      "description": "OpenClaw 工具调用封装（exec/read/write/browser 等）"
+    },
+    {
+      "id": "skill-010-context-manager",
+      "name": "上下文管理器",
+      "status": "active",
+      "createdAt": "2026-03-09",
+      "location": "agents/skills/skill-10-context-manager/",
+      "tests": 10,
+      "passRate": "100%",
+      "description": "会话上下文管理和记忆检索"
+    },
+    {
+      "id": "skill-011-content-generator",
+      "name": "内容生成器",
+      "status": "active",
+      "createdAt": "2026-03-11",
+      "location": "agents/skills/skill-11-content-generator/",
+      "tests": 10,
+      "passRate": "100%",
+      "description": "内容生成技能（文章/报告/文档）"
+    },
+    {
+      "id": "skill-012-code-reviewer",
+      "name": "代码审查器",
+      "status": "active",
+      "createdAt": "2026-03-11",
+      "location": "agents/skills/skill-12-code-reviewer/",
+      "tests": 8,
+      "passRate": "100%",
+      "description": "代码审查和安全扫描"
+    },
+    {
+      "id": "skill-014-test-generator",
+      "name": "测试生成器",
+      "status": "active",
+      "createdAt": "2026-03-11",
+      "location": "agents/skills/skill-14-test-generator/",
+      "tests": 8,
+      "passRate": "100%",
+      "description": "自动化测试用例生成"
+    },
+    {
+      "id": "skill-015-doc-generator",
+      "name": "文档生成器",
+      "status": "active",
+      "createdAt": "2026-03-11",
+      "location": "agents/skills/skill-15-doc-generator/",
+      "tests": 8,
+      "passRate": "100%",
+      "description": "技术文档和 API 文档生成"
+    },
+    {
+      "id": "skill-016-acceptance-tester",
+      "name": "验收测试智能体",
+      "status": "active",
+      "createdAt": "2026-03-11",
+      "location": "agents/skills/skill-16-acceptance-tester/",
+      "tests": 8,
+      "passRate": "100%",
+      "description": "按 AC 逐项验收交付物"
+    },
+    {
+      "id": "skill-025-system-monitor",
+      "name": "系统监控器",
+      "status": "active",
+      "createdAt": "2026-03-11",
+      "location": "agents/skills/skill-25-system-monitor/",
+      "tests": 10,
+      "passRate": "100%",
+      "description": "系统状态监控和告警"
+    }
+  ]
+}

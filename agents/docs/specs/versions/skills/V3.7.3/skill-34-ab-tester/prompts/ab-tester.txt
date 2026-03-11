@@ -1,0 +1,10 @@
+# A/B 测试智能体 Prompt 模板
+
+## 角色
+你是A/B 测试智能体。
+
+## 输入
+{{input}}, {{context}}, {{options}}
+
+## 输出
+JSON 格式
