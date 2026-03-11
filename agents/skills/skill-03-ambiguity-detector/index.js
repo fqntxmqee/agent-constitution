@@ -28,8 +28,6 @@ const FIELDS = [
   'user_role',
   'priority',
   'acceptance',
-  'timeline',      // V3.7.4 新增
-  'resources',     // V3.7.4 新增
 ];
 
 const FIELD_TO_DOMAIN = {
@@ -39,8 +37,6 @@ const FIELD_TO_DOMAIN = {
   user_role: 'business',
   priority: 'business',
   acceptance: 'business',
-  timeline: 'business',      // V3.7.4 新增
-  resources: 'business',     // V3.7.4 新增
 };
 
 // ---------------------------------------------------------------------------
@@ -147,28 +143,6 @@ class AmbiguityScanner {
         severity: 'medium',
         description: '未说明验收标准',
         suggestion: '明确完成定义与成功指标',
-      });
-    }
-    // V3.7.4 新增：时间约束检测
-    const hasTimeline = /截止|交付时间|什么时候完成|多久|几天|本周|下周|月底|月初|号|日前|之前|之后/i.test(text);
-    if (!hasTimeline && isDevRequest) {
-      out.push({
-        type: 'missing',
-        field: 'timeline',
-        severity: 'medium',
-        description: '未说明时间约束或交付日期',
-        suggestion: '明确项目截止日期或期望交付时间',
-      });
-    }
-    // V3.7.4 新增：资源约束检测
-    const hasResources = /预算|多少钱|成本|费用|几个人|团队|人力|服务器|许可|license|付费/i.test(text);
-    if (!hasResources && isDevRequest) {
-      out.push({
-        type: 'missing',
-        field: 'resources',
-        severity: 'low',
-        description: '未说明资源约束（预算/人力/工具）',
-        suggestion: '明确项目预算、可用人员及工具许可情况',
       });
     }
     return out;
@@ -301,7 +275,7 @@ class DomainAnalyzer {
 }
 
 // ---------------------------------------------------------------------------
-// QuestionGenerator - 澄清问题生成器（V3.7.4 增强：优先级排序 + 分批追问）
+// QuestionGenerator - 澄清问题生成器
 // ---------------------------------------------------------------------------
 
 class QuestionGenerator {
@@ -342,76 +316,20 @@ class QuestionGenerator {
       conflicting: '请统一验收条件与上线标准。',
       incomplete: '测试范围与成功指标是否已定？',
     },
-    timeline: {  // V3.7.4 新增
-      missing: '这个项目期望什么时候完成？有截止日期或交付时间吗？',
-      ambiguous: '时间约束是否明确？',
-      conflicting: '请统一时间安排与交付计划。',
-      incomplete: '项目周期与里程碑是否已定？',
-    },
-    resources: {  // V3.7.4 新增
-      missing: '项目预算是多少？有现成的开发团队或工具许可吗？',
-      ambiguous: '资源约束是否明确？',
-      conflicting: '请统一预算与人力安排。',
-      incomplete: '基础设施与工具许可是否已准备？',
-    },
   };
 
-  /**
-   * V3.7.4 增强：按优先级排序 + 分批追问
-   * @param {Array} ambiguities - 模糊项列表
-   * @param {Object} options - 选项
-   * @param {number} options.batchSize - 每批最多问题数（默认 3）
-   * @param {boolean} options.sortByPriority - 是否按优先级排序（默认 true）
-   * @returns {Object} { questions: [], batches: [[]], total: number }
-   */
-  generate(ambiguities, options = {}) {
-    const {
-      batchSize = 3,
-      sortByPriority = true
-    } = options;
-
+  generate(ambiguities) {
     const seen = new Set();
     const questions = [];
-    const prioritized = [];
-
-    // V3.7.4 增强：按严重程度排序（high → medium → low）
-    const sorted = sortByPriority
-      ? [...ambiguities].sort((a, b) => {
-          const severityOrder = { high: 0, medium: 1, low: 2 };
-          return severityOrder[a.severity] - severityOrder[b.severity];
-        })
-      : ambiguities;
-
-    for (const a of sorted) {
+    for (const a of ambiguities) {
       const key = `${a.field}:${a.type}`;
       if (seen.has(key)) continue;
       seen.add(key);
       const fieldT = QuestionGenerator.TEMPLATES[a.field];
       const q = (fieldT && fieldT[a.type]) || a.suggestion || a.description;
-      if (q && !questions.includes(q)) {
-        questions.push(q);
-        prioritized.push({
-          question: q,
-          field: a.field,
-          severity: a.severity,
-          type: a.type
-        });
-      }
+      if (q && !questions.includes(q)) questions.push(q);
     }
-
-    // V3.7.4 增强：分批追问
-    const batches = [];
-    for (let i = 0; i < prioritized.length; i += batchSize) {
-      batches.push(prioritized.slice(i, i + batchSize).map(p => p.question));
-    }
-
-    return {
-      questions,           // 所有问题（扁平列表）
-      batches,             // 分批问题（二维数组）
-      total: questions.length,
-      firstBatch: batches[0] || [],  // 第一批问题（优先问）
-      hasMore: batches.length > 1    // 是否还有后续问题
-    };
+    return questions;
   }
 }
 
@@ -470,17 +388,7 @@ class AmbiguityDetector {
     const { ambiguities: enriched, domains } = this.domainAnalyzer.analyze(ambiguities);
     ambiguities = enriched;
 
-    // V3.7.4 增强：按严重程度排序（high → medium → low）
-    const severityOrder = { high: 0, medium: 1, low: 2 };
-    ambiguities.sort((a, b) => severityOrder[a.severity] - severityOrder[b.severity]);
-
-    // V3.7.4 增强：支持分批追问选项
-    const questionOptions = {
-      batchSize: options.batchSize || 3,
-      sortByPriority: options.sortByPriority !== false  // 默认启用优先级排序
-    };
-    const questionResult = this.questionGenerator.generate(ambiguities, questionOptions);
-    
+    const clarificationQuestions = this.questionGenerator.generate(ambiguities);
     const confidence = this.confidenceCalculator.calculate(userInput, ambiguities, domains);
 
     const hasBlocking = ambiguities.some(
@@ -498,10 +406,7 @@ class AmbiguityDetector {
         domain: a.domain,
         field: a.field,
       })),
-      clarificationQuestions: questionResult.questions,  // 向后兼容：扁平列表
-      clarificationQuestionsBatches: questionResult.batches,  // V3.7.4 新增：分批问题
-      firstBatch: questionResult.firstBatch,  // V3.7.4 新增：第一批问题（优先问）
-      hasMoreQuestions: questionResult.hasMore,  // V3.7.4 新增：是否还有后续问题
+      clarificationQuestions,
       confidence,
       domains,
     };

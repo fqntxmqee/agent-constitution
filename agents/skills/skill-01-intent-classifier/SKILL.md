@@ -1,31 +1,15 @@
 # Skill-01: 全域意图分类引擎
 
-**版本号**: 2.0 · V3.7.5  
+**版本号**: 1.0  
 **创建日期**: 2026-03-09  
-**更新日期**: 2026-03-11 21:45  
 **归属智能体**: 需求澄清智能体  
-**状态**: ✅ 已实现（V3.7.5 增强版）
-
----
-
-## 🆕 V3.7.5 新增（2026-03-11）
-
-**新增意图类别**:
-- ✅ `research` - 研究探索类（技术调研/竞品分析/市场研究）
-- ✅ `learning` - 学习咨询类（技能教学/概念解释/最佳实践）
-
-**新增路由选项**:
-- ✅ `research` - 研究探索流
-- ✅ `learning` - 学习咨询流
-- ✅ `hybrid` - 混合流程
-
-**意图类别**: 4 类 → **6 类**
+**状态**: ✅ 已实现
 
 ---
 
 ## 📋 技能描述
 
-将用户请求分类为六大意图类别（开发类/内容类/技能类/运维类/研究类/学习类），识别主意图与从属意图，支持复合意图识别。
+将用户请求分类为四大意图类别（开发类/内容类/技能类/运维类），识别主意图与从属意图，支持复合意图识别。
 
 ---
 
@@ -51,11 +35,11 @@
 
 ```json
 {
-  "primaryIntent": "development|content|skill|operation|research|learning",
+  "primaryIntent": "development|content|skill|operation",
   "secondaryIntents": ["skill", "operation"],
   "confidence": 0.95,
   "reasoning": "用户请求涉及系统开发 + 第三方 API 集成",
-  "suggestedRoute": "standard|fast|research|learning|hybrid",
+  "suggestedRoute": "standard|fast",
   "complexity": "high|medium|low"
 }
 ```
@@ -68,8 +52,6 @@
 | `content` | 内容类 | 内容创作、文案撰写、咨询分析 | "写一篇技术博客文章" |
 | `skill` | 技能类 | 技能调用、数据处理、API 调用 | "查询东京的天气" |
 | `operation` | 运维类 | 运维操作、部署、监控 | "部署应用到生产环境" |
-| `research` | 研究类 🔴 V3.7.5 | 技术调研、竞品分析、市场研究 | "帮我调研一下 Rust 和 Go 的性能对比" |
-| `learning` | 学习类 🔴 V3.7.5 | 技能教学、概念解释、最佳实践 | "教我如何使用 React Hooks" |
 
 ---
 

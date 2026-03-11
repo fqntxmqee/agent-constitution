@@ -1,0 +1,62 @@
+{
+  "name": "FitBot Pro",
+  "version": "1.0.0",
+  "user": {
+    "level": "intermediate",
+    "experience": "1 year",
+    "weight": 75,
+    "height": 175,
+    "age": 28,
+    "gender": "male"
+  },
+  "training": {
+    "strength": {
+      "type": "dumbbell-split",
+      "location": "home",
+      "frequency": 3,
+      "days": ["周一", "周三", "周五"]
+    },
+    "running": {
+      "goal": {
+        "distance": "half-marathon",
+        "current": "2:10",
+        "target": "2:00"
+      },
+      "frequency": 3,
+      "days": ["周二", "周四", "周六"]
+    },
+    "cycling": {
+      "duration": 60,
+      "intensity": "low-medium",
+      "frequency": 7,
+      "days": ["每日"]
+    }
+  },
+  "nutrition": {
+    "focus": "high-protein",
+    "goal": "muscle-gain",
+    "proteinPerKg": 2.0,
+    "caloriesMultiplier": 35
+  },
+  "integrations": {
+    "dataSource": {
+      "type": "huawei-watch",
+      "syncInterval": 3600
+    },
+    "messaging": {
+      "type": "feishu-bot",
+      "independent": true
+    }
+  },
+  "notifications": {
+    "workoutReminder": {
+      "enabled": true,
+      "time": "18:00"
+    },
+    "weeklyReport": {
+      "enabled": true,
+      "day": "周日",
+      "time": "20:00"
+    }
+  }
+}
