@@ -1,0 +1,76 @@
+{
+  "version": "1.0",
+  "defaultRoute": "general-agent",
+  "rules": [
+    {
+      "id": "rule-dev-001",
+      "name": "开发任务路由",
+      "description": "将开发类任务路由到编码智能体",
+      "priority": 100,
+      "conditions": [
+        {
+          "field": "skill03.taskType",
+          "operator": "equals",
+          "value": "development"
+        }
+      ],
+      "action": {
+        "routeTo": "coding-agent",
+        "metadata": {
+          "reason": "开发任务"
+        }
+      }
+    },
+    {
+      "id": "rule-content-001",
+      "name": "内容创作路由",
+      "description": "将内容类任务路由到内容智能体",
+      "priority": 90,
+      "conditions": [
+        {
+          "field": "skill03.taskType",
+          "operator": "in",
+          "value": ["writing", "editing", "translation"]
+        }
+      ],
+      "action": {
+        "routeTo": "content-agent",
+        "metadata": {
+          "reason": "内容创作类任务"
+        }
+      }
+    },
+    {
+      "id": "rule-skill-001",
+      "name": "技能/数据任务路由",
+      "description": "将技能/数据类任务路由到对应智能体",
+      "priority": 80,
+      "conditions": [
+        {
+          "field": "skill03.taskType",
+          "operator": "in",
+          "value": ["skill", "data", "analysis"]
+        }
+      ],
+      "action": {
+        "routeTo": "skill-agent",
+        "metadata": {
+          "reason": "技能/数据任务"
+        }
+      }
+    },
+    {
+      "id": "rule-default-001",
+      "name": "默认路由",
+      "description": "未匹配其他规则时的默认路由",
+      "priority": 1,
+      "conditions": [],
+      "action": {
+        "routeTo": "general-agent",
+        "metadata": {
+          "reason": "默认路由"
+        }
+      }
+    }
+  ]
+}
