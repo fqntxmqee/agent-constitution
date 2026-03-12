@@ -35,13 +35,13 @@ tmp/
 temp/
 *.tmp
 
-# 项目特定内容（不归档，直接忽略）
-openspec/changes/fitbot-*/
-openspec/changes/xiaohongshu-*/
-openspec/changes/agent-monitor-dashboard/
-openspec/changes/ai-content-generator/
-openspec/changes/p0-skills-development/
-openspec/changes/all-skills-delivery/
+# 依赖目录
+node_modules/
+vendor/
+.bundle/
+
+# OpenSpec 变更（项目特定内容，不归档）
+openspec/changes/
 
 # 应用代码（非宪法智能体）
 agents/fitbot/
