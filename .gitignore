@@ -46,7 +46,8 @@ openspec/changes/agent-monitor-dashboard/
 openspec/changes/ai-content-generator/
 openspec/changes/p0-skills-development/
 openspec/changes/all-skills-delivery/
-openspec/changes/constitution-*/
+# 宪法版本规约保留（不忽略）
+# !openspec/changes/constitution-*/
 
 # 应用代码（非宪法智能体）
 agents/fitbot/
