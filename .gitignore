@@ -43,6 +43,15 @@ vendor/
 # OpenSpec 变更（项目特定内容，不归档）
 openspec/changes/
 
+# 智能体状态文件和个人配置（不归档）
+agents/constitution/*/.openclaw/
+agents/constitution/*/BOOTSTRAP.md
+agents/constitution/*/IDENTITY.md
+agents/constitution/*/SOUL.md
+agents/constitution/*/TOOLS.md
+agents/constitution/*/USER.md
+agents/constitution/*/HEARTBEAT.md
+
 # 应用代码（非宪法智能体）
 agents/fitbot/
 agents/*/src/
