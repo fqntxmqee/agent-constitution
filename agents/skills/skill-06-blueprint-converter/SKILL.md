@@ -237,10 +237,10 @@ agents/skills/skill-06-blueprint-converter/
 
 ## 📚 相关文档
 
-- V3.7 主规范：`agents/docs/specs/CONSTITUTION_V3.7.md`
+- V3.7 主规范：`agents/docs/specs/constitution/CONSTITUTION.md`
 - 需求理解智能体：`agents/constitution/requirement-understanding/AGENTS.md`
 - OpenSpec 规范存放位置：`AGENTS.md` 中「📁 OpenSpec 规范存放位置」
-- P0 实现计划：`agents/docs/specs/P0_SKILLS_IMPLEMENTATION_PLAN.md`
+- P0 实现计划：`agents/docs/specs/README.md`（规范索引）
 - Skill-01：`agents/skills/skill-01-intent-classifier/SKILL.md`
 
 ---

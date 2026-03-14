@@ -188,7 +188,7 @@ spec-validator/
 ## 📚 相关文档
 
 - [SKILL.md](./SKILL.md) - 技能规约
-- [宪法规范 V3.7](../../../../docs/specs/CONSTITUTION_V3.7.md)
+- [宪法规范 V3.7](../../../../agents/docs/specs/constitution/CONSTITUTION_V3.7.md)
 - [Skill-A04 审计报告生成器](../report-generator/)
 
 ---

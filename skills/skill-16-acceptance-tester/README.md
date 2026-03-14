@@ -306,5 +306,5 @@ node test.js
 
 - 技能规约：本目录下 `SKILL.md`
 - 需求验收智能体：`agents/constitution/requirement-acceptance/AGENTS.md`
-- 宪法 V3.7：`agents/docs/specs/CONSTITUTION_V3.7.md`
+- 宪法 V3.7：`agents/docs/specs/constitution/CONSTITUTION.md`
 - OpenSpec 规范位置：工作区 `AGENTS.md` 中「📁 OpenSpec 规范存放位置」

@@ -231,7 +231,7 @@ skill-a03-spec-validator/
 ## 📚 相关文档
 
 - [SKILL.md](./SKILL.md) - 技能规约
-- [宪法规范 V3.7](../../../../docs/specs/CONSTITUTION_V3.7.md)
+- [宪法规范 V3.7](../../../../agents/docs/specs/constitution/CONSTITUTION.md)
 - [审计智能体 AGENTS.md](../../../constitution/audit/AGENTS.md)
 - [Skill-A01 日志分析器](../skill-a01-log-analyzer/)
 

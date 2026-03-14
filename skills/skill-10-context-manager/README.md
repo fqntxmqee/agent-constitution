@@ -326,4 +326,4 @@ node quick-check.js
 
 - 技能规约与输入输出细节：`SKILL.md`
 - 工作区规范：工作区根目录 `AGENTS.md`
-- 宪法与 P0 技能计划：`agents/docs/specs/CONSTITUTION_V3.7.md`、`agents/docs/specs/P0_SKILLS_IMPLEMENTATION_PLAN.md`
+- 宪法与 P0 技能计划：`agents/docs/specs/constitution/CONSTITUTION_V3.7.md`、`agents/docs/specs/README.md`（规范索引）

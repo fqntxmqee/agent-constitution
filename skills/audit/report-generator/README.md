@@ -174,7 +174,7 @@ report-generator/
 ## 📚 相关文档
 
 - [SKILL.md](./SKILL.md) - 技能规约
-- [宪法规范 V3.7](../../../../docs/specs/CONSTITUTION_V3.7.md)
+- [宪法规范 V3.7](../../../../agents/docs/specs/constitution/CONSTITUTION_V3.7.md)
 - [Skill-A01 日志分析器](../skill-a01-log-analyzer/)
 - [Skill-A02 合规检查器](../compliance-checker/)
 - [Skill-A03 规约验证器](../skill-a03-spec-validator/)

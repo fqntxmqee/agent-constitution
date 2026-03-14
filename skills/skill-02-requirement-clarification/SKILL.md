@@ -164,7 +164,7 @@ agents/skills/skill-02-requirement-clarification/
 
 ## 📚 相关文档
 
-- V3.7 主规范：`agents/docs/specs/CONSTITUTION_V3.7.md`
+- V3.7 主规范：`agents/docs/specs/constitution/CONSTITUTION.md`
 - 需求澄清智能体：`agents/constitution/requirement-clarification/AGENTS.md`
 - Skill-01 意图分类：`agents/skills/skill-01-intent-classifier/SKILL.md`
 - Skill-03 模糊性探测：`agents/skills/skill-03-ambiguity-detector/SKILL.md`

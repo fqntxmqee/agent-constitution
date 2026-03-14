@@ -217,7 +217,7 @@ agents/skills/skill-05-requirement-understanding/
 
 ## 📚 相关文档
 
-- 宪法规范 V3.7：`agents/docs/specs/CONSTITUTION_V3.7.md`
+- 宪法规范 V3.7：`agents/docs/specs/constitution/CONSTITUTION.md`
 - 需求理解智能体：`agents/constitution/requirement-understanding/AGENTS.md`
 - 执行蓝图最小模板：`agents/constitution/requirement-understanding/AGENTS.md` § 执行蓝图最小模板
 - Skill-06 蓝图转换器：`agents/skills/skill-06-blueprint-converter/SKILL.md`

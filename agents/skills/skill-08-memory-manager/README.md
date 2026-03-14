@@ -386,4 +386,4 @@ TC-10: 性能测试 [PASS]
 
 - 技能规约（输入输出、执行逻辑、文件结构）：`SKILL.md`
 - 工作区记忆规范：工作区根目录 `AGENTS.md`（MEMORY.md、memory/YYYY-MM-DD.md）
-- 宪法与 P0 技能：`agents/docs/specs/CONSTITUTION_V3.7.md`、`agents/docs/specs/P0_SKILLS_IMPLEMENTATION_PLAN.md`
+- 宪法与 P0 技能：`agents/docs/specs/constitution/CONSTITUTION.md`、`agents/docs/specs/README.md`（规范索引）

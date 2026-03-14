@@ -203,12 +203,12 @@ agents/skills/skill-07-acceptance-tester/
 
 ## 📚 相关文档
 
-- V3.7 主规范：`agents/docs/specs/CONSTITUTION_V3.7.md`
+- V3.7 主规范：`agents/docs/specs/constitution/CONSTITUTION.md`
 - 需求验收智能体：`agents/constitution/requirement-acceptance/AGENTS.md`
 - 需求解决 → 需求验收契约：`agents/constitution/README.md`（智能体间输入输出契约）
 - OpenSpec 规范存放位置：`AGENTS.md` 中「📁 OpenSpec 规范存放位置」
 - Skill-06：`agents/skills/skill-06-blueprint-converter/SKILL.md`
-- P0 技能实现计划：`agents/docs/specs/P0_SKILLS_IMPLEMENTATION_PLAN.md`
+- P0 技能实现计划：`agents/docs/specs/README.md`（规范索引）
 
 ---
 

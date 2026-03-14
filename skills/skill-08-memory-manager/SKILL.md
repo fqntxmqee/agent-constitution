@@ -217,10 +217,10 @@ agents/skills/skill-08-memory-manager/
 
 ## 📚 相关文档
 
-- V3.7 主规范：`agents/docs/specs/CONSTITUTION_V3.7.md`
+- V3.7 主规范：`agents/docs/specs/constitution/CONSTITUTION.md`
 - 工作区记忆规范：`AGENTS.md`（MEMORY.md、memory/YYYY-MM-DD.md）
 - 长期记忆文件：工作区根目录 `MEMORY.md`
-- P0 技能实现计划：`agents/docs/specs/P0_SKILLS_IMPLEMENTATION_PLAN.md`（若已包含 Skill-08）
+- P0 技能实现计划：`agents/docs/specs/README.md`（规范索引）（若已包含 Skill-08）
 
 ---
 

@@ -295,10 +295,10 @@ agents/skills/skill-03-ambiguity-detector/
 
 ## 📚 相关文档
 
-- V3.7 主规范：`agents/docs/specs/CONSTITUTION_V3.7.md`
+- V3.7 主规范：`agents/docs/specs/constitution/CONSTITUTION.md`
 - 需求澄清智能体：`agents/constitution/requirement-clarification/AGENTS.md`
-- P0 实现计划：`agents/docs/specs/P0_SKILLS_IMPLEMENTATION_PLAN.md`
-- 技能差距分析：`agents/docs/specs/V37_SKILLS_GAP_ANALYSIS.md`
+- P0 实现计划：`agents/docs/specs/README.md`（规范索引）
+- 技能差距分析：`agents/docs/specs/skills/V37_SKILLS_GAP_ANALYSIS.md`
 
 ---
 

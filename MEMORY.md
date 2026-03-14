@@ -107,7 +107,7 @@
 ### 📁 更新的文件
 
 #### 主规范文件
-- ✅ `agents/docs/specs/CONSTITUTION_V3.7.md` - V3.7 主规范（新增）
+- ✅ `agents/docs/specs/constitution/CONSTITUTION.md` - V3.7 主规范（新增）
 
 #### 智能体配置（8 个）
 - ✅ `agents/constitution/requirement-clarification/AGENTS.md`
@@ -154,7 +154,7 @@
 
 ### 🔗 参考文档
 
-- **主规范**: `agents/docs/specs/CONSTITUTION_V3.7.md`
+- **主规范**: `agents/docs/specs/constitution/CONSTITUTION.md`
 - **子 Agent 列表**: `agents/constitution/README.md`
 - **架构文档**: `agents/docs/architecture/SIX_AGENT_ARCHITECTURE.md`
 - **工作流程**: `agents/docs/architecture/WORKFLOW.md`
@@ -264,7 +264,7 @@ sessions_spawn(
 
 ### ✅ 已更新文件
 
-- `agents/docs/specs/CONSTITUTION_V3.7_PARALLEL.md` - V3.7.1 需求级并行架构规范（新增）
+- `agents/docs/specs/constitution/architecture/CONSTITUTION_V3.7_PARALLEL.md` - V3.7.1 需求级并行架构规范（新增）
 - `AGENTS.md` - 添加 V3.7.1 需求级并行说明
 - `opsx/requirements-state.json` - 需求状态管理文件
 
@@ -353,9 +353,9 @@ sessions_spawn(
 ### ✅ 已完成工作
 
 **阶段 0: 备份**
-- 宪法规范备份：`versions/constitution/V3.7.3/CONSTITUTION_V3.7.md`
-- 智能体配置备份：`versions/agents/V3.7.3/`（3 个 AGENTS.md）
-- 技能目录备份：`versions/skills/V3.7.3/`（44 个技能，全量）
+- 宪法规范备份：`agents/docs/versions/V3.7.3/constitution/`
+- 智能体配置备份：`agents/docs/versions/V3.7.3/agents/`（3 个 AGENTS.md）
+- 技能目录备份：`agents/docs/versions/V3.7.3/skills/`（44 个技能，全量）
 - 备份时间戳：2026-03-12_00:32:28
 
 **阶段一：核心变更**

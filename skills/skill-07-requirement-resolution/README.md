@@ -377,6 +377,6 @@ A: 替换或扩展 `ToolInvoker` 的 `invoke('cursor-cli', ...)` 实现，在 AC
 ## 相关文档
 
 - 规约详情：本目录下 `SKILL.md`
-- 宪法 V3.7：`agents/docs/specs/CONSTITUTION_V3.7.md`
+- 宪法 V3.7：`agents/docs/specs/constitution/CONSTITUTION.md`
 - 需求解决智能体工作区：`agents/constitution/requirement-resolution/`
 - ACP 与 Cursor CLI：`docs/OpenClaw-ACP-Cursor-集成方案（官方版）.md`（若存在）

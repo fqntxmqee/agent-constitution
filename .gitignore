@@ -1,103 +1,50 @@
-# 敏感配置
-.clawhub/
-.cursor/
-*.log
-*.env
-memory/heartbeat-state.json
-agents/constitution/*/FEISHU_NOTIFICATION.md
+# 默认忽略所有文件
+*
 
-# 动态文件
-*.pyc
-__pycache__/
-*.pyo
-*.pyd
-.Python
-pip-log.txt
-pip-delete-this-directory.txt
+# 不忽略 agents 及其子目录（否则下文的 !agents/docs/* 无法生效）
+!agents/
+!agents/docs/
+!agents/docs/specs/
+!agents/docs/specs/constitution/
+!agents/docs/specs/process/
+!agents/docs/specs/skills/
+!agents/docs/specs/meta/
+!agents/docs/versions/
 
-# 编辑器
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
+# 不忽略宪法文件
+!agents/constitution/*/IDENTITY.md
+!agents/constitution/*/AGENTS.md
+!agents/constitution/*/SOUL.md
+!agents/constitution/*/MEMORY.md
+!agents/constitution/*/TOOLS.md
+!agents/constitution/*/HEARTBEAT.md
 
-# 操作系统
-.DS_Store
-Thumbs.db
+# 不忽略配置状态文件
+!agents/constitution/CONFIG_STATUS.md
+# 不忽略团队角色文件
+!agents/constitution/TEAM_ROLES.md
+# 不忽略配置状态文件
+!agents/constitution/CONFIG_STATUS.md
 
-# 日志
-logs/
-*.log
+# 不忽略宪法规范相关文档文件
+!agents/docs/*
+!agents/docs/specs/*
+!agents/docs/specs/constitution/*
+!agents/docs/specs/constitution/backup/*
+!agents/docs/specs/constitution/upgrade/*
+!agents/docs/specs/constitution/change-classification/*
+!agents/docs/specs/constitution/directory-standard/*
+!agents/docs/specs/constitution/upgrade/*
+!agents/docs/specs/constitution/change-classification/*
+!agents/docs/specs/constitution/directory-standard/*
 
-# 临时文件
-tmp/
-temp/
-*.tmp
+# 不忽略版本文件
+!agents/docs/versions/*
+!agents/docs/versions/V*/
+!agents/docs/versions/V*/agents/*
+!agents/docs/versions/V*/constitution/*
+!agents/docs/versions/V*/skills/*
 
-# 依赖目录
-node_modules/
-vendor/
-.bundle/
-
-# OpenSpec 变更（项目特定内容，不归档）
-openspec/changes/
-
-# 智能体状态文件和个人配置（不归档）
-agents/constitution/*/.openclaw/
-agents/constitution/*/BOOTSTRAP.md
-agents/constitution/*/IDENTITY.md
-agents/constitution/*/SOUL.md
-agents/constitution/*/TOOLS.md
-agents/constitution/*/USER.md
-agents/constitution/*/HEARTBEAT.md
-
-# 应用代码（非宪法智能体）
-agents/fitbot/
-agents/*/src/
-agents/*/dist/
-agents/*/implementation/
-
-# 大型构建产物
-node_modules/
-dist/
-build/
-*.min.js
-*.min.css
-
-# 数据文件
-*.sqlite
-*.db
-data/
-
-# 归档目录（不提交）
-.archive/
-.backup/
-
-# 项目特定规约（防止污染）
-openspec/changes/fitbot-*/
-openspec/changes/xiaohongshu-*/
-openspec/changes/agent-monitor-dashboard/
-openspec/changes/ai-content-generator/
-openspec/changes/p0-skills-development/
-openspec/changes/all-skills-delivery/
-# 宪法版本规约保留（不忽略）
-# !openspec/changes/constitution-*/
-
-# 应用代码（非宪法智能体）
-agents/fitbot/
-agents/*/src/
-agents/*/dist/
-agents/*/implementation/
-
-# 大型构建产物
-node_modules/
-dist/
-build/
-*.min.js
-*.min.css
-
-# 数据文件
-*.sqlite
-*.db
-data/
+# 不忽略技能文件
+!agents/skills/*
+!agents/skills/SKILL_*.md

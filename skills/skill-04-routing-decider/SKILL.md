@@ -222,7 +222,7 @@ agents/skills/skill-04-routing-decider/
 
 ## 📚 相关文档
 
-- V3.7 主规范：`agents/docs/specs/CONSTITUTION_V3.7.md`
+- V3.7 主规范：`agents/docs/specs/constitution/CONSTITUTION.md`
 - 需求澄清智能体：`agents/constitution/requirement-clarification/AGENTS.md`
 - Skill-01：`agents/skills/skill-01-intent-classifier/SKILL.md`
 - Skill-03：`agents/skills/skill-03-ambiguity-detector/SKILL.md`

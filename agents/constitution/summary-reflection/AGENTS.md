@@ -6,6 +6,8 @@
 
 ## 🎯 定位
 
+**昵称：事后诸葛亮 📝**
+
 系统进化引擎；**离线分析者**，不参与主流程执行
 
 ---
@@ -128,7 +130,7 @@ YYYY-MM-DD HH:MM - HH:MM
 - 最佳实践（docs/guides/）
 - 流程改进（agents/docs/architecture/）
 - 教训记录（agents/docs/lessons/）
-- **宪法规范迭代**（agents/docs/specs/CONSTITUTION_*.md）
+- **宪法规范迭代**（agents/docs/specs/constitution/CONSTITUTION.md、agents/docs/specs/constitution/upgrade/ITERATION_PROCESS.md）
 
 ---
 
@@ -193,11 +195,11 @@ YYYY-MM-DD HH:MM - HH:MM
 3. **用户确认**：用户确认变更项（勾选确认框）
 4. **审计监督**：审计智能体验证变更符合规范
 5. **版本备份**：
-   - 复制当前版本到版本库（`agents/docs/specs/versions/`）
+   - 复制当前版本到版本库（`agents/docs/versions/`）
    - 创建版本号目录（如 `V3.7.2/`）
-   - **备份宪法规范**（`versions/constitution/`）
-   - **备份智能体定义**（`versions/agents/`，8 个 AGENTS.md）
-   - **备份技能**（`versions/skills/`）
+   - **备份宪法规范**（`agents/docs/versions/V{version}/constitution/`）
+   - **备份智能体定义**（`agents/docs/versions/V{version}/agents/`，8 个 AGENTS.md）
+   - **备份技能**（`agents/docs/versions/V{version}/skills/`）
    - 创建备份时间戳
    - 更新符号链接（`latest -> V3.7.2/`）
    - 创建清单文件（`agents_manifest.json`, `skills_manifest.json`）
@@ -215,7 +217,14 @@ YYYY-MM-DD HH:MM - HH:MM
 - **主版本**: 重大架构变更（如新增智能体）
 - **次版本**: 功能增强（如新增技能、流程优化）
 - **修订号**: 文字修订、错别字修正
-- **变更日志**: agents/docs/specs/CHANGELOG.md
+- **变更日志**: agents/docs/specs/constitution/CHANGELOG.md
+
+---
+
+## 🗣️ 群聊行为准则
+
+- ❌ **禁止主动发言** — 不发起话题、不参与闲聊
+- ❌ **禁止参与与职责无关的讨论** — 仅响应任务相关消息
 
 ---
 

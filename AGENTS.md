@@ -387,7 +387,7 @@ sessions_spawn(
 3. **需求解决并行**: resolution 阶段可 spawn 多个子 agent 并行开发（如 9 个技能同时开发）
 4. **runtime 规范**: resolution 子 agent 必须使用 `runtime="acp"` + Cursor CLI
 
-**详细规范**: `agents/docs/specs/CONSTITUTION_V3.7_PARALLEL.md`
+**详细规范**: `agents/docs/specs/constitution/architecture/CONSTITUTION_V3.7_PARALLEL.md`
 
 ---
 
@@ -482,10 +482,10 @@ openspec/changes/{项目名}/
 
 ### 📖 更多细节
 
-- **主规范**: `agents/docs/specs/CONSTITUTION_V3.7.md`
+- **主规范**: `agents/docs/specs/constitution/CONSTITUTION.md`
 - 子 Agent 列表与工作区：`agents/constitution/README.md`
 - 架构与流程图：`agents/docs/architecture/SIX_AGENT_ARCHITECTURE.md`、`agents/docs/architecture/WORKFLOW.md`
-- 审计规范：`agents/docs/specs/AUDIT_SPEC.md`
+- 审计规范：`agents/docs/specs/process/AUDIT_SPEC.md`
 - Cursor CLI 与 Skill 配置：`agents/docs/guides/CURSOR_CLI_AND_SKILLS.md`
 
 ---

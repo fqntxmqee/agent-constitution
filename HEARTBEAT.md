@@ -49,7 +49,7 @@
 - 总结反思由 summary-reflection 智能体负责
 
 **参考文档**:
-- 主规范：`agents/docs/specs/CONSTITUTION_V3.7.md`
+- 主规范：`agents/docs/specs/constitution/CONSTITUTION.md`
 - 智能体配置：`agents/constitution/*/AGENTS.md`
 
 ---

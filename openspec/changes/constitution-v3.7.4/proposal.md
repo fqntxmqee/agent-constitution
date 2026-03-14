@@ -164,7 +164,7 @@
 
 **Commit 1**: 宪法规范升级
 ```bash
-git add agents/docs/specs/CONSTITUTION_V3.7.md
+git add agents/docs/specs/constitution/CONSTITUTION_V3.7.md
 git add agents/docs/specs/REPOSITORY_GOVERNANCE.md
 git add openspec/changes/constitution-v3.7.4/
 git commit -m "feat: 宪法规范升级至 V3.7.4（新增第七章仓库治理规范）"

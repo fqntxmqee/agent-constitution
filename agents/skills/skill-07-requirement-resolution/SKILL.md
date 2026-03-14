@@ -247,7 +247,7 @@ agents/skills/skill-06-requirement-resolution/
 
 ## 📚 相关文档
 
-- V3.7 主规范：`agents/docs/specs/CONSTITUTION_V3.7.md`
+- V3.7 主规范：`agents/docs/specs/constitution/CONSTITUTION.md`
 - 需求解决智能体工作规范：`agents/constitution/requirement-resolution/AGENTS.md`
 - ACP 与 Cursor CLI：`docs/OpenClaw-ACP-Cursor-集成方案（官方版）.md`（若存在）
 - OpenSpec 规范存放位置：`AGENTS.md` 中「📁 OpenSpec 规范存放位置」

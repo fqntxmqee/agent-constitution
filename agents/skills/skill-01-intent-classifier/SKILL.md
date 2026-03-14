@@ -110,9 +110,9 @@ agents/skills/skill-01-intent-classifier/
 
 ## 📚 相关文档
 
-- V3.7 主规范：`agents/docs/specs/CONSTITUTION_V3.7.md`
+- V3.7 主规范：`agents/docs/specs/constitution/CONSTITUTION.md`
 - 需求澄清智能体：`agents/constitution/requirement-clarification/AGENTS.md`
-- P0 实现计划：`agents/docs/specs/P0_SKILLS_IMPLEMENTATION_PLAN.md`
+- 规范索引（含技能文档）：`agents/docs/specs/README.md`
 
 ---
 

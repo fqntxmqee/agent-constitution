@@ -238,10 +238,10 @@ agents/skills/skill-25-system-monitor/
 
 ## 📚 相关文档
 
-- V3.7 主规范：`agents/docs/specs/CONSTITUTION_V3.7.md`
+- V3.7 主规范：`agents/docs/specs/constitution/CONSTITUTION.md`
 - 工作区规范：`AGENTS.md`
 - 进展跟进智能体：`agents/constitution/progress-tracking/`（若存在）
-- P0 技能实现计划：`agents/docs/specs/P0_SKILLS_IMPLEMENTATION_PLAN.md`（若已包含 Skill-25）
+- P0 技能实现计划：`agents/docs/specs/README.md`（规范索引）（若已包含 Skill-25）
 
 ---
 

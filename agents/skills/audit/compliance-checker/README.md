@@ -175,7 +175,7 @@ compliance-checker/
 ## 📚 相关文档
 
 - [SKILL.md](./SKILL.md) - 技能规约
-- [宪法规范 V3.7](../../../../docs/specs/CONSTITUTION_V3.7.md)
+- [宪法规范 V3.7](../../../../agents/docs/specs/constitution/CONSTITUTION.md)
 - [Skill-A01 日志分析器](../skill-a01-log-analyzer/)
 - [Skill-A03 规约验证器](../skill-a03-spec-validator/)
 - [Skill-A04 审计报告生成器](../skill-a04-report-generator/)

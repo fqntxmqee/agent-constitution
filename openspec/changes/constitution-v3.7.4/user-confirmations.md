@@ -26,7 +26,7 @@
 
 | # | 类别 | 内容 | 位置 |
 |---|------|------|------|
-| 1 | 宪法规范本身 | CONSTITUTION_V3.7.md → V3.7.4 | `agents/docs/specs/` |
+| 1 | 宪法规范本身 | CONSTITUTION_V3.7.md → V3.7.4 | `agents/docs/specs/constitution/` |
 | 2 | 智能体配置 | 8 个宪法智能体 AGENTS.md | `agents/constitution/*/` |
 | 3 | 技能表 | skills_manifest.json | `skills/` + `agents/skills/` |
 | 4 | skills 目录 | 技能规范（SKILL.md + index.js） | `skills/` + `agents/skills/` |

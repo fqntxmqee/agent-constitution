@@ -202,6 +202,6 @@ node test.js
 ## 相关文档
 
 - **技能规约**: `SKILL.md`
-- **V3.7 主规范**: `agents/docs/specs/CONSTITUTION_V3.7.md`
+- **V3.7 主规范**: `agents/docs/specs/constitution/CONSTITUTION_V3.7.md`
 - **需求澄清智能体**: `agents/constitution/requirement-clarification/AGENTS.md`
 - **Prompt 模板**: `prompts/clarification.txt`

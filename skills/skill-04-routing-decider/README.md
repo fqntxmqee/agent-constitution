@@ -400,4 +400,4 @@ node test.js
 
 **文档版本：** 2.0  
 **最后更新：** 2026-03-10  
-**规约参考：** `SKILL.md`、`agents/docs/specs/CONSTITUTION_V3.7.md`
+**规约参考：** `SKILL.md`、`agents/docs/specs/constitution/CONSTITUTION_V3.7.md`
