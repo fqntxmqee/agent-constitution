@@ -1,7 +1,11 @@
 # 默认忽略所有文件
 *
 
-# 不忽略 agents 及其子目录（否则下文的 !agents/docs/* 无法生效）
+# ---------- 仓库根 ----------
+!.gitignore
+!AGENTS.md
+
+# ---------- agents（宪法与智能体） ----------
 !agents/
 !agents/docs/
 !agents/docs/specs/
@@ -11,40 +15,58 @@
 !agents/docs/specs/meta/
 !agents/docs/versions/
 
-# 不忽略宪法文件
-!agents/constitution/*/IDENTITY.md
+# 宪法智能体配置（8 个子目录内指定文件）
+!agents/constitution/
+!agents/constitution/*/
 !agents/constitution/*/AGENTS.md
+!agents/constitution/*/IDENTITY.md
 !agents/constitution/*/SOUL.md
-!agents/constitution/*/MEMORY.md
 !agents/constitution/*/TOOLS.md
-!agents/constitution/*/HEARTBEAT.md
-
-# 不忽略配置状态文件
 !agents/constitution/CONFIG_STATUS.md
-# 不忽略团队角色文件
 !agents/constitution/TEAM_ROLES.md
-# 不忽略配置状态文件
-!agents/constitution/CONFIG_STATUS.md
 
-# 不忽略宪法规范相关文档文件
-!agents/docs/*
-!agents/docs/specs/*
+# agents/docs/specs 下规范文档（constitution 子目录完整）
+!agents/docs/specs/README.md
+!agents/docs/specs/constitution/
 !agents/docs/specs/constitution/*
-!agents/docs/specs/constitution/backup/*
-!agents/docs/specs/constitution/upgrade/*
-!agents/docs/specs/constitution/change-classification/*
-!agents/docs/specs/constitution/directory-standard/*
-!agents/docs/specs/constitution/upgrade/*
-!agents/docs/specs/constitution/change-classification/*
-!agents/docs/specs/constitution/directory-standard/*
+!agents/docs/specs/constitution/*/*
+!agents/docs/specs/constitution/*/*/*
+!agents/docs/specs/process/
+!agents/docs/specs/process/*
+!agents/docs/specs/skills/
+!agents/docs/specs/skills/*
+!agents/docs/specs/meta/
+!agents/docs/specs/meta/*
 
-# 不忽略版本文件
-!agents/docs/versions/*
+# agents/docs 其他（决策/讨论/提案/模板）
+!agents/docs/decisions/
+!agents/docs/decisions/*
+!agents/docs/discussions/
+!agents/docs/discussions/*
+!agents/docs/proposals/
+!agents/docs/proposals/*
+!agents/docs/proposals/*/*
+!agents/docs/templates/
+!agents/docs/templates/*
+
+# 版本备份（先版本后类型：V{version}/agents|constitution|skills）
+!agents/docs/versions/README.md
+!agents/docs/versions/latest
 !agents/docs/versions/V*/
-!agents/docs/versions/V*/agents/*
+!agents/docs/versions/V*/*
+!agents/docs/versions/V*/*/
+!agents/docs/versions/V*/constitution/
 !agents/docs/versions/V*/constitution/*
+!agents/docs/versions/V*/constitution/*/*
+!agents/docs/versions/V*/agents/
+!agents/docs/versions/V*/agents/*
+!agents/docs/versions/V*/agents/*/*
+!agents/docs/versions/V*/skills/
 !agents/docs/versions/V*/skills/*
+!agents/docs/versions/V*/skills/*/*
 
-# 不忽略技能文件
+# agents/skills
+!agents/skills/
 !agents/skills/*
-!agents/skills/SKILL_*.md
+!agents/skills/*/*
+!agents/skills/*/*/*
