@@ -229,8 +229,17 @@ sessions_spawn(
 
 ## 待办事项
 
-- [ ] 小红书前端项目：使用 `runtime="acp"` 重新执行需求解决（历史遗留，需评估是否仍需执行）
-- [ ] 更新 MEMORY.md 待办清理（本次会话已更新）
+- [ ] 小红书前端项目历史遗留评估（`runtime="acp"` 重新执行需求解决 - 需评估是否仍需执行）
+- [ ] Rokid Glass Channel 推进（Android SDK/Studio 未安装，详见 `memory/rokid-glass-channel-pause.md`）
+- [ ] 周期性支撑智能体（progress-tracking / audit / summary-reflection）cron 配置确认
+- [ ] 飞书宪法变更通知 V3.11.0 同步
+
+---
+
+## 2026-03-21: V3.11.0 正式生效
+
+- **状态**: ✅ 已生效（冷静期已过，2026-03-22 15:17）
+- **变更**: Story File + 复杂度评级 + Analysis阶段 + SOP清单化
 
 ---
 
