@@ -1,0 +1,11 @@
+{
+  "version": "V3.11.0",
+  "backupTimestamp": "2026-03-21T15:24:01+08:00",
+  "backupTrigger": "git-pre-commit",
+  "files": [
+    "CONSTITUTION.md",
+    "CHANGELOG.md",
+    "agents/constitution/*/AGENTS.md"
+  ],
+  "gitCommit": "6991a5e"
+}

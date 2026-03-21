@@ -37,7 +37,7 @@ description: Transforms confirmed proposals into Spec Delta and Execution Bluepr
     "taskType": "string",
     "scope": "变更范围描述",
     "constraints": ["约束1", "约束2"],
-    "path": "可选：澄清产出路径或 openspec/changes/{项目名}/"
+    "path": "可选：澄清产出路径或 project/{项目名}/changes/init/"
   },
   "context": {
     "intentResult": "可选：Skill-01 意图分类结果",
@@ -47,7 +47,7 @@ description: Transforms confirmed proposals into Spec Delta and Execution Bluepr
   },
   "options": {
     "blueprintForm": "openspec|content-outline|execution-plan",
-    "outputPath": "可选：openspec/changes/{项目名}/",
+    "outputPath": "可选：project/{项目名}/changes/init/",
     "strictValidation": true
   }
 }
@@ -60,7 +60,7 @@ description: Transforms confirmed proposals into Spec Delta and Execution Bluepr
 | `confirmedProposal` | 是 | 已确认的提案，至少含 `summary`、`intent`；可带 `path`、`scope`、`constraints` |
 | `context` | 否 | 意图结果、路由、澄清答案、主规约路径等，用于补充与一致性校验 |
 | `options.blueprintForm` | 否 | 蓝图形态：`openspec`（开发）、`content-outline`（内容）、`execution-plan`（技能/数据），未传时按 `intent` 推断 |
-| `options.outputPath` | 否 | 蓝图输出目录，默认 `openspec/changes/{项目名}/` |
+| `options.outputPath` | 否 | 蓝图输出目录，默认 `project/{项目名}/changes/init/` |
 | `options.strictValidation` | 否 | 是否严格校验格式与一致性，默认 `true` |
 
 ---
@@ -71,7 +71,7 @@ description: Transforms confirmed proposals into Spec Delta and Execution Bluepr
 {
   "blueprint": {
     "form": "openspec|content-outline|execution-plan",
-    "outputPath": "openspec/changes/{项目名}/",
+    "outputPath": "project/{项目名}/changes/init/",
     "documents": [
       { "file": "proposal.md", "purpose": "项目提案与背景、目标、范围" },
       { "file": "specs/requirements.md", "purpose": "需求规格与验收条件（AC）" },

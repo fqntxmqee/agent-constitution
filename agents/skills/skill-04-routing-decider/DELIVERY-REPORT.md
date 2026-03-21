@@ -13,7 +13,7 @@
 | **技能名称** | Skill-04: 动态路由决策器 |
 | **技能版本** | 1.0 |
 | **交付类型** | 技能开发类 |
-| **规约位置** | `openspec/changes/skill-04-routing-decider/` |
+| **规约位置** | `project/skill-04-routing-decider/changes/init/` |
 | **交付物位置** | `agents/skills/skill-04-routing-decider/` |
 
 ### 交付内容

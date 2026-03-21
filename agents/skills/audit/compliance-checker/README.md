@@ -22,7 +22,7 @@ const complianceChecker = require('./compliance-checker');
 const result = await complianceChecker.check({
   target: {
     sessionLogs: ['~/.openclaw/agents/*/sessions/*.jsonl'],
-    specPath: 'openspec/changes/skill-04/'
+    specPath: 'project/skill-04/changes/init/'
   },
   config: {
     doCheckRuntime: true,
@@ -104,7 +104,7 @@ console.log('合规得分:', result.result.score);
 # 执行合规检查
 node agents/constitution/audit/tools/compliance-checker.js check \
   --logs ~/.openclaw/agents/*/sessions/*.jsonl \
-  --spec openspec/changes/skill-04/
+  --spec project/skill-04/changes/init/
 
 # 查看规则
 node agents/constitution/audit/tools/compliance-checker.js rules

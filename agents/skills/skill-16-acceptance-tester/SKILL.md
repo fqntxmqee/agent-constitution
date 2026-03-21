@@ -27,7 +27,7 @@
 ```json
 {
   "blueprint": {
-    "path": "openspec/changes/{项目名}/",
+    "path": "project/{项目名}/changes/init/",
     "documents": [
       { "file": "specs/requirements.md", "purpose": "需求规格与验收条件（AC）" },
       { "file": "tasks.md", "purpose": "任务列表" }
@@ -42,7 +42,7 @@
   },
   "deliverables": {
     "codePaths": ["path/to/file.js", "path/to/component.tsx"],
-    "docPaths": ["openspec/changes/{项目名}/design.md"],
+    "docPaths": ["project/{项目名}/changes/init/design.md"],
     "artifacts": ["构建产物、数据文件等路径或摘要"]
   },
   "executionResults": {
@@ -86,7 +86,7 @@
   ],
   "metadata": {
     "verifiedAt": "ISO8601 时间",
-    "blueprintPath": "openspec/changes/{项目名}/",
+    "blueprintPath": "project/{项目名}/changes/init/",
     "acTotal": 6,
     "acPassed": 6,
     "acFailed": 0

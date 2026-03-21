@@ -80,11 +80,11 @@ const result = await understanding.understand({
   },
   context: {
     projectName: 'my-doc-project',
-    mainSpecPath: '/path/to/openspec/changes/other-project',
+    mainSpecPath: '/path/to/project/other-project/changes/init/',
   },
   options: {
     blueprintForm: 'content-outline',
-    outputPath: 'openspec/changes/my-doc-project/',
+    outputPath: 'project/my-doc-project/changes/init/',
     strictValidation: true,
   },
 });
@@ -126,14 +126,14 @@ const result = await understanding.understand({
 | `confirmedProposal.scope` | string | 否 | 变更范围描述 |
 | `confirmedProposal.constraints` | string[] | 否 | 约束列表 |
 | `confirmedProposal.goals` | string[] | 否 | 目标/验收要点，用于生成 AC |
-| `confirmedProposal.path` | string | 否 | 澄清产出路径或 `openspec/changes/{项目名}/` |
+| `confirmedProposal.path` | string | 否 | 澄清产出路径或 `project/{项目名}/changes/init/` |
 | `context` | object | 否 | 上下文 |
 | `context.projectName` | string | 否 | 项目名，用于默认 outputPath |
 | `context.mainSpecPath` | string | 否 | 主规约路径，用于一致性校验与 specDelta 的 modified |
 | `context.intentResult` | string | 否 | 意图分类结果 |
 | `options` | object | 否 | 选项 |
 | `options.blueprintForm` | string | 否 | `openspec` \| `content-outline` \| `execution-plan`，未传时按 intent 推断 |
-| `options.outputPath` | string | 否 | 蓝图输出目录，默认 `openspec/changes/{项目名}/` |
+| `options.outputPath` | string | 否 | 蓝图输出目录，默认 `project/{项目名}/changes/init/` |
 | `options.strictValidation` | boolean | 否 | 是否严格校验（格式/一致性不通过时抛错），默认 `true` |
 
 **输出（成功时）**：

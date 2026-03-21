@@ -127,10 +127,10 @@ agents/constitution/
 
 ## 📚 参考文档
 
-- `CONSTITUTION_BACKUP_WHITELIST.md` - 备份白名单
-- `CONSTITUTION_DELIVERY_CHECKLIST.md` - 交付校验清单
-- `VERSION_BACKUP_AND_ROLLBACK.md` - 版本备份与回滚
-- `DECISION_RECORDING_RULES.md` - 决策记录规范
+- `backup/CONSTITUTION_BACKUP_WHITELIST.md` - 备份白名单
+- `delivery/CONSTITUTION_DELIVERY_CHECKLIST.md` - 交付校验清单
+- `backup/VERSION_BACKUP_AND_ROLLBACK.md` - 版本备份与回滚
+- `decision-recording/DECISION_RECORDING_RULES.md` - 决策记录规范
 
 ---
 

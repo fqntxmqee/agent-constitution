@@ -133,7 +133,7 @@ const complianceChecker = require('./compliance-checker');
 const result = await complianceChecker.check({
   target: {
     sessionLogs: ['~/.openclaw/agents/*/sessions/*.jsonl'],
-    specPath: 'openspec/changes/skill-04/'
+    specPath: 'project/skill-04/changes/init/'
   },
   config: {
     checkRuntime: true,

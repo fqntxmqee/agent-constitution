@@ -57,7 +57,7 @@ const { converter } = require('./index.js');
 const result = converter.convertSync({
   confirmedRequirement: {
     summary: '实现用户登录与权限校验',
-    path: 'openspec/changes/auth-module',  // 可选
+    path: 'project/auth-module/changes/init',  // 可选
   },
   taskType: 'development',  // development | content | skill
   complexity: 'medium',     // 可选：high | medium | low
@@ -65,7 +65,7 @@ const result = converter.convertSync({
 
 if (result.success) {
   console.log(result.blueprintForm);   // 'openspec'
-  console.log(result.outputPath);      // 'openspec/changes/auth-module/'
+  console.log(result.outputPath);      // 'project/auth-module/changes/init/'
   console.log(result.documents);       // [{ file, purpose }, ...]
   console.log(result.summary);         // 用途与下一步说明
 } else {
@@ -121,7 +121,7 @@ const result = await converter.convert({
 {
   "confirmedRequirement": {
     "summary": "需求摘要或已确认的规约内容",
-    "path": "可选：openspec/changes/{项目名}/ 或澄清文档路径",
+    "path": "可选：project/{项目名}/changes/init/ 或澄清文档路径",
     "raw": "可选：完整需求正文"
   },
   "taskType": "development | content | skill",
@@ -246,7 +246,7 @@ node test.js
 | TC-06 | 非法 taskType | 返回 `BLUEPRINT_UNKNOWN_FORM` |
 | TC-07 | 带 context 的 OpenSpec | 异步 `convert` 成功且 `_meta.hasContext === true` |
 | TC-08 | 不同 complexity | low/medium/high 均成功 |
-| TC-09 | outputPath 生成 | 有 path 用 path；无 path 从 summary 推导，格式 `openspec/changes/{项目名}/` |
+| TC-09 | outputPath 生成 | 有 path 用 path；无 path 从 summary 推导，格式 `project/{项目名}/changes/init/` |
 | TC-10 | 性能 | 连续 100 次 `convertSync` 在 1 秒内完成 |
 
 ### 预期输出
@@ -268,7 +268,7 @@ Skill-06 Blueprint Converter - 测试运行
 ## 8. 常见问题 FAQ
 
 **Q: 必须传 `path` 吗？**  
-A: 否。不传时从 `confirmedRequirement.summary` 首行推导项目名，生成 `openspec/changes/{项目名}/`。
+A: 否。不传时从 `confirmedRequirement.summary` 首行推导项目名，生成 `project/{项目名}/changes/init/`。
 
 **Q: 转换器会直接创建文件吗？**  
 A: 不会。当前实现只返回 `blueprintForm`、`outputPath`、`documents`、`summary`，不写入磁盘。落盘需由调用方根据 `documents` 与 `templates/` 自行完成。

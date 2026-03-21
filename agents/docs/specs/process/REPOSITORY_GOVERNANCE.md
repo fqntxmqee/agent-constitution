@@ -84,9 +84,9 @@ agent-constitution/
 ```
 agent-constitution/
 ├── agents/fitbot/             # ❌ 项目应用代码
-├── openspec/changes/fitbot-pro/  # ❌ 项目规约
-├── openspec/changes/xiaohongshu-*/  # ❌ 项目规约
-├── openspec/changes/agent-monitor-dashboard/  # ❌ 项目规约
+├── project/                        # ✅ 项目规约目录
+│   ├── {项目名}/changes/{需求名}/  # 每个需求独立目录
+│   └── ...
 └── node_modules/              # ❌ 依赖
 ```
 
@@ -104,8 +104,8 @@ agent-constitution/
 # 1. 检查 agents/ 目录下是否有非 constitution 内容
 find agents/ -maxdepth 2 -type d | grep -v "constitution\|docs\|skills"
 
-# 2. 检查 openspec/changes/ 目录下是否有非宪法相关规约
-ls openspec/changes/ | grep -v "constitution"
+# 2. 检查 project/ 目录下是否有规约
+ls project/
 
 # 3. 检查大文件（>10MB）
 find . -type f -size +10M | grep -v ".git"
@@ -151,7 +151,7 @@ find . -name "node_modules" -o -name "dist" -o -name "build" | grep -v ".git"
 mkdir -p .archive/projects/YYYYMMDD
 
 # 2. 移动内容
-mv openspec/changes/fitbot-pro .archive/projects/
+mv project/fitbot-pro .archive/projects/
 mv agents/fitbot .archive/projects/
 
 # 3. 记录归档日志
@@ -170,12 +170,12 @@ git commit -m "chore: archive project-specific content (fitbot-pro)"
 
 ```gitignore
 # 项目特定内容
-openspec/changes/fitbot-*/
-openspec/changes/xiaohongshu-*/
-openspec/changes/agent-monitor-dashboard/
-openspec/changes/ai-content-generator/
-openspec/changes/p0-skills-development/
-openspec/changes/all-skills-delivery/
+project/fitbot-pro/changes/init/
+project/xiaohongshu-*/changes/init/
+project/agent-monitor-dashboard/changes/init/
+project/ai-content-generator/changes/init/
+project/p0-skills-development/changes/init/
+project/all-skills-delivery/changes/phase1/
 
 # 应用代码（非宪法智能体）
 agents/fitbot/

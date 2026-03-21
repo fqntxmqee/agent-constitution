@@ -1,4 +1,4 @@
-# 宪法 V3.7 补充规范 - 需求级并行架构
+# 宪法补充规范 - 需求级并行架构
 
 **版本**: V3.7.1  
 **生效日期**: 2026-03-10  
@@ -197,7 +197,7 @@
     {
       "name": "understanding-reqA-001",
       "status": "completed",
-      "output": "openspec/changes/p0-skills-development/"
+      "output": "project/p0-skills-development/changes/init/"
     },
     {
       "name": "resolution-reqA-001",
@@ -206,10 +206,10 @@
     }
   ],
   "artifacts": {
-    "proposal": "openspec/changes/p0-skills-development/proposal.md",
-    "specs": "openspec/changes/p0-skills-development/specs/requirements.md",
-    "design": "openspec/changes/p0-skills-development/design.md",
-    "tasks": "openspec/changes/p0-skills-development/tasks.md"
+    "proposal": "project/p0-skills-development/changes/init/proposal.md",
+    "specs": "project/p0-skills-development/changes/init/specs/requirements.md",
+    "design": "project/p0-skills-development/changes/init/design.md",
+    "tasks": "project/p0-skills-development/changes/init/tasks.md"
   }
 }
 ```
@@ -423,7 +423,7 @@
 ### 需求产物
 
 ```
-openspec/changes/{projectId}/
+project/{projectId}/changes/{changeId}/
 ├── proposal.md
 ├── specs/requirements.md
 ├── design.md

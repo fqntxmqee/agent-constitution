@@ -27,7 +27,7 @@
 {
   "confirmedRequirement": {
     "summary": "需求摘要或已确认的规约内容",
-    "path": "可选：openspec/changes/{项目名}/ 或澄清文档路径",
+    "path": "可选：project/{项目名}/changes/init/ 或澄清文档路径",
     "raw": "可选：完整需求正文"
   },
   "taskType": "development|content|skill",
@@ -60,7 +60,7 @@
 ```json
 {
   "blueprintForm": "openspec",
-  "outputPath": "openspec/changes/{项目名}/",
+  "outputPath": "project/{项目名}/changes/init/",
   "documents": [
     { "file": "proposal.md", "purpose": "项目提案与背景、目标、范围" },
     { "file": "specs/requirements.md", "purpose": "需求规格与验收条件（AC）" },
@@ -76,7 +76,7 @@
 ```json
 {
   "blueprintForm": "content-outline",
-  "outputPath": "openspec/changes/{项目名}/ 或约定内容目录",
+  "outputPath": "project/{项目名}/changes/init/ 或约定内容目录",
   "documents": [
     { "file": "outline.md", "purpose": "内容大纲与章节结构" },
     { "file": "style-guide.md", "purpose": "风格指南、语气、格式要求" },
@@ -91,7 +91,7 @@
 ```json
 {
   "blueprintForm": "execution-plan",
-  "outputPath": "openspec/changes/{项目名}/ 或约定技能/数据目录",
+  "outputPath": "project/{项目名}/changes/init/ 或约定技能/数据目录",
   "documents": [
     { "file": "plan.md", "purpose": "执行计划与步骤说明" },
     { "file": "checklist.md", "purpose": "检查清单与完成标准" },
@@ -216,7 +216,7 @@ agents/skills/skill-06-blueprint-converter/
 | TC-06 | 非法 taskType | `taskType: "unknown"` 或非规定枚举 | 返回错误信息或回退到默认形态（若规约允许）；行为在规约中明确 |
 | TC-07 | 含 context 的 OpenSpec | `taskType: "development"`，带 `context.intentResult`、`context.clarificationAnswers` | 产出 OpenSpec 结构，且 summary 或生成内容能体现 context 的利用（若实现生成逻辑） |
 | TC-08 | 不同 complexity | `complexity: "high"` 与 `complexity: "low"` 各一次（同一 taskType） | 输出结构一致；若实现包含粒度/里程碑逻辑，则 high 时任务或里程碑更细 |
-| TC-09 | outputPath 生成 | `confirmedRequirement.path` 存在 vs 不存在 | 有 path 时 `outputPath` 基于 path；无 path 时使用默认或从 summary 推导的项目名，且格式符合 `openspec/changes/{项目名}/` 或约定 |
+| TC-09 | outputPath 生成 | `confirmedRequirement.path` 存在 vs 不存在 | 有 path 时 `outputPath` 基于 path；无 path 时使用默认或从 summary 推导的项目名，且格式符合 `project/{项目名}/changes/init/` 或约定 |
 
 ### 覆盖率要求
 

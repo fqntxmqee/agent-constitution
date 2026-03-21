@@ -47,7 +47,7 @@ const { tester } = require('./agents/skills/skill-07-acceptance-tester/index.js'
 
 const result = await tester.test({
   blueprint: {
-    path: 'openspec/changes/my-project/',
+    path: 'project/my-project/changes/init/',
     acList: [
       { id: 'AC-1', description: '首页可访问', verification: 'file: src/pages/Home.tsx' },
       { id: 'AC-2', description: 'API 文档包含 GET /api/users', verification: '包含: GET /api/users' },
@@ -80,7 +80,7 @@ node run-quick-test.js
 ```javascript
 const result = await tester.test({
   blueprint: {
-    path: 'openspec/changes/my-project/',
+    path: 'project/my-project/changes/init/',
     documents: [
       { file: 'specs/requirements.md', purpose: '需求规格与 AC' },
     ],
@@ -286,7 +286,7 @@ node test.js
 | **报错：No AC found in blueprint documents** | 未提供 `acList` 且从 `blueprint.path` 下文档未解析到任何 AC。检查 path 是否正确、文档内是否含 `AC-1:` / `- [ ] AC-1:` 等格式。 |
 | **AC 一直 fail，但文件明明存在** | 路径相对于 `process.cwd()` 解析。请在正确的工作目录下调用，或使用绝对路径；且该路径需出现在 `deliverables.codePaths`/`docPaths`/`artifacts` 中。 |
 | **如何支持「包含某正则」？** | 当前实现仅支持「包含: 某关键字」的简单字符串匹配。复杂规则可扩展 `ACValidator._extractContentKeyword` 或在外层做预处理后传入 acList。 |
-| **report 想同步到飞书** | 使用输出的 `report` 字符串创建飞书文档，并将链接写入 `openspec/changes/{项目名}/test-report-feishu-url.txt`（参见 AGENTS.md 验收报告与飞书同步）。 |
+| **report 想同步到飞书** | 使用输出的 `report` 字符串创建飞书文档，并将链接写入 `project/{项目名}/changes/init/test-report-feishu-url.txt`（参见 AGENTS.md 验收报告与飞书同步）。 |
 
 ---
 

@@ -19,7 +19,7 @@
 ```javascript
 {
   // 必填：规约目录路径
-  specPath: string,  // e.g. "openspec/changes/skill-04-routing-decider/"
+  specPath: string,  // e.g. "project/skill-04-routing-decider/changes/init/"
   
   // 可选：验证配置
   config: {
@@ -41,7 +41,7 @@
 ### OpenSpec 文档结构
 
 ```
-openspec/changes/<project-name>/
+project/<project-name>/changes/init/
 ├── proposal.md          # 项目提案（必需）
 ├── specs/
 │   └── requirements.md  # 需求规格（必需）
@@ -143,7 +143,7 @@ openspec/changes/<project-name>/
   // 验证元数据
   meta: {
     validatedAt: "2026-03-10T09:42:00.000Z",
-    specPath: "openspec/changes/skill-04/",
+    specPath: "project/skill-04/changes/init/",
     projectName: "Skill-04 动态路由决策器"
   },
   
@@ -261,7 +261,7 @@ const specValidator = require('./skill-a03-spec-validator');
 
 // 验证规约
 const result = await specValidator.validate({
-  specPath: 'openspec/changes/skill-04-routing-decider/'
+  specPath: 'project/skill-04-routing-decider/changes/init/'
 });
 
 console.log('验证结果:', result.result.passed ? '通过' : '不通过');
@@ -272,7 +272,7 @@ console.log('得分:', result.result.score);
 
 ```javascript
 const result = await specValidator.validate({
-  specPath: 'openspec/changes/skill-04-routing-decider/',
+  specPath: 'project/skill-04-routing-decider/changes/init/',
   config: {
     strict: true,
     checkUserConfirmation: true
@@ -284,7 +284,7 @@ const result = await specValidator.validate({
 
 ```javascript
 const result = await specValidator.checkCompleteness({
-  specPath: 'openspec/changes/skill-04-routing-decider/'
+  specPath: 'project/skill-04-routing-decider/changes/init/'
 });
 ```
 

@@ -21,7 +21,7 @@ const specValidator = require('./index.js');
 
 // 验证规约
 const result = await specValidator.validate({
-  specPath: 'openspec/changes/skill-04-routing-decider/'
+  specPath: 'project/skill-04-routing-decider/changes/init/'
 });
 
 console.log('验证结果:', result.result.passed ? '通过' : '不通过');
@@ -117,10 +117,10 @@ console.log('得分:', result.result.score);
 
 ```bash
 # 完整验证
-node tools/spec-validator.js validate --path openspec/changes/skill-04/
+node tools/spec-validator.js validate --path project/skill-04/changes/init/
 
 # 仅检查完整性
-node tools/spec-validator.js check --path openspec/changes/skill-04/
+node tools/spec-validator.js check --path project/skill-04/changes/init/
 
 # 查看文档要求
 node tools/spec-validator.js docs

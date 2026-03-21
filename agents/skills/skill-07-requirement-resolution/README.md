@@ -42,7 +42,7 @@ const { solver } = require('./agents/skills/skill-06-requirement-resolution/inde
 async function run() {
   const result = await solver.solve({
     blueprint: {
-      path: 'openspec/changes/my-project/',  // 或直接传 tasks 数组
+      path: 'project/my-project/changes/init/',  // 或直接传 tasks 数组
       // tasks: [
       //   { id: 'Task-001', title: '实现登录', steps: ['添加 API', '写测试'], acceptanceCriteria: ['AC-1'] },
       // ],
@@ -71,7 +71,7 @@ run();
 
 ```javascript
 const result = await solver.solve({
-  blueprint: { path: 'openspec/changes/my-project/' },
+  blueprint: { path: 'project/my-project/changes/init/' },
   options: { dryRun: true },
 });
 // result.status === 'success'，result.deliverables 为空，executionLog 为计划条目
@@ -80,7 +80,7 @@ const result = await solver.solve({
 ### 3.3 通过 OpenClaw 调用需求解决智能体
 
 ```bash
-openclaw agent --agent requirement-resolution --message "按 openspec/changes/my-project/tasks.md 逐项执行，仅用 cursor agent --print，禁止 write 写代码"
+openclaw agent --agent requirement-resolution --message "按 project/my-project/changes/init/tasks.md 逐项执行，仅用 cursor agent --print，禁止 write 写代码"
 ```
 
 ---
@@ -125,7 +125,7 @@ const result = await solver.solve(input);
 ```json
 {
   "blueprint": {
-    "path": "openspec/changes/my-project/",
+    "path": "project/my-project/changes/init/",
     "tasks": [
       {
         "id": "Task-001",
@@ -179,7 +179,7 @@ const result = await solver.solve(input);
   "deliverables": [
     {
       "type": "artifact",
-      "path": "openspec/changes/my-project/Task-001-output",
+      "path": "project/my-project/changes/init/Task-001-output",
       "description": "任务标题"
     }
   ],

@@ -29,7 +29,7 @@
 
 ### 产出结构
 ```
-openspec/changes/add-dark-mode/
+project/add-dark-mode/changes/init/
 ├── proposal.md    # 为什么做、做什么
 ├── specs/         # 需求和场景
 ├── design.md      # 技术方案
@@ -67,10 +67,10 @@ openspec init
 ```
 
 **生成文件：**
-- `openspec/changes/daily-news-push/proposal.md`
-- `openspec/changes/daily-news-push/specs/requirements.md`
-- `openspec/changes/daily-news-push/design.md`
-- `openspec/changes/daily-news-push/tasks.md`
+- `project/daily-news-push/changes/init/proposal.md`
+- `project/daily-news-push/changes/init/specs/requirements.md`
+- `project/daily-news-push/changes/init/design.md`
+- `project/daily-news-push/changes/init/tasks.md`
 
 ### 2. 提案模板
 

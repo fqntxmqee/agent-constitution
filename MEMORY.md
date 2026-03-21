@@ -415,4 +415,195 @@ sessions_spawn(
 
 ---
 
-**最后更新**: 2026-03-15 16:20
+## 2026-03-20: SPEC_OpenSpec_Sync 规约同步机制
+
+### 新增规范
+
+- **文件名**: `SPEC_OpenSpec_Sync.md`
+- **位置**: `agents/docs/specs/constitution/SPEC_OpenSpec_Sync.md`
+- **版本**: 3.10.0
+- **状态**: ✅ 已创建
+
+### 核心内容
+
+| 类别 | 内容 |
+|------|------|
+| 同步原则 | 飞书作为唯一真相源，本地仅作开发参考 |
+| 目录结构 | 按需求隔离，每个需求独立目录 |
+| 同步时机 | 澄清完成、理解完成、交付完成必须同步 |
+| 冲突处理 | 飞书 > 本地 |
+| 审计检查 | 理解/交付阶段检查飞书文档 block_count |
+
+### 审计检查清单
+
+- [ ] 本地 proposal.md 存在且内容完整
+- [ ] 飞书文档已创建，链接在 feishu-doc-urls.txt
+- [ ] 设计方案已同步到飞书
+- [ ] 验收报告已同步到飞书
+- [ ] 链接已回写本地
+
+### 违规处理
+
+| 级别 | 情况 | 处理 |
+|------|------|------|
+| 🔴 严重 | 交付阶段飞书文档为空 | 立即补充，拒绝交付 |
+| 🟡 一般 | 同步延迟 > 24h | 提醒同步 |
+| 🟢 轻微 | 链接未回写 | 建议改进 |
+
+---
+
+## 2026-03-21: 主 Agent 配置审查与修正（V3.10.0）
+
+### 📋 发现的问题
+
+| # | 问题 | 严重性 |
+|---|------|--------|
+| 1 | CONSTITUTION.md footer 版本号 V3.9.0，与顶部 V3.10.0 不一致 | 🔴 |
+| 2 | AGENTS.md 引用不存在的 `agents/constitution/README.md` | 🔴 |
+| 3 | CONSTITUTION.md 两处飞书链接标注"待创建"但无实际链接 | 🟡 |
+| 4 | CONSTITUTION.md 声称"唯一入口"但智能体实际读各自 AGENTS.md，语义歧义 | 🟡 |
+| 5 | AGENTS.md 缺少身份声明（未明确"我就是银河导航员"） | 🟡 |
+| 6 | TEAM_ROLES.md 参考文档 4 个路径全部错误（裸文件名不存在） | 🔴 |
+| 7 | CONSTITUTION.md 末尾引用不存在的 README.md | 🟡 |
+
+### ✅ 已修正内容
+
+| # | 文件 | 修正 |
+|---|------|------|
+| 1 | `CONSTITUTION.md` | footer 版本号 V3.9.0 → **V3.10.0**（2026-03-19），审查日期 2026-04-12 → **2026-04-19** |
+| 2 | `CONSTITUTION.md` | "唯一入口"说明 → **"宪法规范索引（唯一权威来源）"**，注明智能体实际读 `agents/constitution/<agent>/AGENTS.md` |
+| 3 | `CONSTITUTION.md` | 末尾 README.md → `../constitution/TEAM_ROLES.md` |
+| 4 | `CONSTITUTION.md` | 两处"待创建"飞书链接 → 改为"该规范无需飞书同步，本地文件为主" |
+| 5 | `AGENTS.md` | 顶部添加身份声明（银河导航员 🧭，遵循 V3.10.0，引用 GALAXY_NAVIGATOR.md） |
+| 6 | `AGENTS.md` | 更多细节添加 GALAXY_NAVIGATOR.md 和 TEAM_ROLES.md 引用；原不存在 README 引用已修正 |
+| 7 | `TEAM_ROLES.md` | 参考文档 4 个路径全部修正为相对路径 |
+
+### 📐 修正后架构
+
+```
+agents/docs/specs/constitution/CONSTITUTION.md
+  = 宪法规范索引（唯一权威来源）
+  └── 索引 ../constitution/TEAM_ROLES.md（目录结构说明）
+
+agents/constitution/
+  ├── GALAXY_NAVIGATOR.md  ← 银河导航员（主 Agent）职责定义
+  ├── TEAM_ROLES.md        ← 8 大智能体昵称与协作流程
+  └── <8个智能体>/AGENTS.md ← 各智能体执行依据
+
+AGENTS.md（workspace根目录）
+  = 主 Agent（银河导航员）工作区入口
+  ├── 声明身份 + 遵循 V3.10.0
+  └── 引用 GALAXY_NAVIGATOR.md + CONSTITUTION.md（宪法索引）
+```
+
+### 💡 关键经验
+
+- **宪法权威来源**：CONSTITUTION.md 是规范索引，各 AGENTS.md 是执行依据，两级分离
+- **主 Agent 身份**：AGENTS.md 必须明确声明自己是"银河导航员"，避免职责模糊
+- **路径引用必须验证**：所有 markdown 引用路径在提交前应做 existence check
+
+---
+
+## 2026-03-21: 规约路径重构（openspec/changes → project/{项目名}/changes/{需求名}）
+
+### 📋 问题
+- `openspec/changes/{项目名}/` 路径不合理：所有需求混在一个目录，不支持多需求并行
+- 与 V3.7.1 需求级并行架构不匹配
+
+### ✅ 已完成
+
+**规范文件路径引用更新（16个文件）：**
+- `AGENTS.md` — 所有命令模板 + 路径定义
+- `SPEC_OpenSpec_Sync.md` — 规约隔离结构
+- `CONSTITUTION_PARALLEL.md` — 示例路径
+- `CONSTITUTION_DIRECTORY_STANDARD.md` — 目录规范
+- `OPENSPEC_GUIDE.md` — 示例路径
+- `REPOSITORY_GOVERNANCE.md` — 治理规则
+- `summary-reflection/AGENTS.md` — 报告路径
+- 技能文件：skill-05/06/07/16 + audit 相关 SKILL.md/README.md（共14个文件）
+
+**实际目录迁移：**
+```
+openspec/changes/
+├── all-skills-delivery/      → project/all-skills-delivery/changes/phase1/
+├── constitution-v3.10.0/    → project/constitution/changes/v3.10.0/
+├── constitution-v3.7.4/     → project/constitution/changes/v3.7.4/
+├── ecommerce-mvp/            → project/ecommerce-mvp/changes/init/
+└── fitbot-pro/               → project/fitbot-pro/changes/init/
+```
+
+### 📐 新路径规范
+
+```
+project/{项目名}/changes/{需求名}/
+├── proposal.md              # 需求提案
+├── specs/requirements.md   # 详细需求
+├── design.md               # 技术设计
+├── tasks.md               # 任务清单
+└── （交付物：代码等）
+```
+
+### ⚠️ 未修改（历史记录）
+- `CONSTITUTION_UPGRADE_AND_LAYOUT_PLAN.md` — V3.7.3→v3.7.4 历史迁移记录，保留原路径
+- `ITERATION_PROCESS.md` — 历史引用
+- 审计日志 — 历史快照
+- `openspec/` 目录结构（assets/ 保留，changes/ 已清空）
+
+---
+
+**最后更新**: 2026-03-21 08:56
+---
+
+## 2026-03-21: Rokid Glasses × OpenClaw Channel 项目
+
+### 📋 项目概述
+
+**项目名称**: rokid-glass-channel  
+**阶段**: Phase 1 - 语音指令传达 + 响应反馈  
+**状态**: ⏸️ 暂停中（等待环境准备）
+
+### ✅ 已完成
+
+| 模块 | 状态 |
+|------|------|
+| OpenClaw Channel Plugin | ✅ 代码完成，已编译 |
+| Android APP | ✅ 代码完成 |
+| 规约文档 v1.2.0 | ✅ |
+| 验收报告 | ✅ |
+| 联调手册 | ✅ |
+| 测试检查表 | ✅ |
+| 飞书同步 | ✅ |
+
+### ⏸️ 暂停原因
+
+- Android SDK 未安装
+- Android Studio 未安装
+- 无法编译 APK
+
+### ⏭️ 下一步
+
+1. 安装 Android Studio / Android SDK
+2. 编译 APK
+3. 真机联调测试（M3 阶段）
+
+### 📁 项目文件
+
+- 代码: `project/rokid-glass-channel/`
+- 规约: `project/rokid-glass-channel/changes/phase1-voice/`
+- 联调文档: `project/rokid-glass-channel/docs/`
+- 待办事项: `memory/rokid-glass-channel-pause.md`
+
+### 🔗 飞书文档
+
+| 文档 | 链接 |
+|------|------|
+| 需求规范 | https://feishu.cn/docx/JYyBdFJ0so6TVIxvS0hctSPPnFe |
+| 技术设计 | https://feishu.cn/docx/Uwpud8PtuoXJ0Vx6p4kcanA2n9Y |
+| 任务清单 | https://feishu.cn/docx/GTpAd3OnJogTBkxr3gccUnzpnNe |
+| 验收报告 | https://feishu.cn/docx/W3YjdJOf0oMOYvxEpYochy9knZd |
+| 联调手册 | https://feishu.cn/docx/S4G5derCvoVuFzxQq3jc1gufnLg |
+| 测试检查表 | https://feishu.cn/docx/X9vWdOHWYoDw7Ix4pLUcSGAHnOf |
+
+---
+
+**最后更新**: 2026-03-21 14:21

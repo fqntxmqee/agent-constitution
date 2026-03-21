@@ -32,7 +32,7 @@ description: Executes confirmed execution blueprints step-by-step, calls tools/A
 ```json
 {
   "blueprint": {
-    "path": "openspec/changes/{项目名}/",
+    "path": "project/{项目名}/changes/init/",
     "documents": [
       { "file": "tasks.md", "purpose": "可执行任务列表" },
       { "file": "specs/requirements.md", "purpose": "需求规格与 AC" },

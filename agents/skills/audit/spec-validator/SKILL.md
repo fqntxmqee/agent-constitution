@@ -32,7 +32,7 @@
 ### OpenSpec 文档结构
 
 ```
-openspec/changes/<project-name>/
+project/<project-name>/changes/init/
 ├── proposal.md          # 项目提案（必需）
 ├── specs/
 │   └── requirements.md  # 需求规格（必需）
@@ -141,7 +141,7 @@ openspec/changes/<project-name>/
 const specValidator = require('./spec-validator');
 
 const result = await specValidator.validate({
-  specPath: 'openspec/changes/skill-04-routing-decider/'
+  specPath: 'project/skill-04-routing-decider/changes/init/'
 });
 
 console.log('验证结果:', result.result.passed ? '通过' : '不通过');
