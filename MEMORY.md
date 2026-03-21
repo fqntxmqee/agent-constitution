@@ -606,4 +606,42 @@ project/{项目名}/changes/{需求名}/
 
 ---
 
-**最后更新**: 2026-03-21 14:21
+**最后更新**: 2026-03-21 15:25
+
+---
+
+## 2026-03-21: V3.11.0 宪法规范升级（BMAD 借鉴）
+
+### 📜 规范版本
+- **从 V3.10.0 升级到 V3.11.0**
+- **生效日期**: 2026-03-22（冷静期后）
+- **状态**: ✅ 已提交 Git + 推送
+
+### 🎯 核心变更（借鉴 BMAD Method）
+
+| # | 改进项 | 来源 |
+|---|--------|------|
+| P0-1 | Story File 上下文工程化 | BMAD Story File |
+| P0-2 | 需求复杂度评级（C/B/A/S） | BMAD 自适应路径 |
+| P1-3 | Clarification 拆分为 Analysis + Clarification | BMAD 分析阶段 |
+| P1-4 | 8 个智能体 SOP 清单化 | BMAD SOP 清单 |
+
+### 📋 决策记录
+- DEC-031: Story File 上下文工程化
+- DEC-032: 需求复杂度评级机制
+- DEC-033: Clarification 阶段拆分
+- DEC-034: 智能体 SOP 清单化
+
+### 📁 新增文档
+- `story/STORY_FILE_SPEC.md`
+- `DEC-031~034.md`
+- `DECISION_LOG.md`
+
+### ⚠️ Type-B 冷静期
+- 冷静期：24h（2026-03-22 15:17 截止）
+- V3.11.0 将在冷静期后正式生效
+
+### 💡 经验
+- 3 个子智能体并行更新 SOP 章节，总耗时 1m32s
+- Story File 规范设计参考了 BMAD Story File 上下文工程化理念
+- Git Hook 自动备份机制在提交时触发
