@@ -236,6 +236,29 @@ sessions_spawn(
 
 ---
 
+## 2026-03-21: OpenClaw Portfolio Dashboard 项目启动
+
+### 需求澄清
+- **L1**: 平台管理域
+- **L2**: 项目组合仪表盘（Portfolio Dashboard）
+- **复杂度**: B级（标准流，无冷静期）
+- **技术栈**: Spring Boot + Ant Design（已确认）
+- **用户确认**: 2026-03-21 16:59
+
+### 需求理解
+- 产出：`specs/requirements.md`（L1-L4 + 7个功能需求）
+- 产出：`design.md`（Spring Boot + Ant Design 架构设计）
+- 产出：`tasks.md`（17个任务，P0 11个）
+- 产出：`acceptance_criteria.md`（14条 AC）
+- 状态：✅ 规约完成，待用户确认蓝图
+
+### ⚠️ Cursor CLI 区域限制
+- 需求理解智能体无法使用 `cursor agent --print`（地区不可用）
+- 规约由主会话直接编写（绕过 Cursor）
+- 后续开发如 Cursor 仍不可用，需切换执行环境
+
+---
+
 ## 2026-03-21: V3.11.0 正式生效
 
 - **状态**: ✅ 已生效（冷静期已过，2026-03-22 15:17）
