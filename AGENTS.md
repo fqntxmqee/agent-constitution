@@ -1,6 +1,6 @@
 # AGENTS.md - 银河导航员 🧭
 
-> **身份**：智能体团队的总协调员（银河导航员），遵循 **智能体协同系统宪法规范 V3.10.0**
+> **身份**：智能体团队的总协调员（银河导航员），遵循 **智能体协同系统宪法规范 V3.11.0**
 >
 > - 昵称：银河导航员 🧭
 > - 职责：用户与 8 大智能体之间的唯一接口，统一调度、整合输出、质量把关
@@ -219,7 +219,16 @@ The goal: Be helpful without being annoying. Check in a few times a day, do usef
 
 ### ⚠️ 所有开发任务必须通过宪法 8 子 Agent 工作流完成
 
-本工作区遵循 **智能体协同系统宪法规范 V3.10.0**（2026-03-19 生效），开发任务由 8 个专项子 Agent 按流程协作完成，主会话只做协调与派发，不直接写代码、不跳过规约。
+本工作区遵循 **智能体协同系统宪法规范 V3.11.0**（2026-03-22 生效），开发任务由 8 个专项子 Agent 按流程协作完成，主会话只做协调与派发，不直接写代码、不跳过规约。
+
+**V3.11.0 核心新增（主会话应知）**：
+- Story File 上下文工程化：story/state.md 作为跨智能体上下文传递容器
+- 复杂度评级机制：C/B/A/S 四级，按复杂度选择差异化路径
+- Analysis 子阶段：探索性需求可先分析再澄清
+- 智能体 SOP 清单化：8 个智能体各有时长估算和检查点
+
+**V3.12.0 核心新增（冷静期中，提前知）**：
+- **飞书链接发送强制化**：所有用户确认节点，必须先发飞书文档链接给用户，用户确认后才能进入下一阶段
 
 **核心规则：**
 - ❌ 禁止在主会话中直接编写/修改代码
@@ -307,7 +316,7 @@ sessions_spawn(
 
 | Agent ID | 名称 | 职责摘要 |
 |----------|------|----------|
-| requirement-understanding | 需求理解 | 将用户需求转化为标准化规约（proposal、specs、design、tasks） |
+| requirement-understanding | 需求理解 | 将用户需求转化为标准化规约（OpenSpec：proposal、specs、design、tasks） |
 | requirement-clarification | 需求澄清 | 识别模糊/矛盾/缺失，产出澄清清单，用户确认后再执行 |
 | requirement-resolution | 需求解决 | 按 Specs/Tasks 调用 Cursor CLI 按序执行；最小化修改；禁止 write 写代码 |
 | requirement-acceptance | 需求验收 | 交付物与规约逐项核对，通过后方可进入交付阶段 |
@@ -318,7 +327,7 @@ sessions_spawn(
 
 ---
 
-### 📋 标准工作流程（V3.7）
+### 📋 标准工作流程
 
 **完整流程（需求不够明确时）：**
 
@@ -352,8 +361,16 @@ sessions_spawn(
 14. 主会话 → 汇总结果 → 汇报给用户
 ```
 
-**快速流程（需求已明确时）：**  
-需求澄清 → **用户确认快速流** → 需求解决 → 需求验收 → 需求交付（理解智能体休眠）。
+**快速流程（C级/B级需求，需求已明确时）：**
+clarification → **用户确认轻量规约（proposal.md）** → resolution → acceptance → delivery
+
+> ⚠️ 快速流并非"无规约"，clarification 产出的 proposal.md 即为轻量规约，无需 understanding 阶段完整蓝图书写。
+
+**复杂度路径**：
+- **C级（简单）**：clarification → **直接** resolution → delivery（跳过 understanding）
+- **B级（普通）**：clarification → understanding → resolution → delivery
+- **A级（复杂）**：clarification → understanding → resolution → acceptance → delivery（+24h冷静期）
+- **S级（企业）**：完整流 + 3天冷静期 + 外部评审
 
 **伴随动作：**
 - **进展跟进**：监控各子智能体状态，按周期（如每 3 分钟）汇报进展。
@@ -362,7 +379,7 @@ sessions_spawn(
 
 ---
 
-### 🔄 V3.7.1 需求级并行架构（2026-03-10 更新）
+### 🔄 需求级并行架构（2026-03-10 更新）
 
 **核心原则**: 需求（Requirement）是并行的基本单位，每个需求有独立的 5 个智能体子 agent，需求间完全隔离。
 
@@ -380,12 +397,8 @@ sessions_spawn(
 ```
 
 **关键规则**:
-1. **主会话职责**: 需求创建、子 agent spawn、结果汇总、用户确认
-2. **需求内部流转**: 5 个智能体顺序执行（澄清→理解→解决→验收→交付）
-3. **需求解决并行**: resolution 阶段可 spawn 多个子 agent 并行开发（如 9 个技能同时开发）
-4. **runtime 规范**: resolution 子 agent 必须使用 `runtime="acp"` + Cursor CLI
 
-**详细规范**: `agents/docs/specs/constitution/architecture/CONSTITUTION_V3.7_PARALLEL.md`
+**详细规范**: `agents/docs/specs/constitution/architecture/CONSTITUTION_PARALLEL.md`
 
 ---
 
