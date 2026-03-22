@@ -232,16 +232,16 @@ sessions_spawn(
 - [ ] 小红书前端项目历史遗留评估（`runtime="acp"` 重新执行需求解决 - 需评估是否仍需执行）
 - [ ] Rokid Glass Channel 推进（Android SDK/Studio 未安装，详见 `memory/rokid-glass-channel-pause.md`）
 - [ ] 周期性支撑智能体（progress-tracking / audit / summary-reflection）cron 配置确认
-- [ ] 飞书宪法变更通知 V3.11.0 同步
+- [x] 飞书宪法变更通知 V3.11.0 同步 ✅（https://feishu.cn/docx/Y5iMdtEBcoNY8SxtpBjcOKlqn2b）
 
 ---
 
-## 2026-03-21: OpenClaw Portfolio Dashboard 项目暂停
+## 2026-03-21: OpenClaw Portfolio Dashboard 项目进行中
 
 ### 项目状态
-- **状态**: ⏸️ 暂停
-- **暂停时间**: 2026-03-21 19:20
-- **暂停原因**: 用户指令暂停
+- **状态**: 🔄 进行中（需求解决阶段）
+- **恢复时间**: 2026-03-21 21:05
+- ACP session: `agent:cursor:acp:f4ca5c1a-9a59-4243-b520-b87bf23b8d20`
 
 ### 已完成
 - 需求澄清 ✅
@@ -253,8 +253,8 @@ sessions_spawn(
 - 技术设计+任务: https://feishu.cn/docx/LhM3dZGbPo86YHx4BKOcVe4wnNg
 
 ### 待办
-- 待用户恢复项目后继续需求解决阶段
-- Cursor CLI 环境问题待解决（OpenClaw exec 环境 vs 终端环境差异）
+- 需求解决阶段进行中（T-01~T-17）
+- Cursor CLI 环境问题已解决（agentId 应为 "cursor"，不是 requirement-resolution）
 
 ---
 
