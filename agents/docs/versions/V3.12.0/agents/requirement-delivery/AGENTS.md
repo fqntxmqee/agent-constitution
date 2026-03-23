@@ -119,6 +119,47 @@
 
 ---
 
+### ⚠️ ACP Harness 强制规范（2026-03-12 更新）
+
+**核心规则：** 按需使用 `runtime="acp"`，禁止使用 `runtime="subagent"`。
+
+**正确用法：**
+```python
+
+# 需求交付
+sessions_spawn(
+    runtime="acp",                    # ← 必须用 acp，不是 subagent
+    agentId="cursor",
+    label="requirement-delivery-xxx",
+    task="Git 提交、部署、交付报告"
+)
+```
+
+**错误用法（禁止）：**
+```python
+# ❌ 禁止这样用！
+sessions_spawn(
+    runtime="subagent",      # ← 错误！subagent 没有 Cursor 上下文
+    agentId="cursor",  # 或其他三个智能体
+    label="requirement-xxx",
+    task="..."
+)
+```
+
+**为什么必须用 ACP：**
+1. OpenClaw 在 `runtime="acp"` 下拉起 **Cursor CLI** 的 ACP 服务端：`agent acp`（与 `cursor agent acp` 等价，取决于 PATH 中的可执行文件名），经 **stdio + JSON-RPC** 与宿主集成；在工作区上下文中执行，不限于仅在 Cursor 桌面 IDE 内使用（参见 [Using Agent in CLI — ACP](https://cursor.com/docs/cli/using)）
+2. **回退路径**：无法使用 ACP 时，可用 `cursor agent --print`（官方称为非交互 / headless 模式，见 [Using Agent in CLI — Non-interactive](https://cursor.com/docs/cli/using)）委托 Cursor 完成步骤，工具能力与 CLI 一致
+
+**各智能体使用 Cursor CLI 的原因：**
+| 智能体 | 为什么需要 Cursor CLI |
+|--------|----------------------|
+| 需求理解 | 读取项目代码结构、技术栈、依赖关系，生成贴合实际的规约 |
+| 需求解决 | 编写代码、运行自测、修复循环 |
+| 需求验收 | 运行测试套件、代码审查、安全扫描、一致性比对 |
+| 需求交付 | Git 操作、环境检查、敏感信息扫描 |
+
+---
+
 ## 📤 产出
 
 - **交付物**（按用户指定格式与渠道）

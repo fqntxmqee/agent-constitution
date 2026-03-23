@@ -4,6 +4,51 @@
 
 ---
 
+## 2026-03-23: V3.13.0 - 移除强制 ACP 模式
+
+### 📜 规范升级
+
+- **从 V3.12.0 升级到 V3.13.0**
+- **生效日期**: 2026-03-23
+- **状态**: ✅ 已完成
+
+### 🎯 核心变更
+
+**移除强制 ACP 模式要求**：
+- V3.12.0: 需求解决智能体**必须**使用 `runtime="acp"`
+- V3.13.0: 智能体**自主选择**执行方式（ACP / Subagent / 直接工具调用）
+
+### 📝 变更原因
+
+1. Cursor ACP 模式不可用（2026-03-22 发现 12 个会话全部失败）
+2. 强制 ACP 导致开发任务阻塞
+3. 不同任务对上下文需求不同，应允许灵活选择
+
+### 📁 更新的文件
+
+| 文件 | 变更 |
+|------|------|
+| `AGENTS.md` | 移除 runtime="acp" 强制要求，改为自主选择 |
+| `agents/constitution/requirement-resolution/AGENTS.md` | V3.13.0，新增执行方式自主选择说明 |
+| `agents/constitution/audit/AGENTS.md` | 审计检查从 runtime 改为 sessions_spawn |
+| `MEMORY.md` | 更新强制规范、审计检查点、违规处理 |
+
+### ⚠️ 保留铁律
+
+- ❌ 禁止主会话直接 `write`/`edit` 业务代码到 `/project/` 或 `/src/`
+- ✅ 必须通过 `sessions_spawn` 派发任务给子智能体
+- ✅ 子智能体可自主选择执行方式
+
+### 💡 执行方式选择建议
+
+| 方式 | 适用场景 |
+|------|----------|
+| ACP (`runtime="acp"`) | 有完整项目上下文需求、复杂开发任务 |
+| Subagent (`runtime="subagent"`) | 简单任务、ACP 不可用时 |
+| 直接工具调用 | ACP 和 CLI 均不可用时的回退 |
+
+---
+
 ## 2026-03-09: V3.7 宪法规范升级
 
 ### 📜 规范版本
@@ -85,10 +130,10 @@
 
 ### ⚠️ 强制规范（必须遵守）
 
-#### ACP Harness 规范
-- ✅ 需求解决智能体**必须**使用 `runtime="acp"`（不是 `subagent`）
-- ✅ 需求解决智能体**必须**使用 Cursor CLI（`cursor agent --print`）+ PTY 模式
-- ❌ 禁止使用 `write` 工具直接创建业务代码
+#### 子智能体执行规范
+- ✅ 需求解决智能体通过 `sessions_spawn` 执行
+- ✅ 执行方式自主选择（ACP / Subagent / 直接工具调用）
+- ❌ 禁止主会话直接使用 `write` 工具创建业务代码
 
 #### 用户确认节点
 - 意图确认（澄清智能体输出后）
@@ -99,8 +144,7 @@
 
 #### 审计检查点（开发类任务）
 - [ ] 规约先行（proposal + specs + design + tasks）
-- [ ] **runtime="acp"**（严重违规：使用 `subagent`）
-- [ ] 需求解决仅用 Cursor CLI
+- [ ] 通过 `sessions_spawn` 执行（严重违规：主会话直接 write）
 - [ ] 需求验收独立验证（严禁采信解决智能体自查报告）
 - [ ] Git 提交规范
 
@@ -161,19 +205,18 @@
 
 ### 💡 重要经验
 
-#### 为什么必须用 ACP (runtime="acp")
-1. ACP 在 Cursor IDE 中执行，有完整项目上下文
-2. 支持 `cursor agent --print` 原生用法
-3. 符合宪法规范要求（需求解决必须用 Cursor CLI）
-4. Subagent 没有 Cursor 环境，无法正确执行开发任务
+#### 执行方式选择
+- ACP 模式：有完整项目上下文需求时优先
+- Subagent 模式：简单任务或 ACP 不可用时
+- 直接工具调用：ACP 和 CLI 均不可用时的回退
 
 #### 审计严重违规
-- 使用 `runtime="subagent"` 执行开发任务 → 标记为严重违规，必须重做
+- 主会话直接 `write` 业务代码 → 标记为严重违规，必须重做
 - 这会触发审计智能体的熔断机制
 
 ### ⚠️ 违规处理
-- 🔴 严重违规（无规约开发、使用 subagent、跳过验收）→ 立即熔断，必须整改重做
-- 🟡 一般违规（未用 Cursor CLI、文档不全）→ 限期整改
+- 🔴 严重违规（无规约开发、主会话直接 write、跳过验收）→ 立即熔断，必须整改重做
+- 🟡 一般违规（文档不全、未用 sessions_spawn）→ 限期整改
 - 🟢 轻微违规（格式问题、命名不规范）→ 建议改进
 
 ---
@@ -637,11 +680,96 @@ project/{项目名}/changes/{需求名}/
 
 ---
 
-**最后更新**: 2026-03-21 15:25
+**最后更新**: 2026-03-22 20:29
 
 ---
 
-## 2026-03-21: V3.11.0 宪法规范升级（BMAD 借鉴）
+## 2026-03-22 20:29: Self-Improving Proactive Agent 安装与整合
+
+### 📥 已安装
+- `skill-vetter` (1.0.0) - 安全审查，即装即用
+- `self-improving-proactive-agent` (1.0.0) - 自提升主动智能体
+- `summarize` (1.0.0) - CLI工具，需安装 `brew install steipete/tap/summarize`
+
+### 🔗 与 summary-reflection 整合
+
+| 系统 | 性质 | 触发 |
+|------|------|------|
+| `summary-reflection` 智能体 | 离线深度分析 | 每日 23:00 + 任务完成后 |
+| `~/self-improving/` | 实时轻量学习 | 每个 session 持续 |
+| `~/proactivity/` | 主动执行状态 | 每次 heartbeat |
+
+**整合原则**：不重叠，互相补强。summary-reflection 产出改进方案 → 写入 corrections.md → 用户确认后 promote 到 memory.md。
+
+### 📁 目录结构
+```
+~/self-improving/          # 持久学习
+~/proactivity/             # 主动执行
+```
+
+### ⚠️ 下次 session 验证
+- [ ] 验证 ~/self-improving/ 和 ~/proactivity/ 文件存在
+- [ ] HEARTBEAT.md 主动心跳行为是否生效
+
+---
+
+## ⚠️ 铁律（2026-03-23 追加）
+
+**禁止主会话直接写业务代码到 project/src 目录**
+- 触发：`write`/`edit` 目标含 `/project/` 或 `/src/` → 必须走 `sessions_spawn`
+- 绝不允许用"用户授权豁免"绕过
+- ACP 不可用 → 尝试 subagent → 绝不允许主会话直接 write
+- 违反 = 严重违规，标记 PROCESS_VIOLATION
+
+---
+
+## 2026-03-22: V3.12.0 正式生效 + ACP 空会话分析
+
+### 📜 版本状态
+- **宪法规范版本**: V3.12.0 ✅ 今日正式生效
+- **V3.11.0**: 2026-03-22 15:17 冷静期结束，已并入 V3.12.0
+
+### 🔍 ACP Cursor 会话问题分析
+
+#### 问题发现
+- **12 个 ACP cursor 会话**全部 `messages: []`，属于残留会话记录
+- Portfolio T-01 脚手架任务**至少重试了 5 次**，全部立即以 `acpx exited with code 1` 失败
+
+#### 根因确认
+| 原因 | 证据 |
+|------|------|
+| `cursor-agent acp` 命令存在但 Cursor 模型服务不可用 | 所有会话在 phase:start 后 2-3 秒即 phase:error，退出码 1 |
+| 不是网络/权限问题 | acpx 进程启动成功（phase:start 记录存在） |
+| 不是 CLI 版本问题 | cursor-agent 版本 2026.02.27-e7d2ef6 |
+
+#### 会话分类
+| 类型 | 数量 | 最后更新时间 |
+|------|------|-------------|
+| Portfolio T-01 重试会话 | 5 个 | 14:10 (ee68f330) |
+| ACP 测试会话 | 1 个 | 03-20 |
+| 其他 agent ACP 后台调用 | 5+ 个 | 分散 |
+
+#### 关键证据（acp-stream.jsonl）
+```
+所有失败会话共同模式:
+1. lifecycle/phase:start (启动成功)
+2. ~2-3秒后 lifecycle/phase:error
+3. error: "acpx exited with code 1"
+4. cursor stream relay timed out after 21600s (6小时超时)
+```
+
+#### 结论
+- **Cursor ACP 模式根本不可用**，不是暂时故障
+- 建议切换到其他 ACP agent（如 `pi`、`codex`、`claude`）
+- 或使用非 ACP 的 `cursor agent --print` 模式（但宪法规定开发任务必须用 ACP）
+
+#### 待用户决策
+- [ ] 是否切换到其他 ACP agent？
+- [ ] 是否临时授权 write 工具绕过 ACP 限制？
+
+---
+
+## 2026-03-21 15:25
 
 ### 📜 规范版本
 - **从 V3.10.0 升级到 V3.11.0**

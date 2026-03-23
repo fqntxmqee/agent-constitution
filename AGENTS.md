@@ -236,82 +236,11 @@ The goal: Be helpful without being annoying. Check in a few times a day, do usef
 - ❌ 禁止没有经需求理解/澄清确认的规约就直接开发
 - ❌ 禁止开发完成后不经验收就交付
 - ✅ 必须按流程调用 **需求理解** →（可选）**需求澄清** → **需求解决** → **需求验收** → **需求交付**
-- ✅ 需求解决等开发类 harness 智能体须通过 **Cursor CLI**：**优先** `runtime="acp"`（底层为 `cursor agent acp` / `agent acp`，stdio + JSON-RPC，见 [Cursor ACP 文档](https://cursor.com/docs/cli/acp)）；**仅当无法走 ACP** 时用 `cursor agent --print` 等非交互方式回退；禁止用 `write` 写业务代码
+- ✅ 需求解决等开发类 harness 智能体须通过 **子智能体执行**：主会话使用 `sessions_spawn` 派发任务；执行方式由智能体根据环境自主选择（ACP / 非交互 CLI / 直接工具调用）
 - ✅ 需求验收智能体必须做交付物与规约的逐项核对，并可选用浏览器自动化 + 截图验证
 - ✅ 进展跟进 / 审计 / 总结反思 按周期或任务节点运行（见下文）
 
 ---
-
-### ⚠️ ACP Harness 强制规范（V3.7.2 · 2026-03-12 更新）
-
-**核心规则：** 需求理解、需求解决、需求验收、需求交付智能体必须使用 `runtime="acp"`，禁止使用 `runtime="subagent"`。
-
-**适用智能体：**
-- ✅ `requirement-understanding`（需求理解）- 需要读取项目上下文生成规约
-- ✅ `requirement-resolution`（需求解决）- 需要完整项目上下文编写代码
-- ✅ `requirement-acceptance`（需求验收）- 需要运行测试、代码审查
-- ✅ `requirement-delivery`（需求交付）- 需要 Git 操作、环境检查
-
-**正确用法：**
-```python
-# 需求理解
-sessions_spawn(
-    runtime="acp",                    # ← 必须用 acp，不是 subagent
-    agentId="requirement-understanding",
-    label="requirement-understanding-xxx",
-    task="按澄清提案产出 OpenSpec 规约"
-)
-
-# 需求解决
-sessions_spawn(
-    runtime="acp",                    # ← 必须用 acp，不是 subagent
-    agentId="requirement-resolution",
-    label="requirement-resolution-xxx",
-    task="按 tasks.md 执行，使用 Cursor CLI"
-)
-
-# 需求验收
-sessions_spawn(
-    runtime="acp",                    # ← 必须用 acp，不是 subagent
-    agentId="requirement-acceptance",
-    label="requirement-acceptance-xxx",
-    task="按 AC 逐项验收，独立验证"
-)
-
-# 需求交付
-sessions_spawn(
-    runtime="acp",                    # ← 必须用 acp，不是 subagent
-    agentId="requirement-delivery",
-    label="requirement-delivery-xxx",
-    task="Git 提交、部署、交付报告"
-)
-```
-
-**错误用法（禁止）：**
-```python
-# ❌ 禁止这样用！
-sessions_spawn(
-    runtime="subagent",      # ← 错误！subagent 没有 Cursor 上下文
-    agentId="requirement-understanding",  # 或其他三个智能体
-    label="requirement-xxx",
-    task="..."
-)
-```
-
-**为什么必须用 ACP：**
-1. OpenClaw 在 `runtime="acp"` 下拉起 **Cursor CLI** 的 ACP 服务端：`agent acp`（与 `cursor agent acp` 等价，取决于 PATH 中的可执行文件名），经 **stdio + JSON-RPC** 与宿主集成；在工作区上下文中执行，不限于仅在 Cursor 桌面 IDE 内使用（参见 [Using Agent in CLI — ACP](https://cursor.com/docs/cli/using)）
-2. **回退路径**：无法使用 ACP 时，可用 `cursor agent --print`（官方称为非交互 / headless 模式，见 [Using Agent in CLI — Non-interactive](https://cursor.com/docs/cli/using)）委托 Cursor 完成步骤，工具能力与 CLI 一致
-3. 符合宪法规范要求（开发类任务必须通过 Cursor CLI，禁止在无 harness 下直接 `write` 业务代码）
-4. `runtime="subagent"` 不具备上述 Cursor CLI harness，无法可靠完成开发类任务
-
-**各智能体使用 Cursor CLI 的原因：**
-| 智能体 | 为什么需要 Cursor CLI |
-|--------|----------------------|
-| 需求理解 | 读取项目代码结构、技术栈、依赖关系，生成贴合实际的规约 |
-| 需求解决 | 编写代码、运行自测、修复循环 |
-| 需求验收 | 运行测试套件、代码审查、安全扫描、一致性比对 |
-| 需求交付 | Git 操作、环境检查、敏感信息扫描 |
-
 
 **子 Agent 工作区与职责**（详见 `agents/constitution/<agent-id>/AGENTS.md`）：
 
@@ -319,7 +248,7 @@ sessions_spawn(
 |----------|------|----------|
 | requirement-understanding | 需求理解 | 将用户需求转化为标准化规约（OpenSpec：proposal、specs、design、tasks） |
 | requirement-clarification | 需求澄清 | 识别模糊/矛盾/缺失，产出澄清清单，用户确认后再执行 |
-| requirement-resolution | 需求解决 | 优先在 ACP（`runtime="acp"`）下按 Specs/Tasks 执行；回退时用 `cursor agent --print`；最小化修改；禁止 write 写业务代码 |
+| requirement-resolution | 需求解决 | 按 Specs/Tasks 执行；最小化修改；自主选择执行方式（ACP / CLI / 工具调用） |
 | requirement-acceptance | 需求验收 | 交付物与规约逐项核对，通过后方可进入交付阶段 |
 | requirement-delivery | 需求交付 | Git 提交、部署、交付报告 |
 | progress-tracking | 进展跟进 | 监控各子智能体状态，周期汇报 |
@@ -390,9 +319,9 @@ audit 智能体每 2 小时检查最近 24h 内的宪法文件变更：
    ↓
 7. 用户确认蓝图
    ↓
-8. 主会话 → 调用 requirement-resolution（需求解决，runtime="acp"）
+8. 主会话 → 调用 requirement-resolution（需求解决）
    ↓
-9. 需求解决 → 在 ACP（`runtime="acp"`）承载的 Cursor CLI 中按 tasks.md 执行；无法走 ACP 时回退 `cursor agent --print`；禁止 write 业务代码
+9. 需求解决 → 按 tasks.md 执行；自主选择执行方式（ACP / CLI / 工具调用）
    ↓
 10. 主会话 → 调用 requirement-acceptance（需求验收）
     ↓
@@ -472,15 +401,12 @@ openclaw agent --agent requirement-delivery --message "对 project/{项目名}/c
 主会话使用 `sessions_spawn` 时，在 `task` 中写明「以某某智能体身份」并传入规约路径，子会话应读取 `agents/constitution/<agent-id>/AGENTS.md` 与 `SOUL.md` 遵守职责。例如：
 
 ```python
-# 需求解决（⚠️ 必须用 runtime="acp"）
+# 需求解决（示例）
 sessions_spawn(
-    runtime="acp",                    # ← V3.7 强制：必须用 acp，不是 subagent
     agentId="requirement-resolution",
     label="requirement-resolution-xxx",
     task="""你现为需求解决智能体。规约路径：project/{项目名}/changes/{需求名}/。
-    请按 tasks.md 顺序执行：本会话应以 runtime="acp" 运行（Cursor CLI ACP：`cursor agent acp` / `agent acp`）。
-    若当前环境无法使用 ACP，可回退 `cursor agent --print` 等非交互 CLI 调用完成步骤。
-    禁止用 write 直接创建业务代码。
+    请按 tasks.md 顺序执行，自主选择执行方式。
     完成后汇报执行记录与验证结果。""",
     mode="run"
 )
@@ -547,6 +473,20 @@ project/{项目名}/changes/{需求名}/
 
 ---
 
-## Make It Yours
+## 🚨 铁律：禁止主会话直接写业务代码
+
+**触发条件**：任何 `write`/`edit` 调用，若目标路径包含 `/project/` 或 `/src/`
+
+**强制行为**：
+- ❌ 禁止主会话直接使用 `write`/`edit` 写 `.java` `.ts` `.tsx` `.js` 文件
+- ❌ 禁止"用户授权豁免"作为绕过此规则的借口
+- ✅ 唯一正确做法：`sessions_spawn` → 子智能体执行 → 结果回写 memory
+
+**检查清单**（每次写代码前必须自问）：
+- [ ] 这是 `sessions_spawn` 的结果吗？
+- [ ] 目标路径在 `/project/` 或 `/src/` 下吗？
+- [ ] 有子智能体完成通知吗？
+
+
 
 This is a starting point. Add your own conventions, style, and rules as you figure out what works.

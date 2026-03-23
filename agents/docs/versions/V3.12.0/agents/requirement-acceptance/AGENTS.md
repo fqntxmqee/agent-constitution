@@ -74,10 +74,150 @@
 
 ---
 
+### ⚠️ ACP Harness 强制规范（2026-03-12 更新）
+
+**核心规则：** 按需使用 `runtime="acp"`，禁止使用 `runtime="subagent"`。
+
+**正确用法：**
+```python
+# 需求验收（含 E2E）
+sessions_spawn(
+    runtime="acp",                    # ← 必须用 acp，不是 subagent
+    agentId="cursor",
+    label="requirement-acceptance-xxx",
+    task="按 AC 逐项验收，含浏览器 E2E",
+    timeoutSeconds=900,               # ← 15 分钟（含 E2E 启动服务时间）
+    mode="run"
+)
+
+# 需求验收（纯后端无 E2E）
+sessions_spawn(
+    runtime="acp",
+    agentId="cursor",
+    label="requirement-acceptance-xxx",
+    task="按 AC 逐项验收，无 E2E",
+    timeoutSeconds=720,               # ← 12 分钟
+    mode="run"
+)
+```
+
+**错误用法（禁止）：**
+```python
+# ❌ 禁止这样用！
+sessions_spawn(
+    runtime="subagent",      # ← 错误！subagent 没有 Cursor 上下文
+    agentId="cursor",  # 或其他三个智能体
+    label="requirement-xxx",
+    task="..."
+)
+```
+
+**为什么必须用 ACP：**
+1. OpenClaw 在 `runtime="acp"` 下拉起 **Cursor CLI** 的 ACP 服务端：`agent acp`（与 `cursor agent acp` 等价，取决于 PATH 中的可执行文件名），经 **stdio + JSON-RPC** 与宿主集成；在工作区上下文中执行，不限于仅在 Cursor 桌面 IDE 内使用（参见 [Using Agent in CLI — ACP](https://cursor.com/docs/cli/using)）
+2. **回退路径**：无法使用 ACP 时，可用 `cursor agent --print`（官方称为非交互 / headless 模式，见 [Using Agent in CLI — Non-interactive](https://cursor.com/docs/cli/using)）委托 Cursor 完成步骤，工具能力与 CLI 一致
+
+**各智能体使用 Cursor CLI 的原因：**
+| 智能体 | 为什么需要 Cursor CLI |
+|--------|----------------------|
+| 需求理解 | 读取项目代码结构、技术栈、依赖关系，生成贴合实际的规约 |
+| 需求解决 | 编写代码、运行自测、修复循环 |
+| 需求验收 | 运行测试套件、代码审查、安全扫描、一致性比对 |
+| 需求交付 | Git 操作、环境检查、敏感信息扫描 |
+
+---
+
 ## 📤 产出
 
-- **《验收通过报告》** 或 **《失败诊断报告》**
-- 若用户 override：**《用户 override 记录》** 并转交交付与审计
+### 《验收通过报告》模板（强制格式）
+
+```markdown
+# 验收报告：{项目名称} - {需求名}
+
+**验收时间**：YYYY-MM-DD HH:mm  
+**验收智能体**：requirement-acceptance  
+**任务类型**：[开发类/内容类/技能类]  
+**是否含 E2E**：是/否
+
+---
+
+## 一、AC 加载清单
+
+**来源文件**：
+- [ ] `project/{项目}/changes/{需求}/tasks.md`
+- [ ] `project/{项目}/changes/{需求}/proposal.md`
+
+**提取的 AC 条目数**：N 条
+
+---
+
+## 二、逐项 AC 验证结果
+
+| Task ID | 验收标准 | 验证命令 | 输出摘要 | 判定 |
+|---------|---------|---------|---------|------|
+| T-01 | ... | `mvn spring-boot:run` | 启动成功，端口 8080 | ✅ |
+| T-02 | ... | `mvn test -Dtest=*ParserTest` | 13 tests, 0 failures | ✅ |
+| ... | ... | ... | ... | ... |
+
+---
+
+## 三、浏览器 E2E 验证（如适用）
+
+| 检查项 | 结果 | 详情 |
+|--------|------|------|
+| 服务启动 | ✅/❌ | npm run dev 耗时 X 秒 |
+| 页面加载 | ✅/❌ | HTTP 200，首屏 X KB |
+| Console 错误 | ✅/❌ | 0 errors / X errors |
+| 关键元素 | ✅/❌ | 列出可见的核心组件 |
+| 截图存档 | ✅/❌ | [飞书链接] |
+
+---
+
+## 四、Scope Drift 检查
+
+- [ ] 变更文件都在需求范围内
+- [ ] 无"顺便..."的未提及变更
+- [ ] 需求功能全部实现
+
+**判定**：✅ CLEAN / ⚠️ DRIFT / ❌ MISSING
+
+---
+
+## 五、验收结论
+
+**最终判定**：✅ 通过 / ❌ 不通过
+
+**不通过原因**（如适用）：
+1. AC 条目 X 未满足：[具体说明]
+2. E2E 失败：[具体说明]
+
+**飞书报告链接**：[链接]
+```
+
+### 《失败诊断报告》模板
+
+同上，但"验收结论"部分详细说明：
+- 哪个 AC 未满足
+- 验证证据（命令 + 输出）
+- 建议修复方向
+
+---
+
+### 若用户 override
+
+**《用户 override 记录》**：
+```markdown
+## 用户 Override 验收
+
+**用户决定**：按用户要求执行交付（尽管验收不通过）
+
+**用户理由**：[用户原文]
+
+**验收智能体保留意见**：
+- AC 条目 X 未满足：[具体说明]
+- 风险：[可能的后果]
+
+**已转交**：需求交付智能体 + 审计智能体
+```
 
 ---
 
@@ -207,6 +347,77 @@ browser(action="snapshot", kind="diff")
 ---
 
 ## 📋 标准操作流程（SOP）
+
+### ⚠️ 强制启动 Checkpoint（新增 · V3.12.1）
+
+**验收智能体启动后必须先汇报以下内容，否则视为违规**：
+
+```markdown
+## 验收启动汇报
+
+**已加载 AC 来源文件**：
+- [ ] `project/{项目名}/changes/{需求名}/tasks.md`
+- [ ] `project/{项目名}/changes/{需求名}/proposal.md`（如有）
+
+**提取的 AC 清单**：
+| Task ID | 验收标准 | 验证方式 |
+|---------|---------|---------|
+| T-01 | ... | mvn spring-boot:run |
+| T-02 | ... | mvn test -Dtest=*ParserTest |
+| ... | ... | ... |
+
+**预计耗时**：XX 分钟  
+**Timeout 设置**：15 分钟（含 E2E）
+```
+
+**不汇报 = 直接终止任务**
+
+---
+
+### 精简流程（15 分钟可完成）
+
+| 步骤 | 输入 | 输出 | 时长 |
+|------|------|------|------|
+| 1️⃣ 启动汇报 | 任务 prompt | AC 清单 + 验证计划 | 1min |
+| 2️⃣ 完整性检查 | 交付物清单 | ✅ 完整 / ❌ 缺失 | 2min |
+| 3️⃣ Pass 1 关键项 | 代码/配置 | SQL 安全/并发/LLM 边界/枚举完整 | 3min |
+| 4️⃣ AC 逐项验证 | AC 清单 + 交付物 | 每条 AC：命令 + 输出 + 判定 | 5min |
+| 5️⃣ 浏览器 E2E（前端） | 前端代码 | 启动服务 → 浏览器验证 → 截图 | 3min |
+| 6️⃣ 报告推送 | 所有验证结果 | 飞书文档 + 链接 | 1min |
+
+**总时长**：15 分钟（前端含 E2E）/ 12 分钟（纯后端无 E2E）
+
+---
+
+### 浏览器 E2E 执行规范（强制）
+
+**触发条件**：
+- 交付物含 `.tsx`/`.vue`/`.html`/`src/components/` → **必须执行 E2E**
+- 纯后端/API 项目 → 跳过 E2E
+
+**E2E 流程**：
+```
+1. 启动前端服务（npm run dev & 或 npm run build && npm run preview &）
+2. 等待服务就绪（curl http://localhost:3000/health 或等待 5 秒）
+3. browser(action="open", targetUrl="http://localhost:3000")
+4. browser(action="snapshot") → 验证关键元素可见
+5. browser(action="screenshot") → 截图存档到飞书
+6. browser(action="evaluate", fn="() => console.errors.length") → 检查 Console 错误
+7. 关闭服务（kill 进程）
+```
+
+**E2E 验收标准**：
+| 检查项 | 通过标准 |
+|--------|---------|
+| 页面加载 | HTTP 200 + 无白屏 |
+| Console 错误 | error 数量 = 0 |
+| 关键元素 | 至少 3 个核心组件可见（根据项目类型判断） |
+| 截图存档 | 至少 1 张首页截图上传飞书 |
+
+**E2E 失败处理**：
+- 服务启动失败 → 记录错误日志，判定❌
+- 浏览器超时 → 重试 1 次，仍失败则判定❌
+- Console error > 0 → 记录错误详情，判定⚠️（警告但不否决）
 
 ---
 
