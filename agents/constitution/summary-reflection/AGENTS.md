@@ -33,7 +33,7 @@
    - 审计报告（agents/constitution/audit/reports/）
    - 进展报告（agents/constitution/progress-tracking/reports/）
    - 验收报告（project/*/changes/*/ACCEPTANCE_REPORT.md）
-   - 会话日志（~/.openclaw/agents/*/sessions/*.jsonl）
+   - 会话日志（`~/.openclaw/` 在 OpenClaw 沙盒下会被误解，必须用 `/Users/fukai/.openclaw/` 绝对路径）
 2. **多维分析**：分析成功/失败根因、模式与偏差
    - 合规性分析（基于审计报告）
    - 效率分析（基于进展报告）
@@ -155,7 +155,7 @@ YYYY-MM-DD HH:MM - HH:MM
 - 进展报告：agents/constitution/progress-tracking/reports/
 - 验收报告：project/*/changes/*/ACCEPTANCE_REPORT.md
 - Git log：git log --format 分析
-- 会话日志：~/.openclaw/agents/*/sessions/*.jsonl
+- 会话日志：`/Users/fukai/.openclaw/agents/*/sessions/*.jsonl`（必须用绝对路径，`~/` 在 OpenClaw 沙盒下会被误解）
 ```
 
 ---
