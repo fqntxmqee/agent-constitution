@@ -9,8 +9,10 @@
 ### 📜 规范升级
 
 - **从 V3.12.0 升级到 V3.13.0**
-- **生效日期**: 2026-03-23
-- **状态**: ✅ 已完成
+- **升级日期**: 2026-03-23
+- **冷静期**: 24 小时（Type-B 变更）
+- **预计生效**: 2026-03-24 23:13
+- **状态**: 🟡 冷静期中
 
 ### 🎯 核心变更
 
@@ -20,18 +22,29 @@
 
 ### 📝 变更原因
 
-1. Cursor ACP 模式不可用（2026-03-22 发现 12 个会话全部失败）
-2. 强制 ACP 导致开发任务阻塞
-3. 不同任务对上下文需求不同，应允许灵活选择
+1. 强制 ACP 在简单场景下增加不必要开销
+2. 智能体需要根据任务复杂度灵活选择执行方式
+3. Subagent 在简单任务中更高效
+
+### 📋 升级流程（已执行）
+
+1. ✅ summary-reflection 生成升级提案
+2. ✅ 飞书文档创建并补充内容
+3. ✅ 用户确认（2026-03-23 23:12）
+4. ✅ audit 审计验证（6/6 通过）
+5. ✅ Git 提交 + 推送
+6. ✅ V3.13.0 备份完成
+7. ⏳ 冷静期 24 小时
 
 ### 📁 更新的文件
 
 | 文件 | 变更 |
 |------|------|
-| `AGENTS.md` | 移除 runtime="acp" 强制要求，改为自主选择 |
-| `agents/constitution/requirement-resolution/AGENTS.md` | V3.13.0，新增执行方式自主选择说明 |
-| `agents/constitution/audit/AGENTS.md` | 审计检查从 runtime 改为 sessions_spawn |
-| `MEMORY.md` | 更新强制规范、审计检查点、违规处理 |
+| `AGENTS.md` | 移除 ACP 强制规范，新增执行方式选择规范 |
+| `CONSTITUTION.md` | 版本号 V3.12.0 → V3.13.0 |
+| `CHANGELOG.md` | 新增 V3.13.0 变更记录 |
+| `requirement-resolution/AGENTS.md` | 执行方式自主选择说明 |
+| `audit/AGENTS.md` | 审计检查从 runtime 改为 sessions_spawn |
 
 ### ⚠️ 保留铁律
 
@@ -43,9 +56,15 @@
 
 | 方式 | 适用场景 |
 |------|----------|
-| ACP (`runtime="acp"`) | 有完整项目上下文需求、复杂开发任务 |
-| Subagent (`runtime="subagent"`) | 简单任务、ACP 不可用时 |
-| 直接工具调用 | ACP 和 CLI 均不可用时的回退 |
+| ACP (`runtime="acp"`) | 复杂开发任务、需要完整项目上下文 |
+| Subagent (`runtime="subagent"`) | 简单任务、单文件修改、配置调整 |
+| 直接工具调用 | 单一操作（read/write/exec） |
+
+### 🔗 相关链接
+
+- 飞书提案：https://feishu.cn/docx/HB00d6o47oud7rxnJRfcl4gbnBh
+- 决策记录：`agents/docs/versions/V3.12.0/constitution/upgrade-to-V3.13.0/DECISION_LOG.md`
+- 审计报告：`agents/docs/versions/V3.12.0/constitution/upgrade-to-V3.13.0/audit-report.md`
 
 ---
 
