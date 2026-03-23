@@ -133,6 +133,40 @@
 | 第二章 §3 | 新增 | 增加审计智能体职责 | P0 |
 | 第五章 | 修订 | 更新可配置参数 | P1 |
 
+## 📁 影响文件清单（P0 · 新增）
+
+**强制步骤**: 生成提案前，必须执行全局搜索，列出所有受影响文件。
+
+```bash
+# 搜索所有包含旧版本号的智能体 AGENTS.md
+grep -r "V3.12.0" agents/constitution/*/AGENTS.md
+
+# 搜索其他引用该版本号的文件
+grep -r "V3.12.0" agents/docs/specs/constitution/ --include="*.md"
+```
+
+**输出清单**:
+- 核心文件（CONSTITUTION.md, AGENTS.md, CHANGELOG.md）
+- 所有智能体 AGENTS.md（当前共 9 个）
+- 其他引用版本号的文档
+
+**示例**:
+```
+受影响文件（共 12 个）:
+1. AGENTS.md
+2. agents/docs/specs/constitution/CONSTITUTION.md
+3. agents/docs/specs/constitution/CHANGELOG.md
+4. agents/constitution/audit/AGENTS.md
+5. agents/constitution/debugger/AGENTS.md
+6. agents/constitution/progress-tracking/AGENTS.md
+7. agents/constitution/requirement-acceptance/AGENTS.md
+8. agents/constitution/requirement-clarification/AGENTS.md
+9. agents/constitution/requirement-delivery/AGENTS.md
+10. agents/constitution/requirement-resolution/AGENTS.md
+11. agents/constitution/requirement-understanding/AGENTS.md
+12. agents/constitution/summary-reflection/AGENTS.md
+```
+
 ## 变更对比
 
 ### 变更前（V{当前版本}）

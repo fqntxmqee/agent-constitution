@@ -1,0 +1,56 @@
+#!/bin/bash
+# Pre-commit Hook: 智能体版本号统一性检查
+# 位置：.githooks/pre-commit-version-check
+# 用途：宪法规范升级时，检查所有智能体版本号是否统一
+
+set -e
+
+echo "🔍 检查智能体版本号统一性..."
+
+# 获取主文件中的当前版本号
+CURRENT_VERSION=$(grep -o 'V3\.[0-9]*\.[0-9]*' AGENTS.md 2>/dev/null | head -1)
+
+if [ -z "$CURRENT_VERSION" ]; then
+    echo "❌ 无法从 AGENTS.md 获取当前版本号"
+    exit 1
+fi
+
+echo "📋 当前版本号：$CURRENT_VERSION"
+
+# 检查所有智能体 AGENTS.md 文件
+INTEL_DIR="agents/constitution"
+MISMATCH_FILES=()
+TOTAL_AGENTS=0
+
+for agent_file in "$INTEL_DIR"/*/AGENTS.md; do
+    if [ -f "$agent_file" ]; then
+        TOTAL_AGENTS=$((TOTAL_AGENTS + 1))
+        agent_version=$(grep -o 'V3\.[0-9]*\.[0-9]*' "$agent_file" 2>/dev/null | head -1)
+        
+        # 检查是否包含当前版本号（允许历史引用，但第一行必须是当前版本）
+        first_line_version=$(head -1 "$agent_file" | grep -o 'V3\.[0-9]*\.[0-9]*' 2>/dev/null | head -1)
+        
+        if [ "$first_line_version" != "$CURRENT_VERSION" ]; then
+            MISMATCH_FILES+=("$agent_file ($first_line_version)")
+        fi
+    fi
+done
+
+echo "📊 检查了 $TOTAL_AGENTS 个智能体"
+
+if [ ${#MISMATCH_FILES[@]} -gt 0 ]; then
+    echo "❌ 智能体版本号不统一！"
+    echo ""
+    echo "当前版本：$CURRENT_VERSION"
+    echo "未更新文件："
+    for file in "${MISMATCH_FILES[@]}"; do
+        echo "  - $file"
+    done
+    echo ""
+    echo "💡 修复建议："
+    echo "  sed -i '' 's/V3\\.[0-9]*\\.[0-9]*/$CURRENT_VERSION/g' agents/constitution/*/AGENTS.md"
+    exit 1
+fi
+
+echo "✅ 所有智能体版本号统一为 $CURRENT_VERSION"
+exit 0
