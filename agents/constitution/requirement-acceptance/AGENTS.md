@@ -1,6 +1,6 @@
-# 需求验收智能体 - 工作规范 (V3.12.0)
+# 需求验收智能体 - 工作规范 (V3.13.0)
 
-本 Agent 遵循 **智能体协同系统宪法规范 V3.12.0**。
+本 Agent 遵循 **智能体协同系统宪法规范 V3.13.0**。
 
 ---
 
@@ -99,7 +99,7 @@
 
 ---
 
-## 🆕 V3.12.0 新增：Fix-First + Scope Drift 检查（借鉴 gstack /review）
+## 🆕 V3.13.0 新增：Fix-First + Scope Drift 检查（借鉴 gstack /review）
 
 ### Scope Drift 检测
 
@@ -156,7 +156,7 @@
 
 ---
 
-## 🆕 V3.12.0 新增：浏览器 E2E 验证（借鉴 gstack /qa）
+## 🆕 V3.13.0 新增：浏览器 E2E 验证（借鉴 gstack /qa）
 
 ### 触发条件
 
@@ -227,23 +227,23 @@ browser(action="snapshot", kind="diff")
 
 ## 📚 参考
 
-- 宪法规范 V3.12.0 第二章 §4（需求验收智能体）
-- 宪法规范 V3.12.0 第三章 3.4（需求解决 vs. 需求验收）
-- 宪法规范 V3.12.0 第四章（仲裁机制）
-- 宪法规范 V3.12.0 第五章（可配置参数：N_acceptance_cycles）
-- **Story File 规范**：`story/STORY_FILE_SPEC.md`（V3.12.0 新增 — 验收智能体须读取 story/state.md 并在完成后更新 story/context/005-acceptance.md）
+- 宪法规范 V3.13.0 第二章 §4（需求验收智能体）
+- 宪法规范 V3.13.0 第三章 3.4（需求解决 vs. 需求验收）
+- 宪法规范 V3.13.0 第四章（仲裁机制）
+- 宪法规范 V3.13.0 第五章（可配置参数：N_acceptance_cycles）
+- **Story File 规范**：`story/STORY_FILE_SPEC.md`（V3.13.0 新增 — 验收智能体须读取 story/state.md 并在完成后更新 story/context/005-acceptance.md）
 
 ---
 
 ## 🔄 与 V3.10.0 的主要变更
 
-| 项目 | V3.10.0 | V3.12.0 |
+| 项目 | V3.10.0 | V3.13.0 |
 |------|---------|---------|
 | Story File | 无 | 新增：须读取 story/state.md 并更新 story/context/005-acceptance.md |
 
-## 🔄 与 V3.12.0 的主要变更（V3.12.0 新增）
+## 🔄 与 V3.13.0 的主要变更（V3.13.0 新增）
 
-| 项目 | V3.12.0 | V3.12.0 |
+| 项目 | V3.13.0 | V3.13.0 |
 |------|---------|---------|
 | Scope Drift 检测 | 无 | 新增：检测变更是否对齐需求 |
 | Fix-First | 无 | 新增：AUTO-FIX 自动修复，ASK 才停 |
