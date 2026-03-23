@@ -13,7 +13,7 @@
 
 ## 📌 确认的持久偏好
 
-### constitution（2026-03-23 promote）
+### constitution（2026-03-24 promote）
 
 | 规则 | 说明 | 来源 | 确认日期 |
 |------|------|------|----------|
@@ -27,6 +27,9 @@
 | **宪法升级必须全局 grep 检查所有智能体版本号** | 不能只改核心文件，必须 `grep -r "旧版本号" agents/constitution/*/AGENTS.md` | corrections | 2026-03-23 |
 | **审计检查必须验证智能体版本号统一性** | 抽查改为全量检查，智能体数量 = 9 个 | corrections | 2026-03-23 |
 | **Git 提交前必须通过 pre-commit version hook** | 自动化拦截版本号不统一的提交 | corrections | 2026-03-23 |
+| **智能体优先原则** | 任何任务优先安排对应智能体执行，主会话不自己动手 | corrections | 2026-03-24 |
+| **主会话职责** | 主会话是协调员/导航员，不是执行者 | corrections | 2026-03-24 |
+| **智能体分工** | 开发→resolution, 交付→delivery, 审计→audit, 清理→resolution | corrections | 2026-03-24 |
 
 ---
 
