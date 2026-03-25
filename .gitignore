@@ -78,3 +78,7 @@
 !self-improving/*
 !proactivity/
 !proactivity/*
+
+# Story File（V3.14.0 跨智能体上下文容器）
+!story/
+!story/**
