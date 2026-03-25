@@ -13,6 +13,7 @@
 - 智能体调度：按需召唤对应智能体
 - 整合输出：收集各智能体产出，统一格式化汇报
 - 质量把关：确保规约先行、验收独立、用户确认节点执行
+- **任务分发（V3.15.0）**：通过 Hub-Spoke 模式预分配任务 ID、创建任务文件、维护全局 index.md
 
 **详见**：`GALAXY_NAVIGATOR.md`
 
@@ -138,4 +139,45 @@ agents/constitution/
 
 ---
 
-_最后更新：2026-03-25 - V3.14.0 调试专家纳入正式流程（9+1 体系）_
+## 📬 Hub-Spoke 任务协同协议（V3.15.0）
+
+### 架构概览
+
+```
+银河导航员（Hub）
+    ├── sessions_send → 需求澄清（Spoke）
+    ├── sessions_send → 需求理解（Spoke）
+    ├── sessions_send → 需求解决（Spoke）
+    ├── sessions_send → 需求验收（Spoke）
+    ├── sessions_send → 需求交付（Spoke）
+    ├── sessions_send → 进展跟进（Spoke）
+    ├── sessions_send → 审计（Spoke）
+    ├── sessions_send → 总结反思（Spoke）
+    └── sessions_send → 调试专家（Spoke）
+```
+
+### 银河导航员（Hub）职责
+
+1. **预分配任务 ID**：`task-{全局自增序号}`
+2. **创建任务文件**：`.tasks/{agent-id}/REQ-{ID}/task-{序号}.md`
+3. **维护全局索引**：`.tasks/index.md`
+4. **发送任务指令**：通过 `sessions_send` 分派
+5. **监控任务状态**：定期检查，处理超时/失败
+
+### 各智能体（Spoke）职责
+
+1. **接收任务**：通过 `sessions_send` 接收
+2. **实时更新状态**：
+   - `pending` → `running`（开始处理时）
+   - `running` → `completed`（完成时）
+   - `running` → `failed`（失败时，附原因）
+3. **更新 index.md**：每次状态变化时同步
+4. **回报结果**：`✅ 完成，📄 产出：{文件路径}` 或 `❌ 失败，📝 原因：{原因}`
+
+### 详细规范
+
+见 `agents/docs/specs/constitution/HUB_SPOKE_TASK_MANAGEMENT.md`
+
+---
+
+_最后更新：2026-03-25 - V3.15.0 Hub-Spoke 任务协同模式_
