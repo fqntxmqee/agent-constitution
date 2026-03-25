@@ -1,5 +1,36 @@
 # 宪法规范变更日志
 
+## V3.15.0 (2026-03-29 预计生效)
+
+**状态**: 🟡 冷静期中（Type-A，3 天，2026-03-26 ~ 2026-03-29）
+
+### 新增
+
+**Hub-Spoke + Master-Worker 混合模式**
+- 智能体协同架构升级：银河导航员作为 Hub，子智能体作为 Spoke
+- 复杂任务支持 Master-Worker 模式（功能魔法师可分派子任务）
+- 文本 + 共享文件双通道协同
+
+**任务管理文件结构**
+- 任务文件：`.tasks/{agent-id}/REQ-{ID}/task-xxx.md`
+- 状态管理：在文件内容中（非文件名）
+- 全局任务总览：`.tasks/index.md`
+- 任务必须关联需求 ID
+
+**与 Story File 互补设计**
+- Story File（`story/state.md`）：跨智能体上下文传递
+- Task File（`.tasks/`）：任务状态跟踪和分派
+- 两者互补，不重叠
+
+### 变更依据
+
+- 提案：`agents/docs/versions/V3.14.0/constitution/upgrade-to-V3.15.0/PROPOSAL.md`
+- 决策记录：DEC-037
+- 用户确认：2026-03-25
+- 飞书文档：待创建
+
+---
+
 ## V3.14.0 (2026-03-25)
 
 ### 新增
