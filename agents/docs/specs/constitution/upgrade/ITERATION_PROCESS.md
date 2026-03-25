@@ -259,6 +259,26 @@ grep -r "V3.12.0" agents/docs/specs/constitution/ --include="*.md"
 - 更新变更日志
 - 通知相关智能体
 
+### 步骤 5.1: 升级后强制检查（V3.14.0 新增）
+
+**负责人**: 执行升级的智能体  
+**强制检查清单**:
+- [ ] **所有智能体版本号统一更新**：9 个子智能体的 AGENTS.md 标题和遵循声明中的版本号必须一致
+- [ ] CONSTITUTION.md 版本号已更新
+- [ ] CHANGELOG.md 已记录本次变更
+- [ ] TEAM_ROLES.md 智能体列表与实际一致
+- [ ] Git 提交并推送
+- [ ] 备份目录 `agents/docs/versions/V{version}/` 已创建
+
+**验证命令**:
+```bash
+# 检查所有智能体版本号是否统一
+grep "^# .*工作规范" agents/constitution/*/AGENTS.md
+grep "^本 Agent 遵循" agents/constitution/*/AGENTS.md
+```
+
+⚠️ **如果版本号不统一，禁止进入冷静期。必须先修正。**
+
 ---
 
 ## 📚 版本管理
