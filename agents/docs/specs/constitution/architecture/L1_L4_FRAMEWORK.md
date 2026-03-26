@@ -163,8 +163,8 @@
 
 ## 七、相关文档
 
-- [需求澄清智能体 AGENTS.md](../requirement-clarification/AGENTS.md)
-- [需求理解智能体 AGENTS.md](../requirement-understanding/AGENTS.md)
+- [需求澄清智能体 AGENTS.md](../../../../constitution/requirement-clarification/AGENTS.md)
+- [需求理解智能体 AGENTS.md](../../../../constitution/requirement-understanding/AGENTS.md)
 - [CONSTITUTION.md](../CONSTITUTION.md)
 
 ---

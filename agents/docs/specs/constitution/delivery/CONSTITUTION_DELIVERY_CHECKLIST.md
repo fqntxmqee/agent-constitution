@@ -27,7 +27,7 @@
 | 序号 | 文件路径 | 说明 |
 |------|---------|------|
 | 1 | `agents/constitution/audit/AGENTS.md` | 审计智能体 |
-| 2 | `agents/constitution/progress-tracking/AGENTS.md` | 进展跟进智能体 |
+| 2 | `agents/constitution/debugger/AGENTS.md` | 调试专家智能体 |
 | 3 | `agents/constitution/requirement-acceptance/AGENTS.md` | 需求验收智能体 |
 | 4 | `agents/constitution/requirement-clarification/AGENTS.md` | 需求澄清智能体 |
 | 5 | `agents/constitution/requirement-delivery/AGENTS.md` | 需求交付智能体 |
@@ -79,25 +79,19 @@
 
 **说明**：此处为**全局**提案（总结报告、演练、配置）。某次宪法升级的提案、设计、交付报告在 `agents/docs/versions/V{源}/constitution/upgrade-to-V{目标}/`，随版本备份一并同步。
 
-| 序号 | 文件路径 | 说明 |
-|------|---------|------|
-| 1 | `agents/docs/proposals/CONSTITUTION_V3.9.0_FINAL_REPORT.md` | 总结报告 |
-| 2 | `agents/docs/proposals/ROLLBACK_DRILL_001.md` | 回滚演练 |
-| 3 | `agents/docs/proposals/FEISHU_SYNC_CONFIG.md` | 飞书配置 |
+| 序号 | 文件路径模式 | 说明 |
+|------|-------------|------|
+| 1 | `agents/docs/proposals/constitutional/*.md` | 总结报告等全局宪法提案 |
+| 2 | `agents/docs/proposals/drills/*.md` | 回滚演练等演练记录 |
+| 3 | `agents/docs/proposals/configs/*.md` | 配置指南与操作手册 |
 
 ---
 
-### 6. 智能体模板（8 个）
+### 6. 智能体模板（按需）
 
-| 序号 | 文件路径 | 说明 |
-|------|---------|------|
-| 1 | `agents/docs/templates/audit-agent.md` | 审计智能体模板 |
-| 2 | `agents/docs/templates/progress-tracking-agent.md` | 进展跟进模板 |
-| 3 | `agents/docs/templates/requirement-acceptance-agent.md` | 需求验收模板 |
-| 4 | `agents/docs/templates/requirement-clarification-agent.md` | 需求澄清模板 |
-| 5 | `agents/docs/templates/requirement-solving-agent.md` | 需求解决模板 |
-| 6 | `agents/docs/templates/requirement-understanding-agent.md` | 需求理解模板 |
-| 7 | `agents/docs/templates/summary-reflection-agent.md` | 总结反思模板 |
+| 序号 | 文件路径模式 | 说明 |
+|------|-------------|------|
+| 1 | `agents/docs/templates/*-agent.md` | 智能体模板（按目录实际文件为准） |
 
 ---
 
