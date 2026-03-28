@@ -2,8 +2,24 @@
 
 > 本文件为全局任务索引，由银河导航员维护，各智能体实时更新。
 > 
-> **规范版本**: V3.15.0  
+> **规范版本**: V3.16.0  
 > **规范文档**: `agents/docs/specs/constitution/HUB_SPOKE_TASK_MANAGEMENT.md`
+
+---
+
+## REQ-DAILY-TEST-20260328（智能体协同每日自检）
+
+| 任务 ID | 智能体 | 状态 | 产出 |
+|---------|--------|------|------|
+| task-001 | requirement-clarification | ✅ 完成 | proposal.md |
+| task-002 | requirement-understanding | ✅ 完成 | specs/requirements.md + design.md + tasks.md |
+| task-003 | requirement-resolution | ✅ 完成 | daily-status-20260328.md + Git 提交 |
+
+**项目**: 智能体协同每日自检  
+**场景**: 宪法规范执行验证  
+**核心功能**: 创建每日状态报告文件，验证所有智能体协同  
+**复杂度**: C 级（简单）  
+**当前阶段**: ✅ 需求解决完成  
 
 ---
 
@@ -12,7 +28,7 @@
 | 任务 ID | 智能体 | 状态 | 产出 |
 |---------|--------|------|------|
 | task-001 | requirement-clarification | ✅ 完成 | proposal.md + 飞书文档 |
-| task-002 | requirement-understanding | ✅ 完成 | specs/requirements.md + design.md + tasks.md + acceptance-criteria.md |
+| task-002 | requirement-understanding | ✅ 完成 | specs/requirements.md + design.md + tasks.md |
 | task-003 | requirement-resolution | ✅ 完成 | AIOS MVP（Yocto+OpenClaw+AI+ 电机控制） |
 | task-004 | requirement-acceptance | ✅ 完成 | acceptance-report.md（有条件通过 75%） |
 | task-005 | requirement-delivery | ✅ 完成 | delivery-report.md + Git 提交 + v1.0.0-mvp 标签 |
