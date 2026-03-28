@@ -1,5 +1,88 @@
 # 宪法规范变更日志
 
+## V3.17.0 (2026-03-28 11:52)
+
+**状态**: ✅ 已交付（Git 提交 + 标签 v1.0.0-red-team-simulation）
+
+### 新增
+
+**第 9 大智能体：红蓝推演师 🎭（杠精本精）**
+- 智能体目录：`agents/constitution/red-team-simulation/`
+- 核心职责：多视角分析、方案挑战、决策辅助
+- 触发方式：复杂度≥B 级自动触发 + 手动调用
+- 推演深度：light/standard/deep 三档可配置
+- 输出格式：结构化 Markdown 报告（挑战点 + 应对建议 + 行动项）
+
+**红队挑战（7 个维度）**:
+1. 假设挑战 - 质疑基础假设
+2. 风险识别 - 识别技术/业务风险
+3. 替代方案 - 提出更优方案
+4. 边界条件 - 分析极端情况
+5. 性能扩展 - 评估性能和可扩展性
+6. 依赖分析 - 分析外部依赖风险
+7. 用户体验 - 从用户角度挑战
+
+**蓝队完善（5 个策略）**:
+1. 风险缓解 - 降低风险发生概率
+2. 方案设计 - 增加冗余/降级/回滚
+3. 监控降级 - 增加可观测性
+4. 备选方案 - 提供 Plan B
+5. 验收完善 - 补充测试场景
+
+### 集成更新
+
+**TEAM_ROLES.md**:
+- 添加第 9 大智能体角色（红蓝推演师 🎭）
+- 更新协作流程图
+
+**HUB_SPOKE_TASK_MANAGEMENT.md**:
+- 添加红蓝推演 Spoke 说明
+- 更新架构图
+
+**CONSTITUTION.md**:
+- 更新智能体列表（9 大智能体 + 2 个辅助）
+- 版本号 V3.16.0 → V3.17.0
+
+### 测试验证
+
+**网关测试**:
+- 智能体注册成功（`openclaw agents list` 可识别）
+- 网关调用测试通过（优惠券系统案例）
+- 输出 10 个挑战点（3 高/4 中/3 低）
+- 生成 10 个应对建议（P0:4/P1:5/P2:1）
+
+**测试报告**:
+- `agents/constitution/red-team-simulation/reports/2026-03-28-coupon-system.md` (18KB)
+- `agents/constitution/red-team-simulation/reports/acceptance-report.md` (5.8KB)
+- `agents/constitution/red-team-simulation/reports/delivery-report.md` (5.0KB)
+
+### 文件统计
+
+- 新增文件：21 个（智能体配置 10 个 + 提示词 2 个 + 报告 7 个 + 集成文档 2 个）
+- 总大小：约 82KB
+- Git 提交：3 次（8db142f, 7e76e12, 42fde8f）
+- Git 标签：v1.0.0-red-team-simulation
+
+### 使用示例
+
+```bash
+# CLI 调用
+openclaw agent --agent red-team-simulation --channel webchat --message "请对以下设计进行红蓝推演..."
+
+# 银河导航员自动调用
+# 任务复杂度≥B 级时，在需求理解/方案评审阶段自动触发
+```
+
+### 后续计划
+
+- [ ] 飞书自动同步推演报告
+- [ ] 配置智能路由规则（根据关键词自动触发）
+- [ ] 推演效果追踪（建议采纳率统计）
+
+**Closes**: REQ-003
+
+---
+
 ## V3.16.2 (2026-03-27 00:25)
 
 **状态**: ✅ 已生效（配置新增，无冷静期）

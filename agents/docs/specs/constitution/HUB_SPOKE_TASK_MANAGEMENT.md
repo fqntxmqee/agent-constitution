@@ -27,11 +27,17 @@
     │               ├── Subagent 1 → REQ-001 需求澄清
     │               └── Subagent 2 → REQ-002 需求澄清
     ├── 消息分发 → 需求理解智能体（Spoke）
-    │               └── Subagent 3 → REQ-001 需求理解
+    │               ├── Subagent 3 → REQ-001 需求理解
+    │               └── 触发 → 杠精本精 🎭（红蓝推演）→ 挑战设计方案
     ├── 消息分发 → 需求解决智能体（Spoke）
-    │               └── Subagent 4 → REQ-001 开发执行
+    │               ├── Subagent 4 → REQ-001 开发执行
+    │               └── 触发 → Bug 猎人 🏹（调试专家）→ 可调试性审查
+    ├── 消息分发 → 需求验收智能体（Spoke）
+    │               └── Subagent 5 → REQ-001 验收测试
+    ├── 消息分发 → 需求交付智能体（Spoke）
+    │               └── Subagent 6 → REQ-001 交付发布
     └── 消息分发 → 总结反思智能体（Spoke）
-                    └── Subagent 5 → 复盘报告
+                    └── Subagent 7 → 复盘报告
 ```
 
 **角色分工**：
