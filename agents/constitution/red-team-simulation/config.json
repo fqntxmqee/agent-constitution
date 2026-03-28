@@ -1,0 +1,80 @@
+{
+  "version": "1.0",
+  "created": "2026-03-28",
+  "description": "红蓝推演智能体配置文件",
+  
+  "trigger": {
+    "complexityThreshold": "B",
+    "enablePeerRequest": true,
+    "autoTriggerPhases": ["requirement-understanding", "requirement-resolution"]
+  },
+  
+  "depth": {
+    "default": "standard",
+    "challengeCount": {
+      "light": {"min": 3, "max": 5},
+      "standard": {"min": 5, "max": 10},
+      "deep": {"min": 10, "max": 15}
+    },
+    "override": {
+      "S": "deep",
+      "A": "standard",
+      "B": "standard",
+      "C": "light"
+    }
+  },
+  
+  "output": {
+    "feishuSync": true,
+    "reportFormat": "markdown",
+    "reportPath": "agents/constitution/red-team-simulation/reports",
+    "includeSummary": true,
+    "includeActionItems": true
+  },
+  
+  "redTeam": {
+    "enabled": true,
+    "dimensions": [
+      "assumption_challenge",
+      "risk_identification",
+      "alternative_solutions",
+      "boundary_conditions",
+      "performance_scaling",
+      "dependency_analysis",
+      "user_experience"
+    ],
+    "priorityWeights": {
+      "assumption_challenge": 1.0,
+      "risk_identification": 1.2,
+      "alternative_solutions": 0.8,
+      "boundary_conditions": 1.0,
+      "performance_scaling": 0.9,
+      "dependency_analysis": 1.0,
+      "user_experience": 0.8
+    }
+  },
+  
+  "blueTeam": {
+    "enabled": true,
+    "strategies": [
+      "risk_mitigation",
+      "design_hardening",
+      "monitoring_alerting",
+      "fallback_plans",
+      "acceptance_criteria"
+    ]
+  },
+  
+  "model": {
+    "agentId": "red-team-simulation",
+    "defaultModel": "minimax/MiniMax-M2.7",
+    "contextLimit": 200000,
+    "timeoutSeconds": 600
+  },
+  
+  "logging": {
+    "level": "info",
+    "path": "agents/constitution/red-team-simulation/logs",
+    "format": "json"
+  }
+}

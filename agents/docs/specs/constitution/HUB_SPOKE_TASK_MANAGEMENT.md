@@ -390,7 +390,6 @@ Hub-Spoke Task Management 与 Story File 是**互补关系**，解决不同维�
 - **Story File 规范**: `agents/docs/specs/constitution/story/STORY_FILE_SPEC.md`
 - **团队角色图谱**: `agents/constitution/TEAM_ROLES.md`
 - **银河导航员规范**: `agents/constitution/GALAXY_NAVIGATOR.md`
-- **提案原文**: `agents/docs/versions/V3.14.0/constitution/upgrade-to-V3.15.0/PROPOSAL.md`
 
 ---
 

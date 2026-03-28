@@ -144,6 +144,29 @@
 
 ---
 
+### 10. 架构规范（L1-L4 框架）
+**文件**: [architecture/L1_L4_FRAMEWORK.md](architecture/L1_L4_FRAMEWORK.md)  
+**说明**: AI 时代的软件需求与资产标准化框架
+
+**核心内容**:
+- L1 领域层：业务边界（Bounded Context）
+- L2 场景层：业务价值流（用户完整目标）
+- L3 业务活动层：行为原子（输入输出状态变更）
+- L4 功能点层：服务能力（跨领域复用的最小技术单元）
+- 动态编排与双向映射机制
+- 与 OpenSpec 的映射关系
+- 功能点向量库（RAG 检索复用）
+
+**使用场景**:
+- 需求澄清阶段：识别 L1 领域 + L2 场景
+- 需求理解阶段：拆解 L3 业务活动 + 编排 L4 功能点
+- 需求解决阶段：复用/扩展/新增 L4 功能点
+- 需求交付阶段：反向治理（代码 → 功能点注册）
+
+**飞书链接**: 待创建
+
+---
+
 ## 📋 配套文档
 
 ### 智能体配置（8 个）
@@ -160,6 +183,42 @@
 | 调试专家 | `agents/constitution/debugger/AGENTS.md` | ✅ V3.16.0 |
 
 **注**: V3.16.0 移除进展跟进智能体，职责由银河导航员接管
+
+### 多主 Agent 配置（V3.16.1 新增）
+
+**混合模式**: Hub-Spoke + 多主 Agent
+
+| 主 Agent | Label | 专长 | 运行时 |
+|----------|-------|------|--------|
+| 银河导航员 🧭 | `navigator` | 复杂任务协调 | subagent |
+| 代码专家 💻 | `code-expert` | 专业开发 | acp (Cursor) |
+| 数据分析师 📊 | `data-analyst` | 数据分析 | subagent |
+| 写作助手 ✍️ | `writing-assistant` | 内容创作 | subagent |
+
+**路由策略**: 显式 > LLM 语义 > 关键词 > 默认
+
+**详见**: [agents/docs/multi-agent/HYBRID_MODE_CONFIG.md](../../../docs/multi-agent/HYBRID_MODE_CONFIG.md)
+
+### L1-L4 框架使用指南
+
+**需求澄清阶段**：
+- 识别 L1 领域 + L2 场景
+- 产出：《已确认提案》（含 L1/L2 定位）
+
+**需求理解阶段**：
+- 拆解 L3 业务活动
+- 编排 L4 功能点
+- 产出：L2→L3 映射表 + L3→L4 映射表
+
+**需求解决阶段**：
+- 复用/扩展/新增 L4 功能点
+- 按编排 DSL 生成代码
+
+**需求交付阶段**：
+- 反向治理（代码扫描 → 功能点注册）
+- 更新功能点向量库
+
+**详见**: [architecture/L1_L4_FRAMEWORK.md](architecture/L1_L4_FRAMEWORK.md)
 
 ### 决策记录（30 项）
 

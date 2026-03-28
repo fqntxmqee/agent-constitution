@@ -1,5 +1,74 @@
 # 宪法规范变更日志
 
+## V3.16.2 (2026-03-27 00:25)
+
+**状态**: ✅ 已生效（配置新增，无冷静期）
+
+### 新增
+
+**混合模式（Hub-Spoke + 多主 Agent）**
+- 新增多主 Agent 配置模式
+- 保留 Hub-Spoke 用于复杂任务
+- 新增专业 Agent 快速响应简单任务
+
+### 主 Agent 配置
+
+| Agent | Label | 专长 | 运行时 |
+|-------|-------|------|--------|
+| 银河导航员 🧭 | `navigator` | 复杂任务协调 | subagent |
+| 代码专家 💻 | `code-expert` | 专业开发 | acp (Cursor) |
+| 数据分析师 📊 | `data-analyst` | 数据分析 | subagent |
+| 写作助手 ✍️ | `writing-assistant` | 内容创作 | subagent |
+
+### 路由策略
+
+**优先级**: 显式 (@提及) > LLM 语义 > 关键词 > 默认
+
+**复杂任务判断**: 复杂度 > 0.7 → 路由到银河导航员
+
+### 新增文档
+
+- `agents/docs/multi-agent/HYBRID_MODE_CONFIG.md` - 混合模式配置指南
+- `agents/docs/multi-agent/ROUTER.md` - 路由决策器规范
+
+---
+
+## V3.16.1 (2026-03-26 23:45)
+
+**状态**: ✅ 已生效（文档完善，无冷静期）
+
+### 新增
+
+**架构规范（L1-L4 框架）**
+- 新增第 10 个核心规范文档：`architecture/L1_L4_FRAMEWORK.md`
+- 在 `CONSTITUTION.md` 中正式引用
+- 添加 L1-L4 框架使用指南到配套文档
+
+### L1-L4 框架核心内容
+
+| 层级 | 名称 | 说明 |
+|------|------|------|
+| L1 | 领域层 | 业务边界（Bounded Context） |
+| L2 | 场景层 | 业务价值流（用户完整目标） |
+| L3 | 业务活动层 | 行为原子（输入输出状态变更） |
+| L4 | 功能点层 | 服务能力（跨领域复用的最小技术单元） |
+
+### 使用场景
+
+**需求澄清阶段**：识别 L1 领域 + L2 场景  
+**需求理解阶段**：拆解 L3 业务活动 + 编排 L4 功能点  
+**需求解决阶段**：复用/扩展/新增 L4 功能点  
+**需求交付阶段**：反向治理（代码 → 功能点注册）
+
+### 智能体 AGENTS.md 已包含 L1-L4 要求
+
+- ✅ `requirement-clarification/AGENTS.md`：L1-L2 识别
+- ✅ `requirement-understanding/AGENTS.md`：L3 活动拆解 + L4 功能点映射
+- ✅ `requirement-resolution/AGENTS.md`：功能点复用/扩展/新增
+- ✅ `requirement-delivery/AGENTS.md`：反向治理
+
+---
+
 ## V3.16.0 (2026-03-26)
 
 **状态**: ✅ 已生效（用户授权跳过冷静期，2026-03-26 立即生效）

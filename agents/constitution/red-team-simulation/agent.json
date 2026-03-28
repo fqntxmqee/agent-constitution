@@ -1,0 +1,14 @@
+{
+  "id": "red-team-simulation",
+  "name": "红蓝推演",
+  "nickname": "红蓝推演师 🎭",
+  "description": "多视角分析专家，方案挑战与决策辅助",
+  "configured": true,
+  "runtime": {
+    "type": "subagent",
+    "mode": "session",
+    "thread": false
+  },
+  "triggers": ["红蓝推演", "方案挑战", "风险评估", "多视角分析"],
+  "workdir": "agents/constitution/red-team-simulation"
+}
