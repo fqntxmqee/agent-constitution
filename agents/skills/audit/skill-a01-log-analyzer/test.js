@@ -468,30 +468,27 @@ console.log('\n4️⃣ analyze 函数测试 - 空输入');
   }
   
   // --------------------------------------------------------------------------
-  // 12. detectViolations 函数测试 - V004 未使用 Cursor CLI
+  // 12. detectViolations 函数测试 - V004 开发任务未走 sessions_spawn
   // --------------------------------------------------------------------------
-  console.log('\n1️⃣2️⃣ detectViolations 函数测试 - V004 未使用 Cursor CLI');
+  console.log('\n1️⃣2️⃣ detectViolations 函数测试 - V004 开发任务未走 sessions_spawn');
   
-  const noCursorEvents = [
-    { type: 'toolCall', timestamp: 1000, data: { 
-      tool: 'sessions_spawn',
-      runtime: 'acp',
-      task: '实现数据导出功能',
-      label: 'export-feature'
+  const noHarnessEvents = [
+    { type: 'toolCall', timestamp: 1000, data: {
+      tool: 'grep',
+      task: '实现数据导出功能'
     }}
-    // 没有 cursor 工具调用
   ];
   
-  const noCursorFile = createTestJsonlFile('no-cursor-session.jsonl', noCursorEvents);
+  const noHarnessFile = createTestJsonlFile('no-harness-session.jsonl', noHarnessEvents);
   
-  const noCursorResult = await logAnalyzer.detectViolations({
-    sessionPaths: [noCursorFile]
+  const noHarnessResult = await logAnalyzer.detectViolations({
+    sessionPaths: [noHarnessFile]
   });
   
-  const v004 = noCursorResult.violations.find(v => v.ruleId === 'V004');
+  const v004 = noHarnessResult.violations.find(v => v.ruleId === 'V004');
   assert(
     v004 !== undefined,
-    '应检测到 V004 违规（未使用 Cursor CLI）'
+    '应检测到 V004 违规（开发任务未见 sessions_spawn）'
   );
   if (v004) {
     assertEqual(
@@ -500,6 +497,19 @@ console.log('\n4️⃣ analyze 函数测试 - 空输入');
       'V004 违规等级应为一般'
     );
   }
+  
+  const withSpawnEvents = [
+    { type: 'toolCall', timestamp: 1000, data: {
+      tool: 'sessions_spawn',
+      runtime: 'acp',
+      task: '实现数据导出功能',
+      label: 'export-feature'
+    }}
+  ];
+  const withSpawnFile = createTestJsonlFile('with-spawn-session.jsonl', withSpawnEvents);
+  const withSpawnResult = await logAnalyzer.detectViolations({ sessionPaths: [withSpawnFile] });
+  const v004b = withSpawnResult.violations.find(v => v.ruleId === 'V004');
+  assert(v004b === undefined, '存在 sessions_spawn 时不应判定 V004');
   
   // --------------------------------------------------------------------------
   // 13. 合规评分计算测试

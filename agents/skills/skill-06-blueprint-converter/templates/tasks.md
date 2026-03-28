@@ -2,14 +2,14 @@
 
 > 可执行任务列表 · OpenSpec 规范  
 > 创建日期：{{created_date}}  
-> 供需求解决智能体按序执行（Cursor CLI）
+> 供需求解决智能体按序执行（经 sessions_spawn，禁止主会话直接 write 业务代码）
 
 ---
 
 ## 说明
 
 - 按 Phase 与任务顺序执行，完成一项勾选一项。
-- 执行方：需求解决智能体（仅用 Cursor CLI，禁止 write 写代码）。
+- 执行方：需求解决智能体（经 sessions_spawn 委托 Worker，禁止主会话 write 业务代码）。
 - 验收依据：`specs/requirements.md` 中的 AC。
 
 ---

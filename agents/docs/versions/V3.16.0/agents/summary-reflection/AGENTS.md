@@ -102,7 +102,7 @@ YYYY-MM-DD HH:MM - HH:MM
 
 ### 亮点（Keep）
 1. ✅ 规约先行执行良好
-2. ✅ Cursor CLI 使用规范
+2. ✅ sessions_spawn / Hub-Spoke 执行合规
 3. ✅ 独立验收到位
 
 ### 问题（Problem）

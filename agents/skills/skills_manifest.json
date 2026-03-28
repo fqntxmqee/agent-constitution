@@ -72,7 +72,7 @@
       "location": "agents/skills/skill-07-requirement-resolution/",
       "tests": 10,
       "passRate": "100%",
-      "description": "按蓝图执行开发/创作/技能任务，使用 Cursor CLI"
+      "description": "按蓝图执行开发/创作/技能任务，经 sessions_spawn（ACP/subagent）产出业务代码"
     },
     {
       "id": "skill-008-memory-manager",

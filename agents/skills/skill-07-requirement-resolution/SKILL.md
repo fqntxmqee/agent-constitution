@@ -15,7 +15,7 @@ description: Executes confirmed execution blueprints step-by-step, calls tools/A
 
 ## 📋 技能描述
 
-在「执行蓝图已确认」后，按蓝图中的任务/步骤顺序执行，调用必要的外部工具或 API，实时上报进度与异常，失败时自动重试或调整策略，并产出代码/文档/数据等交付物。作为需求解决流程的核心执行技能，确保蓝图执行可追溯、可复现，且仅通过 Cursor CLI（或 ACP 模式）进行开发类代码产出。
+在「执行蓝图已确认」后，按蓝图中的任务/步骤顺序执行，经 **`sessions_spawn`（ACP 或 subagent）** 委托 Worker 产出业务代码，并调用其他必要工具或 API，实时上报进度与异常，失败时自动重试或调整策略，并产出代码/文档/数据等交付物。作为需求解决流程的核心执行技能，确保蓝图执行可追溯、可复现，且与 Hub-Spoke 铁律一致（协调会话不直接 `write` 业务代码）。
 
 ---
 
@@ -150,7 +150,7 @@ description: Executes confirmed execution blueprints step-by-step, calls tools/A
 
 - 读取并解析执行蓝图：若未提供 `blueprint.tasks`，则从 `blueprint.path` 下读取 tasks.md（及 design.md、specs/requirements.md 等），解析为结构化任务与步骤。
 - 按步骤顺序执行：严格按 tasks 顺序执行，每步完成后写入 executionLog，并更新 progress。
-- 开发类任务必须通过 **Cursor CLI**（`cursor agent --print`）或 **ACP 模式** 执行，禁止使用 `write` 直接写业务代码（配置文件、文档、脚本等非业务代码允许 write）。
+- 开发类任务必须通过 **`sessions_spawn`（`runtime="acp"` 或 `runtime="subagent"`）** 在 Worker 会话中执行；协调会话禁止使用 `write` 直接写业务代码（配置文件、文档、脚本等非业务代码允许按规约 write）。
 
 ### 2. 工具调用
 
@@ -177,7 +177,7 @@ description: Executes confirmed execution blueprints step-by-step, calls tools/A
 
 1. **校验输入**：校验 blueprint.path 存在、options 合法；缺失必填则返回 status: "error"。
 2. **解析蓝图**：解析 tasks 与 steps，若 dryRun 则只返回执行计划不执行。
-3. **按序执行**：循环执行每个 task/step，调用 Cursor CLI 或工具/API，记录 executionLog，更新 progress。
+3. **按序执行**：循环执行每个 task/step，经 `sessions_spawn` 或工具/API 完成，记录 executionLog，更新 progress。
 4. **失败处理**：失败则重试（≤ maxRetries）或标记失败；不可恢复则设 status: "error" 并返回。
 5. **自查**：依据 AC 做 Self-Review，填写 selfReview。
 6. **返回结果**：输出符合「📤 输出」约定的 JSON。
@@ -187,12 +187,12 @@ description: Executes confirmed execution blueprints step-by-step, calls tools/A
 ## 📁 文件结构
 
 ```
-agents/skills/skill-06-requirement-resolution/
+agents/skills/skill-07-requirement-resolution/
 ├── SKILL.md                          # 本文件
 ├── index.js                          # 技能实现（可选）
 ├── lib/
 │   ├── blueprint-parser.js           # 蓝图解析（tasks.md 等）
-│   ├── executor.js                   # 步骤执行与 Cursor CLI 调用
+│   ├── executor.js                   # 步骤执行与 sessions_spawn / 工具调用
 │   ├── progress-reporter.js          # 进度上报
 │   └── self-review.js                # 自查与 AC 核对
 ├── prompts/
@@ -249,7 +249,7 @@ agents/skills/skill-06-requirement-resolution/
 
 - V3.7 主规范：`agents/docs/specs/constitution/CONSTITUTION.md`
 - 需求解决智能体工作规范：`agents/constitution/requirement-resolution/AGENTS.md`
-- ACP 与 Cursor CLI：`docs/OpenClaw-ACP-Cursor-集成方案（官方版）.md`（若存在）
+- Hub-Spoke 任务协议：`agents/docs/specs/constitution/HUB_SPOKE_TASK_MANAGEMENT.md`
 - OpenSpec 规范存放位置：`AGENTS.md` 中「📁 OpenSpec 规范存放位置」
 - Skill-06 蓝图转换器：`agents/skills/skill-06-blueprint-converter/SKILL.md`
 - Skill-07 验收测试智能体：`agents/skills/skill-07-acceptance-tester/SKILL.md`

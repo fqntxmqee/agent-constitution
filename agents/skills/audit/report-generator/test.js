@@ -25,7 +25,7 @@ function createMockAnalysis() {
     logAnalysis: {
       meta: { sessionCount: 5, eventCount: 1234 },
       violations: [
-        { ruleId: 'V001', name: '无规约写业务代码', level: '严重', description: '检测到 write 工具创建业务代码', sessionId: 'session-123', suggestion: '使用 runtime="acp" + Cursor CLI 开发' }
+        { ruleId: 'V001', name: '无规约写业务代码', level: '严重', description: '检测到 write 工具创建业务代码', sessionId: 'session-123', suggestion: '使用 sessions_spawn（ACP 或 subagent）由子会话开发' }
       ],
       compliance: { score: 75, level: '良好' }
     },

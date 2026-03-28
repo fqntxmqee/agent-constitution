@@ -103,7 +103,7 @@ console.log('合规评分:', result.compliance.score);
 | V001 | 无规约写业务代码 | 🔴 严重 | 使用 write 工具创建业务代码 |
 | V002 | 使用 subagent 执行开发 | 🔴 严重 | 开发任务使用 runtime="subagent" |
 | V003 | 跳过验收直接交付 | 🟡 一般 | 无验收报告但有交付行为 |
-| V004 | 未使用 Cursor CLI | 🟡 一般 | 开发任务未使用 cursor 工具 |
+| V004 | 开发任务未走 sessions_spawn | 🟡 一般 | 开发任务日志中未见 sessions_spawn（或历史 cursor 工具） |
 | V005 | 敏感信息泄露 | 🔴 严重 | 内容包含 API Key/密码/Token |
 
 ---
@@ -172,7 +172,7 @@ node tools/log-analyzer.js violations --sessions ... --json
         "path": "/src/main.js",
         "contentPreview": "function main() {..."
       },
-      "recommendation": "使用 runtime=\"acp\" + Cursor CLI 开发"
+      "recommendation": "使用 sessions_spawn(runtime=\"acp\"|\"subagent\") 委托 Worker 开发"
     }
   ],
   "compliance": {

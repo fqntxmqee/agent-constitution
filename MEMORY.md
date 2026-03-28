@@ -2,6 +2,8 @@
 
 > 本文件记录重要决策、经验教训、规范变更等需要长期保留的信息
 
+**归档说明**: 2026-03-09 至 03-15 的历史记录已归档至 `memory/2026-03-09-to-03-15-constitution-upgrades.md`
+
 ---
 
 ## 2026-03-23: V3.13.0 - 移除强制 ACP 模式
@@ -11,8 +13,8 @@
 - **从 V3.12.0 升级到 V3.13.0**
 - **升级日期**: 2026-03-23
 - **冷静期**: 24 小时（Type-B 变更）
-- **预计生效**: 2026-03-24 23:13
-- **状态**: 🟡 冷静期中
+- **生效日期**: 2026-03-24 23:13
+- **状态**: ✅ 已生效（冷静期已结束）
 
 ### 🎯 核心变更
 
@@ -68,443 +70,186 @@
 
 ---
 
-## 2026-03-09: V3.7 宪法规范升级
+## 2026-03-22: V3.12.0 正式生效 + ACP 空会话分析
+
+### 📜 版本状态
+- **宪法规范版本**: V3.12.0 ✅ 今日正式生效
+- **V3.11.0**: 2026-03-22 15:17 冷静期结束，已并入 V3.12.0
+
+### 🔍 ACP Cursor 会话问题分析
+
+#### 问题发现
+- **12 个 ACP cursor 会话**全部 `messages: []`，属于残留会话记录
+- Portfolio T-01 脚手架任务**至少重试了 5 次**，全部立即以 `acpx exited with code 1` 失败
+
+#### 根因确认
+| 原因 | 证据 |
+|------|------|
+| `cursor-agent acp` 命令存在但 Cursor 模型服务不可用 | 所有会话在 phase:start 后 2-3 秒即 phase:error，退出码 1 |
+| 不是网络/权限问题 | acpx 进程启动成功（phase:start 记录存在） |
+| 不是 CLI 版本问题 | cursor-agent 版本 2026.02.27-e7d2ef6 |
+
+#### 会话分类
+| 类型 | 数量 | 最后更新时间 |
+|------|------|-------------|
+| Portfolio T-01 重试会话 | 5 个 | 14:10 (ee68f330) |
+| ACP 测试会话 | 1 个 | 03-20 |
+| 其他 agent ACP 后台调用 | 5+ 个 | 分散 |
+
+#### 关键证据（acp-stream.jsonl）
+```
+所有失败会话共同模式:
+1. lifecycle/phase:start (启动成功)
+2. ~2-3 秒后 lifecycle/phase:error
+3. error: "acpx exited with code 1"
+4. cursor stream relay timed out after 21600s (6 小时超时)
+```
+
+#### 结论
+- **Cursor ACP 模式根本不可用**，不是暂时故障
+- 建议切换到其他 ACP agent（如 `pi`、`codex`、`claude`）
+- 或回退为 **`sessions_spawn(runtime="subagent")`** 由子会话执行业务代码（已不再使用 Cursor CLI `cursor agent --print` 路径）
+
+#### 待用户决策
+- [ ] 是否切换到其他 ACP agent？
+- [ ] 是否临时授权 write 工具绕过 ACP 限制？
+
+---
+
+## 2026-03-21 15:25: V3.11.0 升级
 
 ### 📜 规范版本
-- **从 V3.0 升级到 V3.7**
-- **生效日期**: 2026-03-09
-- **状态**: ✅ 已完成并生效
+- **从 V3.10.0 升级到 V3.11.0**
+- **生效日期**: 2026-03-22（冷静期后）
+- **状态**: ✅ 已提交 Git + 推送
+
+### 🎯 核心变更（借鉴 BMAD Method）
+
+| # | 改进项 | 来源 |
+|---|--------|------|
+| P0-1 | Story File 上下文工程化 | BMAD Story File |
+| P0-2 | 需求复杂度评级（C/B/A/S） | BMAD 自适应路径 |
+| P1-3 | Clarification 拆分为 Analysis + Clarification | BMAD 分析阶段 |
+| P1-4 | 8 个智能体 SOP 清单化 | BMAD SOP 清单 |
+
+### 📋 决策记录
+- DEC-031: Story File 上下文工程化
+- DEC-032: 需求复杂度评级机制
+- DEC-033: Clarification 阶段拆分
+- DEC-034: 智能体 SOP 清单化
+
+### 📁 新增文档
+- `story/STORY_FILE_SPEC.md`
+- `DEC-031~034.md`
+- `DECISION_LOG.md`
+
+### ⚠️ Type-B 冷静期
+- 冷静期：24h（2026-03-22 15:17 截止）
+- V3.11.0 将在冷静期后正式生效
+
+### 💡 经验
+- 3 个子智能体并行更新 SOP 章节，总耗时 1m32s
+- Story File 规范设计参考了 BMAD Story File 上下文工程化理念
+- Git Hook 自动备份机制在提交时触发
 
 ---
 
-## 2026-03-09: P0 技能开发启动
+## 2026-03-21: 主 Agent 配置审查与修正（V3.10.0）
 
-### ✅ Skill-01: 全域意图分类引擎（已完成）
+### 📋 发现的问题
 
-**状态**: ✅ 100% 完成  
-**测试通过率**: 100% (10/10)  
-**位置**: `agents/skills/skill-01-intent-classifier/`
+| # | 问题 | 严重性 |
+|---|------|--------|
+| 1 | CONSTITUTION.md footer 版本号 V3.9.0，与顶部 V3.10.0 不一致 | 🔴 |
+| 2 | AGENTS.md 引用不存在的 `agents/constitution/README.md` | 🔴 |
+| 3 | CONSTITUTION.md 两处飞书链接标注"待创建"但无实际链接 | 🟡 |
+| 4 | CONSTITUTION.md 声称"唯一入口"但智能体实际读各自 AGENTS.md，语义歧义 | 🟡 |
+| 5 | AGENTS.md 缺少身份声明（未明确"我就是银河导航员"） | 🟡 |
+| 6 | TEAM_ROLES.md 参考文档 4 个路径全部错误（裸文件名不存在） | 🔴 |
+| 7 | CONSTITUTION.md 末尾引用不存在的 README.md | 🟡 |
 
-**创建的文件**:
-- `SKILL.md` - 技能规范文档
-- `index.js` - 技能实现
-- `test.js` - 测试脚本（10 个测试用例）
-- `prompts/intent-classification.txt` - Prompt 模板
-- `README.md` - 使用说明
+### ✅ 已修正内容
 
-**验收结果**:
-- ✅ 准确率 >90%（实际 100%）
-- ✅ 支持复合意图识别
-- ✅ JSON 格式验证
-- ✅ 路由建议合理
+| # | 文件 | 修正 |
+|---|------|------|
+| 1 | `CONSTITUTION.md` | footer 版本号 V3.9.0 → **V3.10.0**（2026-03-19），审查日期 2026-04-12 → **2026-04-19** |
+| 2 | `CONSTITUTION.md` | "唯一入口"说明 → **"宪法规范索引（唯一权威来源）"**，注明智能体实际读 `agents/constitution/<agent>/AGENTS.md` |
+| 3 | `CONSTITUTION.md` | 末尾 README.md → `../constitution/TEAM_ROLES.md` |
+| 4 | `CONSTITUTION.md` | 两处"待创建"飞书链接 → 改为"该规范无需飞书同步，本地文件为主" |
+| 5 | `AGENTS.md` | 顶部添加身份声明（银河导航员 🧭，遵循 V3.10.0，引用 GALAXY_NAVIGATOR.md） |
+| 6 | `AGENTS.md` | 更多细节添加 GALAXY_NAVIGATOR.md 和 TEAM_ROLES.md 引用；原不存在 README 引用已修正 |
+| 7 | `TEAM_ROLES.md` | 参考文档 4 个路径全部修正为相对路径 |
 
----
-
-### ✅ Skill-03: 跨域模糊性探测器（已完成）
-
-**状态**: ✅ 100% 完成  
-**测试通过率**: 100% (10/10)  
-**位置**: `agents/skills/skill-03-ambiguity-detector/`  
-**开发方式**: Cursor CLI（`cursor agent --print`）✅ V3.7 合规
-
-**创建的文件**:
-- `SKILL.md` - 技能规范文档
-- `index.js` - 技能实现（六维度检测）
-- `test.js` - 测试脚本（10 个测试用例）
-- `prompts/ambiguity-detection.txt` - Prompt 模板（6 示例 +10 测试用例）
-- `README.md` - 使用说明
-
-**验收结果**:
-- ✅ 六维度覆盖（技术栈/部署/数据源/用户角色/优先级/验收标准）
-- ✅ JSON 格式验证
-- ✅ 优先级判定准确（high/medium/low）
-- ✅ isClear 逻辑正确
-- ✅ 响应时间 <3 秒
-
-**测试结果**:
-```
-✅ T01: 高度模糊 → 5 个维度
-✅ T02: 技术栈明确 → 不检出 tech_stack
-✅ T03: 部署环境明确 → 不检出 deployment
-✅ T04: 需求清晰 → isClear=true
-✅ T05: 非开发类 → isClear=true
-✅ T06-T09: 单维度模糊 → 准确检出
-✅ T10: 多维度中度模糊 → 5 个维度
-
-📊 10/10 通过（100.0%）
-```
-
-**下一步**: Skill-04 动态路由决策器
-
-### 🔄 主要变更
-
-| 类别 | 变更摘要 |
-|------|----------|
-| **术语表** | 新增：意图、执行蓝图、OpenSpec、AC、熔断、一票否决等 10 个术语 |
-| **智能体内部逻辑** | 每个智能体明确：触发条件、输入、内部执行逻辑、产出、出口条件 |
-| **智能体间契约** | 新增智能体间输入输出契约表、主流程触发链 |
-| **执行与仲裁** | 新增验收用户 override 流程、审计熔断恢复、总结反思未确认策略 |
-| **可配置参数** | 补全：N_rounds、N_acceptance_cycles、N_reflection_hours 等 |
-| **决策权表** | 明确 12 个关键决策事项的主导智能体、协助方、最终裁定权 |
-
-### ⚠️ 强制规范（必须遵守）
-
-#### 子智能体执行规范
-- ✅ 需求解决智能体通过 `sessions_spawn` 执行
-- ✅ 执行方式自主选择（ACP / Subagent / 直接工具调用）
-- ❌ 禁止主会话直接使用 `write` 工具创建业务代码
-
-#### 用户确认节点
-- 意图确认（澄清智能体输出后）
-- 蓝图/执行计划确认（理解智能体或澄清智能体产出后）
-- 生产环境部署（交付智能体发起前）
-- 规范/宪法变更
-- 高风险内容发布
-
-#### 审计检查点（开发类任务）
-- [ ] 规约先行（proposal + specs + design + tasks）
-- [ ] 通过 `sessions_spawn` 执行（严重违规：主会话直接 write）
-- [ ] 需求验收独立验证（严禁采信解决智能体自查报告）
-- [ ] Git 提交规范
-
-### 📁 更新的文件
-
-#### 主规范文件
-- ✅ `agents/docs/specs/constitution/CONSTITUTION.md` - V3.7 主规范（新增）
-
-#### 智能体配置（8 个）
-- ✅ `agents/constitution/requirement-clarification/AGENTS.md`
-- ✅ `agents/constitution/requirement-understanding/AGENTS.md`
-- ✅ `agents/constitution/requirement-resolution/AGENTS.md`
-- ✅ `agents/constitution/requirement-acceptance/AGENTS.md`
-- ✅ `agents/constitution/requirement-delivery/AGENTS.md`
-- ✅ `agents/constitution/progress-tracking/AGENTS.md`
-- ✅ `agents/constitution/audit/AGENTS.md`
-- ✅ `agents/constitution/summary-reflection/AGENTS.md`
-
-#### 架构与流程
-- ✅ `agents/constitution/README.md` - 子 Agent 总览（V3.7）
-- ✅ `agents/docs/architecture/SIX_AGENT_ARCHITECTURE.md` - 架构文档（V3.7）
-- ✅ `agents/docs/architecture/WORKFLOW.md` - 工作流程（V3.7）
-
-#### 工作区配置
-- ✅ `AGENTS.md` - 主工作区配置（V3.7）
-- ✅ `HEARTBEAT.md` - 周期性支撑智能体配置（V3.7）
-
-### 🎯 V3.7 关键流程
-
-#### 标准构建流（复杂任务）
-```
-用户 → 需求澄清 → 用户确认 → 需求理解 → 用户确认 → 需求解决 → 需求验收 → 需求交付
-```
-
-#### 快速执行流（简单任务）
-```
-用户 → 需求澄清 → 用户确认 → 需求解决 → 需求验收 → 需求交付
-                    ↓
-            (理解智能体休眠)
-```
-
-### 📊 可配置参数
-
-| 参数标识 | 含义 | 默认值 |
-|----------|------|--------|
-| N_rounds | 短期记忆保留轮数 | 20 |
-| N_acceptance_cycles | 解决-验收循环最大次数 | 3 |
-| N_reflection_hours | 触发总结反思的小时数 | 8 |
-| 人工确认超时时间 | 关键节点等待时间 | 24 小时 |
-| Crash Dump 保留天数 | 现场快照保留期限 | 7-90 天 |
-
-### 🔗 参考文档
-
-- **主规范**: `agents/docs/specs/constitution/CONSTITUTION.md`
-- **子 Agent 列表**: `agents/constitution/README.md`
-- **架构文档**: `agents/docs/architecture/SIX_AGENT_ARCHITECTURE.md`
-- **工作流程**: `agents/docs/architecture/WORKFLOW.md`
-
-### 💡 重要经验
-
-#### 执行方式选择
-- ACP 模式：有完整项目上下文需求时优先
-- Subagent 模式：简单任务或 ACP 不可用时
-- 直接工具调用：ACP 和 CLI 均不可用时的回退
-
-#### 审计严重违规
-- 主会话直接 `write` 业务代码 → 标记为严重违规，必须重做
-- 这会触发审计智能体的熔断机制
-
-### ⚠️ 违规处理
-- 🔴 严重违规（无规约开发、主会话直接 write、跳过验收）→ 立即熔断，必须整改重做
-- 🟡 一般违规（文档不全、未用 sessions_spawn）→ 限期整改
-- 🟢 轻微违规（格式问题、命名不规范）→ 建议改进
-
----
-
-## ACP Harness 规范教训（2026-03-09）
-
-### 问题发现
-主会话在启动需求解决智能体时，错误使用了 `runtime="subagent"` 而不是 `runtime="acp"`，导致：
-- 需求解决智能体没有 Cursor IDE 上下文
-- 无法正确使用 `cursor agent --print`
-- 违反宪法规范要求
-
-### 解决方案
-1. ✅ 更新 `AGENTS.md` 添加 ACP Harness 强制规范
-2. ✅ 更新 `agents/constitution/audit/AGENTS.md` 添加 runtime 检查
-3. ✅ 更新 `HEARTBEAT.md` 添加审计检查点
-4. ✅ 重新使用 `runtime="acp"` 执行需求解决
-
-### 规范（必须遵守）
-```python
-# ✅ 正确
-sessions_spawn(
-    runtime="acp",           # ← 必须用 acp，不是 subagent
-    agentId="requirement-resolution",
-    task="..."
-)
-
-# ❌ 禁止
-sessions_spawn(
-    runtime="subagent",      # ← 错误！subagent 没有 Cursor 上下文
-    label="requirement-resolution-xxx",
-    task="..."
-)
-```
-
-### 审计检查
-审计智能体必须检查：
-- `sessions_spawn` 调用是否使用 `runtime="acp"`
-- 发现使用 `subagent` 执行开发任务 → 标记为严重违规，必须重做
-
----
-
-## 项目状态（2026-03-09）
-
-| 项目 | 状态 | 备注 |
-|------|------|------|
-| xiaohongshu-frontend | ✅ 验收通过 | 等待 ACP 重新执行 |
-| xiaohongshu-backend | ✅ 验收通过 | - |
-| 周期性智能体 | ✅ 配置完成 | progress-tracking, audit, summary-reflection |
-| V3.7 规范升级 | ✅ 完成 | 所有文档已更新 |
-
----
-
-## 待办事项
-
-- [ ] 小红书前端项目历史遗留评估（`runtime="acp"` 重新执行需求解决 - 需评估是否仍需执行）
-- [ ] Rokid Glass Channel 推进（Android SDK/Studio 未安装，详见 `memory/rokid-glass-channel-pause.md`）
-- [ ] 周期性支撑智能体（progress-tracking / audit / summary-reflection）cron 配置确认
-- [x] 飞书宪法变更通知 V3.11.0 同步 ✅（https://feishu.cn/docx/Y5iMdtEBcoNY8SxtpBjcOKlqn2b）
-
----
-
-## 2026-03-21: OpenClaw Portfolio Dashboard 项目进行中
-
-### 项目状态
-- **状态**: 🔄 进行中（需求解决阶段）
-- **恢复时间**: 2026-03-21 21:05
-- ACP session: `agent:cursor:acp:f4ca5c1a-9a59-4243-b520-b87bf23b8d20`
-
-### 已完成
-- 需求澄清 ✅
-- 需求理解 ✅（规约已产出，已同步飞书）
-
-### 飞书文档
-- 澄清提案: https://feishu.cn/docx/XPhUdciJkoyAZLxy1Iacbez8nBf
-- 需求规格: https://feishu.cn/docx/KGcod0Vj3ou4eMxK0Dlcw6NRnxg
-- 技术设计+任务: https://feishu.cn/docx/LhM3dZGbPo86YHx4BKOcVe4wnNg
-
-### 待办
-- 需求解决阶段进行中（T-01~T-17）
-- Cursor CLI 环境问题已解决（agentId 应为 "cursor"，不是 requirement-resolution）
-
----
-
-## 2026-03-21: V3.11.0 正式生效
-
-- **状态**: ✅ 已生效（冷静期已过，2026-03-22 15:17）
-- **变更**: Story File + 复杂度评级 + Analysis阶段 + SOP清单化
-
----
-
-## 2026-03-10: V3.7.1 需求级并行架构升级
-
-### 📜 架构升级
-
-- **从 V3.7 升级到 V3.7.1**
-- **生效日期**: 2026-03-10
-- **状态**: ✅ 已完成并生效
-
-### 🎯 核心变更
-
-| 类别 | V3.7 | V3.7.1 |
-|------|------|--------|
-| **并行单位** | 智能体内部并行 | **需求级并行** |
-| **需求隔离** | 无明确定义 | 每个需求有独立 5 智能体子 agent |
-| **主会话角色** | 协调者 | **需求调度器 + 子 agent spawn 执行者** |
-| **子 agent 管理** | 智能体自行 spawn | **主会话统一 spawn** |
-
-### 📊 架构设计
+### 📐 修正后架构
 
 ```
-主会话（需求调度器）
-│
-├─ 需求 A → clarification-reqA → understanding-reqA → resolution-reqA → acceptance-reqA → delivery-reqA
-├─ 需求 B → clarification-reqB → understanding-reqB → resolution-reqB → acceptance-reqB → delivery-reqB
-└─ 需求 C → ...
+agents/docs/specs/constitution/CONSTITUTION.md
+  = 宪法规范索引（唯一权威来源）
+  └── 索引 ../constitution/TEAM_ROLES.md（目录结构说明）
+
+agents/constitution/
+  ├── GALAXY_NAVIGATOR.md  ← 银河导航员（主 Agent）职责定义
+  ├── TEAM_ROLES.md        ← 8 大智能体昵称与协作流程
+  └── <8 个智能体>/AGENTS.md ← 各智能体执行依据
+
+AGENTS.md（workspace 根目录）
+  = 主 Agent（银河导航员）工作区入口
+  ├── 声明身份 + 遵循 V3.10.0
+  └── 引用 GALAXY_NAVIGATOR.md + CONSTITUTION.md（宪法索引）
 ```
 
-### ✅ 已更新文件
+### 💡 关键经验
 
-- `agents/docs/specs/constitution/architecture/CONSTITUTION_V3.7_PARALLEL.md` - V3.7.1 需求级并行架构规范（新增）
-- `AGENTS.md` - 添加 V3.7.1 需求级并行说明
-- `opsx/requirements-state.json` - 需求状态管理文件
-
-### 🚀 立即执行
-
-1. **req-A（P0 核心技能开发）**: 9 个技能并行开发中
-2. **req-B（Agent Monitor Dashboard）**: 前后端并行开发中
+- **宪法权威来源**：CONSTITUTION.md 是规范索引，各 AGENTS.md 是执行依据，两级分离
+- **主 Agent 身份**：AGENTS.md 必须明确声明自己是"银河导航员"，避免职责模糊
+- **路径引用必须验证**：所有 markdown 引用路径在提交前应做 existence check
 
 ---
 
-**最后更新**: 2026-03-10 06:45  
-**下次审查**: 2026-03-17
+## 2026-03-21: 规约路径重构（openspec/changes → project/{项目名}/changes/{需求名}）
 
----
+### 📋 问题
+- `openspec/changes/{项目名}/` 路径不合理：所有需求混在一个目录，不支持多需求并行
+- 与 V3.7.1 需求级并行架构不匹配
 
-## 2026-03-12: ACP Harness 扩展至需求理解/验收/交付智能体
+### ✅ 已完成
 
-### 📜 规范版本
-- **从 V3.7 升级到 V3.7.2**
-- **生效日期**: 2026-03-12
-- **状态**: 🟡 测试中（需求理解智能体已更新，待验证）
+**规范文件路径引用更新（16 个文件）：**
+- `AGENTS.md` — 所有命令模板 + 路径定义
+- `SPEC_OpenSpec_Sync.md` — 规约隔离结构
+- `CONSTITUTION_PARALLEL.md` — 示例路径
+- `CONSTITUTION_DIRECTORY_STANDARD.md` — 目录规范
+- `OPENSPEC_GUIDE.md` — 示例路径
+- `REPOSITORY_GOVERNANCE.md` — 治理规则
+- `summary-reflection/AGENTS.md` — 报告路径
+- 技能文件：skill-05/06/07/16 + audit 相关 SKILL.md/README.md（共 14 个文件）
 
-### 🎯 核心变更
+**实际目录迁移：**
+```
+openspec/changes/
+├── all-skills-delivery/      → project/all-skills-delivery/changes/phase1/
+├── constitution-v3.10.0/    → project/constitution/changes/v3.10.0/
+├── constitution-v3.7.4/     → project/constitution/changes/v3.7.4/
+├── ecommerce-mvp/            → project/ecommerce-mvp/changes/init/
+└── fitbot-pro/               → project/fitbot-pro/changes/init/
+```
 
-**扩展 ACP Harness 适用范围**：
-- V3.7: 仅 `requirement-resolution`（需求解决）必须用 `runtime="acp"`
-- V3.7.2: 扩展至 4 个智能体
-  - ✅ `requirement-understanding`（需求理解）
-  - ✅ `requirement-resolution`（需求解决）
-  - ✅ `requirement-acceptance`（需求验收）
-  - ✅ `requirement-delivery`（需求交付）
+### 📐 新路径规范
 
-### 📝 已更新文件
+```
+project/{项目名}/changes/{需求名}/
+├── proposal.md              # 需求提案
+├── specs/requirements.md   # 详细需求
+├── design.md               # 技术设计
+├── tasks.md               # 任务清单
+└── （交付物：代码等）
+```
 
-| 文件 | 改动 |
-|------|------|
-| `AGENTS.md` | 更新 ACP Harness 规范（V3.7.2），添加 4 智能体适用列表 |
-| `agents/constitution/requirement-understanding/AGENTS.md` | 新增"强制工作模式"章节 |
-| `agents/constitution/requirement-acceptance/AGENTS.md` | 待更新 |
-| `agents/constitution/requirement-delivery/AGENTS.md` | 待更新 |
-
-### 💡 变更理由
-
-| 智能体 | 为什么需要 Cursor CLI |
-|--------|----------------------|
-| 需求理解 | 读取项目代码结构、技术栈、依赖关系，生成贴合实际的规约 |
-| 需求解决 | 编写代码、运行自测、修复循环 |
-| 需求验收 | 运行测试套件、代码审查、安全扫描、一致性比对 |
-| 需求交付 | Git 操作、环境检查、敏感信息扫描 |
-
-### 🚀 执行计划
-
-- [x] 更新 `AGENTS.md` 主规范
-- [x] 更新 `requirement-understanding/AGENTS.md`
-- [x] 需求验收/交付智能体更新（已随 V3.10.0 完成）
-- [x] 更新 `CONSTITUTION.md` 宪法主规范
-- ⏭️ **已忽略** V3.7.2 单独验证（V3.10.0 已覆盖）
-
-### ⚠️ 注意事项
-
-- 新任务立即生效，旧任务继续完成
-- 仅开发类任务强制，内容/咨询类可选
-- 主会话 spawn 时必须用 `runtime="acp"`
-
----
-
-**最后更新**: 2026-03-12 00:15  
-**下次审查**: 2026-03-19
-
----
-
-## 2026-03-12 00:32: V3.7.3 升级执行中
-
-### 📊 执行进度
-
-| 阶段 | 状态 | 完成时间 |
-|------|------|----------|
-| 阶段 0: 备份 | ✅ 完成 | 00:32 |
-| 阶段一：核心变更 | ✅ 完成 | 00:33 |
-| 阶段二：配套规范 | ✅ 完成 | 00:35 |
-| 阶段三：文档化 | ✅ 完成 | 00:36 |
-| 阶段四：Git 提交推送 | ⏳ 待执行 | - |
-| 阶段五：飞书同步 | ⏳ 待执行 | - |
-
-### ✅ 已完成工作
-
-**阶段 0: 备份**
-- 宪法规范备份：`agents/docs/versions/V3.7.3/constitution/`
-- 智能体配置备份：`agents/docs/versions/V3.7.3/agents/`（3 个 AGENTS.md）
-- 技能目录备份：`agents/docs/versions/V3.7.3/skills/`（44 个技能，全量）
-- 备份时间戳：2026-03-12_00:32:28
-
-**阶段一：核心变更**
-- 更新 `requirement-acceptance/AGENTS.md`（新增前置完整性检查）
-- 更新 `requirement-delivery/AGENTS.md`（新增 Git 推送强制要求）
-
-**阶段二：配套规范**
-- 创建 `SKILLS_NAMING_CONVENTION.md`（技能命名规范 V1.0）
-- 创建 `skills_manifest.json`（技能注册表，16 个活跃技能）
-
-**阶段三：文档化**
-- 更新 `CHANGELOG.md`（V3.7.3 变更记录）
-
-## 2026-03-15: 状态确认
-
-### ✅ V3.7.3 待办已完成
-- Git 已推送到 V3.10.0
-- 工作区干净，无需提交
-
-### 📊 当前版本
-- **宪法规范版本**: V3.9.2（已推送）
-
----
-
-## 2026-03-15: V3.9.2 智能体规范升级
-
-### 📜 规范升级
-
-- **从 V3.9 升级到 V3.9.2**
-- **生效日期**: 2026-03-15
-- **状态**: ✅ 已完成
-
-### 🎯 核心变更
-
-**需求澄清智能体（迷糊粉碎机）**：
-| 变更项 | 内容 |
-|--------|------|
-| 新增步骤 | 技术选型确认（后端/数据库/认证） |
-| 产出增加 | 技术选型字段 |
-
-**需求理解智能体（脑洞整理师）**：
-| 变更项 | 内容 |
-|--------|------|
-| 产出强化 | L2→L3 映射表（强制） |
-| 产出强化 | L3→L4 映射表（强制） |
-
-### 📋 验证 B 结果
-
-- 电商交易系统需求走通全流程
-- 发现问题：L2-L3 未关联 + 技术选型未确认
-- 已修正规范并更新智能体
-
-### 📁 更新的文件
-
-| 文件 | 变更 |
-|------|------|
-| `requirement-clarification/AGENTS.md` | V3.9.2，新增技术选型确认 |
-| `requirement-understanding/AGENTS.md` | V3.9.2，新增 L2→L3、L3→L4 映射表 |
+### ⚠️ 未修改（历史记录）
+- `CONSTITUTION_UPGRADE_AND_LAYOUT_PLAN.md` — V3.7.3→v3.7.4 历史迁移记录，保留原路径
+- `ITERATION_PROCESS.md` — 历史引用
+- 审计日志 — 历史快照
+- `openspec/` 目录结构（assets/ 保留，changes/ 已清空）
 
 ---
 
@@ -545,106 +290,43 @@ sessions_spawn(
 
 ---
 
-## 2026-03-21: 主 Agent 配置审查与修正（V3.10.0）
+## 2026-03-22 20:29: Self-Improving Proactive Agent 安装与整合
 
-### 📋 发现的问题
+### 📥 已安装
+- `skill-vetter` (1.0.0) - 安全审查，即装即用
+- `self-improving-proactive-agent` (1.0.0) - 自提升主动智能体
+- `summarize` (1.0.0) - CLI 工具，需安装 `brew install steipete/tap/summarize`
 
-| # | 问题 | 严重性 |
-|---|------|--------|
-| 1 | CONSTITUTION.md footer 版本号 V3.9.0，与顶部 V3.10.0 不一致 | 🔴 |
-| 2 | AGENTS.md 引用不存在的 `agents/constitution/README.md` | 🔴 |
-| 3 | CONSTITUTION.md 两处飞书链接标注"待创建"但无实际链接 | 🟡 |
-| 4 | CONSTITUTION.md 声称"唯一入口"但智能体实际读各自 AGENTS.md，语义歧义 | 🟡 |
-| 5 | AGENTS.md 缺少身份声明（未明确"我就是银河导航员"） | 🟡 |
-| 6 | TEAM_ROLES.md 参考文档 4 个路径全部错误（裸文件名不存在） | 🔴 |
-| 7 | CONSTITUTION.md 末尾引用不存在的 README.md | 🟡 |
+### 🔗 与 summary-reflection 整合
 
-### ✅ 已修正内容
+| 系统 | 性质 | 触发 |
+|------|------|------|
+| `summary-reflection` 智能体 | 离线深度分析 | 每日 23:00 + 任务完成后 |
+| `~/self-improving/` | 实时轻量学习 | 每个 session 持续 |
+| `~/proactivity/` | 主动执行状态 | 每次 heartbeat |
 
-| # | 文件 | 修正 |
-|---|------|------|
-| 1 | `CONSTITUTION.md` | footer 版本号 V3.9.0 → **V3.10.0**（2026-03-19），审查日期 2026-04-12 → **2026-04-19** |
-| 2 | `CONSTITUTION.md` | "唯一入口"说明 → **"宪法规范索引（唯一权威来源）"**，注明智能体实际读 `agents/constitution/<agent>/AGENTS.md` |
-| 3 | `CONSTITUTION.md` | 末尾 README.md → `../constitution/TEAM_ROLES.md` |
-| 4 | `CONSTITUTION.md` | 两处"待创建"飞书链接 → 改为"该规范无需飞书同步，本地文件为主" |
-| 5 | `AGENTS.md` | 顶部添加身份声明（银河导航员 🧭，遵循 V3.10.0，引用 GALAXY_NAVIGATOR.md） |
-| 6 | `AGENTS.md` | 更多细节添加 GALAXY_NAVIGATOR.md 和 TEAM_ROLES.md 引用；原不存在 README 引用已修正 |
-| 7 | `TEAM_ROLES.md` | 参考文档 4 个路径全部修正为相对路径 |
+**整合原则**：不重叠，互相补强。summary-reflection 产出改进方案 → 写入 corrections.md → 用户确认后 promote 到 memory.md。
 
-### 📐 修正后架构
-
+### 📁 目录结构
 ```
-agents/docs/specs/constitution/CONSTITUTION.md
-  = 宪法规范索引（唯一权威来源）
-  └── 索引 ../constitution/TEAM_ROLES.md（目录结构说明）
-
-agents/constitution/
-  ├── GALAXY_NAVIGATOR.md  ← 银河导航员（主 Agent）职责定义
-  ├── TEAM_ROLES.md        ← 8 大智能体昵称与协作流程
-  └── <8个智能体>/AGENTS.md ← 各智能体执行依据
-
-AGENTS.md（workspace根目录）
-  = 主 Agent（银河导航员）工作区入口
-  ├── 声明身份 + 遵循 V3.10.0
-  └── 引用 GALAXY_NAVIGATOR.md + CONSTITUTION.md（宪法索引）
+~/self-improving/          # 持久学习
+~/proactivity/             # 主动执行
 ```
 
-### 💡 关键经验
-
-- **宪法权威来源**：CONSTITUTION.md 是规范索引，各 AGENTS.md 是执行依据，两级分离
-- **主 Agent 身份**：AGENTS.md 必须明确声明自己是"银河导航员"，避免职责模糊
-- **路径引用必须验证**：所有 markdown 引用路径在提交前应做 existence check
+### ⚠️ 下次 session 验证
+- [ ] 验证 ~/self-improving/ 和 ~/proactivity/ 文件存在
+- [ ] HEARTBEAT.md 主动心跳行为是否生效
 
 ---
 
-## 2026-03-21: 规约路径重构（openspec/changes → project/{项目名}/changes/{需求名}）
+## ⚠️ 铁律（2026-03-23 追加）
 
-### 📋 问题
-- `openspec/changes/{项目名}/` 路径不合理：所有需求混在一个目录，不支持多需求并行
-- 与 V3.7.1 需求级并行架构不匹配
+**禁止主会话直接写业务代码到 project/src 目录**
+- 触发：`write`/`edit` 目标含 `/project/` 或 `/src/` → 必须走 `sessions_spawn`
+- 绝不允许用"用户授权豁免"绕过
+- ACP 不可用 → 尝试 subagent → 绝不允许主会话直接 write
+- 违反 = 严重违规，标记 PROCESS_VIOLATION
 
-### ✅ 已完成
-
-**规范文件路径引用更新（16个文件）：**
-- `AGENTS.md` — 所有命令模板 + 路径定义
-- `SPEC_OpenSpec_Sync.md` — 规约隔离结构
-- `CONSTITUTION_PARALLEL.md` — 示例路径
-- `CONSTITUTION_DIRECTORY_STANDARD.md` — 目录规范
-- `OPENSPEC_GUIDE.md` — 示例路径
-- `REPOSITORY_GOVERNANCE.md` — 治理规则
-- `summary-reflection/AGENTS.md` — 报告路径
-- 技能文件：skill-05/06/07/16 + audit 相关 SKILL.md/README.md（共14个文件）
-
-**实际目录迁移：**
-```
-openspec/changes/
-├── all-skills-delivery/      → project/all-skills-delivery/changes/phase1/
-├── constitution-v3.10.0/    → project/constitution/changes/v3.10.0/
-├── constitution-v3.7.4/     → project/constitution/changes/v3.7.4/
-├── ecommerce-mvp/            → project/ecommerce-mvp/changes/init/
-└── fitbot-pro/               → project/fitbot-pro/changes/init/
-```
-
-### 📐 新路径规范
-
-```
-project/{项目名}/changes/{需求名}/
-├── proposal.md              # 需求提案
-├── specs/requirements.md   # 详细需求
-├── design.md               # 技术设计
-├── tasks.md               # 任务清单
-└── （交付物：代码等）
-```
-
-### ⚠️ 未修改（历史记录）
-- `CONSTITUTION_UPGRADE_AND_LAYOUT_PLAN.md` — V3.7.3→v3.7.4 历史迁移记录，保留原路径
-- `ITERATION_PROCESS.md` — 历史引用
-- 审计日志 — 历史快照
-- `openspec/` 目录结构（assets/ 保留，changes/ 已清空）
-
----
-
-**最后更新**: 2026-03-21 08:56
 ---
 
 ## 2026-03-21: Rokid Glasses × OpenClaw Channel 项目
@@ -681,10 +363,10 @@ project/{项目名}/changes/{需求名}/
 
 ### 📁 项目文件
 
-- 代码: `project/rokid-glass-channel/`
-- 规约: `project/rokid-glass-channel/changes/phase1-voice/`
-- 联调文档: `project/rokid-glass-channel/docs/`
-- 待办事项: `memory/rokid-glass-channel-pause.md`
+- 代码：`project/rokid-glass-channel/`
+- 规约：`project/rokid-glass-channel/changes/phase1-voice/`
+- 联调文档：`project/rokid-glass-channel/docs/`
+- 待办事项：`memory/rokid-glass-channel-pause.md`
 
 ### 🔗 飞书文档
 
@@ -699,127 +381,6 @@ project/{项目名}/changes/{需求名}/
 
 ---
 
-**最后更新**: 2026-03-22 20:29
-
----
-
-## 2026-03-22 20:29: Self-Improving Proactive Agent 安装与整合
-
-### 📥 已安装
-- `skill-vetter` (1.0.0) - 安全审查，即装即用
-- `self-improving-proactive-agent` (1.0.0) - 自提升主动智能体
-- `summarize` (1.0.0) - CLI工具，需安装 `brew install steipete/tap/summarize`
-
-### 🔗 与 summary-reflection 整合
-
-| 系统 | 性质 | 触发 |
-|------|------|------|
-| `summary-reflection` 智能体 | 离线深度分析 | 每日 23:00 + 任务完成后 |
-| `~/self-improving/` | 实时轻量学习 | 每个 session 持续 |
-| `~/proactivity/` | 主动执行状态 | 每次 heartbeat |
-
-**整合原则**：不重叠，互相补强。summary-reflection 产出改进方案 → 写入 corrections.md → 用户确认后 promote 到 memory.md。
-
-### 📁 目录结构
-```
-~/self-improving/          # 持久学习
-~/proactivity/             # 主动执行
-```
-
-### ⚠️ 下次 session 验证
-- [ ] 验证 ~/self-improving/ 和 ~/proactivity/ 文件存在
-- [ ] HEARTBEAT.md 主动心跳行为是否生效
-
----
-
-## ⚠️ 铁律（2026-03-23 追加）
-
-**禁止主会话直接写业务代码到 project/src 目录**
-- 触发：`write`/`edit` 目标含 `/project/` 或 `/src/` → 必须走 `sessions_spawn`
-- 绝不允许用"用户授权豁免"绕过
-- ACP 不可用 → 尝试 subagent → 绝不允许主会话直接 write
-- 违反 = 严重违规，标记 PROCESS_VIOLATION
-
----
-
-## 2026-03-22: V3.12.0 正式生效 + ACP 空会话分析
-
-### 📜 版本状态
-- **宪法规范版本**: V3.12.0 ✅ 今日正式生效
-- **V3.11.0**: 2026-03-22 15:17 冷静期结束，已并入 V3.12.0
-
-### 🔍 ACP Cursor 会话问题分析
-
-#### 问题发现
-- **12 个 ACP cursor 会话**全部 `messages: []`，属于残留会话记录
-- Portfolio T-01 脚手架任务**至少重试了 5 次**，全部立即以 `acpx exited with code 1` 失败
-
-#### 根因确认
-| 原因 | 证据 |
-|------|------|
-| `cursor-agent acp` 命令存在但 Cursor 模型服务不可用 | 所有会话在 phase:start 后 2-3 秒即 phase:error，退出码 1 |
-| 不是网络/权限问题 | acpx 进程启动成功（phase:start 记录存在） |
-| 不是 CLI 版本问题 | cursor-agent 版本 2026.02.27-e7d2ef6 |
-
-#### 会话分类
-| 类型 | 数量 | 最后更新时间 |
-|------|------|-------------|
-| Portfolio T-01 重试会话 | 5 个 | 14:10 (ee68f330) |
-| ACP 测试会话 | 1 个 | 03-20 |
-| 其他 agent ACP 后台调用 | 5+ 个 | 分散 |
-
-#### 关键证据（acp-stream.jsonl）
-```
-所有失败会话共同模式:
-1. lifecycle/phase:start (启动成功)
-2. ~2-3秒后 lifecycle/phase:error
-3. error: "acpx exited with code 1"
-4. cursor stream relay timed out after 21600s (6小时超时)
-```
-
-#### 结论
-- **Cursor ACP 模式根本不可用**，不是暂时故障
-- 建议切换到其他 ACP agent（如 `pi`、`codex`、`claude`）
-- 或使用非 ACP 的 `cursor agent --print` 模式（但宪法规定开发任务必须用 ACP）
-
-#### 待用户决策
-- [ ] 是否切换到其他 ACP agent？
-- [ ] 是否临时授权 write 工具绕过 ACP 限制？
-
----
-
-## 2026-03-21 15:25
-
-### 📜 规范版本
-- **从 V3.10.0 升级到 V3.11.0**
-- **生效日期**: 2026-03-22（冷静期后）
-- **状态**: ✅ 已提交 Git + 推送
-
-### 🎯 核心变更（借鉴 BMAD Method）
-
-| # | 改进项 | 来源 |
-|---|--------|------|
-| P0-1 | Story File 上下文工程化 | BMAD Story File |
-| P0-2 | 需求复杂度评级（C/B/A/S） | BMAD 自适应路径 |
-| P1-3 | Clarification 拆分为 Analysis + Clarification | BMAD 分析阶段 |
-| P1-4 | 8 个智能体 SOP 清单化 | BMAD SOP 清单 |
-
-### 📋 决策记录
-- DEC-031: Story File 上下文工程化
-- DEC-032: 需求复杂度评级机制
-- DEC-033: Clarification 阶段拆分
-- DEC-034: 智能体 SOP 清单化
-
-### 📁 新增文档
-- `story/STORY_FILE_SPEC.md`
-- `DEC-031~034.md`
-- `DECISION_LOG.md`
-
-### ⚠️ Type-B 冷静期
-- 冷静期：24h（2026-03-22 15:17 截止）
-- V3.11.0 将在冷静期后正式生效
-
-### 💡 经验
-- 3 个子智能体并行更新 SOP 章节，总耗时 1m32s
-- Story File 规范设计参考了 BMAD Story File 上下文工程化理念
-- Git Hook 自动备份机制在提交时触发
+**最后更新**: 2026-03-24 08:37  
+**归档后大小**: ~400 行（原 825 行）  
+**归档内容**: `memory/2026-03-09-to-03-15-constitution-upgrades.md`

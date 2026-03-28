@@ -179,7 +179,7 @@ const { errors } = require('./index.js');
 | `proposal.md` | 项目提案 | 背景、目标、范围、约束 |
 | `specs/requirements.md` | 需求规格 | 功能需求、非功能需求、验收条件（AC） |
 | `design.md` | 技术设计 | 架构、技术选型、接口与数据流 |
-| `tasks.md` | 任务列表 | 按序可执行任务，供需求解决与 Cursor CLI 使用 |
+| `tasks.md` | 任务列表 | 按序可执行任务，供需求解决经 `sessions_spawn` 执行 |
 
 ### ContentOutline（内容类 · taskType = content）
 

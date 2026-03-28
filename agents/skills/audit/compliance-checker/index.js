@@ -18,7 +18,7 @@ const readline = require('readline');
 
 const DEFAULT_RULES = [
   { id: 'R001', name: 'Runtime 配置错误', description: '开发任务必须使用 runtime="acp"', level: '严重', suggestion: '使用 runtime="acp" 执行开发任务' },
-  { id: 'R002', name: '违规使用 write 工具', description: '禁止使用 write 工具创建业务代码', level: '严重', suggestion: '使用 Cursor CLI 进行代码开发' },
+  { id: 'R002', name: '违规使用 write 工具', description: '禁止使用 write 工具创建业务代码', level: '严重', suggestion: '使用 sessions_spawn（ACP 或 subagent）由子会话进行代码开发' },
   { id: 'R003', name: '任务顺序错误', description: '任务未按 tasks.md 定义顺序执行', level: '一般', suggestion: '按 tasks.md 定义的任务顺序执行' },
   { id: 'R004', name: '缺失意图确认', description: '未找到用户意图确认记录', level: '一般', suggestion: '在 proposal.md 中添加用户确认章节' },
   { id: 'R005', name: '缺失蓝图确认', description: '未找到用户蓝图确认记录', level: '一般', suggestion: '在 design.md 中添加确认记录' },

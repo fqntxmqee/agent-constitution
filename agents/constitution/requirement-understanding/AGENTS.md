@@ -76,18 +76,17 @@
 
 ## ⚠️ 强制工作模式（开发类任务）
 
-- ✅ **优先方式（ACP）：** 本智能体在 OpenClaw 中已配置 `runtime.type: "acp"`、`runtime.acp.agent: "cursor"`。主会话应以 **ACP 模式** 派发需求理解任务，使本任务**在 cursor 内执行**，具备完整项目上下文。
-- ✅ **未以 ACP 派发时的唯一方式：** 若本会话以 subagent 运行，则**仅允许**通过调用 `cursor agent --print` CLI 命令（PTY 模式）将规约编写步骤委托给 Cursor，禁止用 `write` 直接写 OpenSpec 规约文档。
+- ✅ **优先方式（ACP）：** 本智能体在 OpenClaw 中已配置 `runtime.type: "acp"`、`runtime.acp.agent: "cursor"`。主会话应以 **ACP 模式** 派发需求理解任务，使本任务在具备完整项目上下文的会话中执行。
+- ✅ **未以 ACP 派发时的回退：** 须通过 `sessions_spawn(runtime="subagent", ...)`（或等效 Worker）将 OpenSpec 规约编写委托给子会话完成，**禁止**主会话或协调会话用 `write` 直接写 OpenSpec 规约文档。
 - ✅ 所有操作可追溯、可复现
 - ❌ **禁止**使用 `write` 工具直接创建 OpenSpec 规约文档（proposal.md, specs/requirements.md, design.md, tasks.md）
 
 **例外（允许 write）：** 临时笔记、调试日志、中间分析稿等非规约文件
 
-**为什么需要 Cursor CLI**：
-- 读取项目现有代码结构和技术栈
-- 理解现有架构和依赖关系
-- 生成与项目实际一致的规约文档
-- 避免脱离上下文空想设计
+**为什么不能由主会话直接 write 规约**：
+- OpenSpec 须对照仓库真实结构与代码上下文，子会话 / ACP Worker 具备完整工具链与工作区视图
+- 保证 proposal / specs / design / tasks 与项目实际一致、可验收
+- 满足 Hub-Spoke 下「规约产出可审计、可追溯」的要求
 
 ---
 

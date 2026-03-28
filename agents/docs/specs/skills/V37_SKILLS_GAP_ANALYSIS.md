@@ -109,7 +109,6 @@
 | OpenClaw `read/write/edit` | Skill-11/21/26 | 文件操作 |
 | OpenClaw `feishu_doc` | Skill-21/23/26 | 飞书文档 |
 | OpenClaw `feishu_bitable` | Skill-24/26 | 飞书表格 |
-| Cursor CLI | Skill-11/13/14 | 代码生成与测试 |
 
 ### ⚠️ 需实现的技能（28 个）
 
@@ -123,7 +122,6 @@
 | Skill-06 | 多模态蓝图转换器 | LLM Prompt + 模板 | 2 天 |
 | Skill-09 | 跨域验收标准定义器 | LLM Prompt + AC 模板 | 1 天 |
 | Skill-10 | 任务原子化拆解器 | LLM Prompt + Tasks 模板 | 1 天 |
-| Skill-13 | 自适应测试/审查生成器 | Cursor CLI + 测试框架 | 2 天 |
 | Skill-16 | 自动化测试/审查运行器 | Jest/Pytest + 浏览器自动化 | 2 天 |
 | Skill-18 | 事实与逻辑验证器 | web_search + 交叉验证 | 1 天 |
 | Skill-25 | 敏感信息终检器 | Gitleaks/truffleHog | 1 天 |
@@ -137,7 +135,6 @@
 | Skill-07 | 资源与影响分析器 | LLM + 资源评估模板 | 1 天 |
 | Skill-08 | 逻辑一致性校验器 | LLM + 规则检查 | 1 天 |
 | Skill-12 | 技能路由执行器 | 工具注册表 + 路由 | 2 天 |
-| Skill-14 | 自测与修复循环 | Cursor CLI + 重试逻辑 | 1 天 |
 | Skill-17 | 多模态一致性比对器 | diff + LLM 语义比对 | 2 天 |
 | Skill-19 | 交付物完整性扫描仪 | 文件结构检查 | 0.5 天 |
 | Skill-20 | 一票否决触发器 | 状态机 + 报告生成 | 0.5 天 |

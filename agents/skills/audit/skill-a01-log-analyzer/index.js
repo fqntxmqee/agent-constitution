@@ -25,7 +25,7 @@ const VIOLATION_RULES = {
     name: '无规约写业务代码',
     level: '严重',
     description: '检测到使用 write 工具创建业务代码',
-    recommendation: '使用 runtime="acp" + Cursor CLI 开发'
+    recommendation: '通过 sessions_spawn（ACP 或 subagent）由子会话执行业务代码，禁止主会话直接 write'
   },
   V002: {
     id: 'V002',
@@ -43,10 +43,10 @@ const VIOLATION_RULES = {
   },
   V004: {
     id: 'V004',
-    name: '未使用 Cursor CLI',
+    name: '开发任务未走 sessions_spawn',
     level: '一般',
-    description: '开发任务未使用 Cursor CLI',
-    recommendation: '使用 cursor agent --print 进行开发'
+    description: '开发任务日志中未见 sessions_spawn（或历史兼容的 cursor 工具调用）',
+    recommendation: '使用 sessions_spawn(runtime="acp"|"subagent") 委托 Worker 执行业务代码'
   },
   V005: {
     id: 'V005',
@@ -328,7 +328,7 @@ function detectSessionViolations(events) {
   let hasDevTask = false;
   let hasAcceptance = false;
   let hasDelivery = false;
-  let hasCursorCli = false;
+  let hasWorkerHarness = false;
   
   for (const event of events) {
     if (event.type === 'toolCall') {
@@ -337,8 +337,8 @@ function detectSessionViolations(events) {
         hasDevTask = true;
       }
       
-      if (event.data.tool === 'cursor') {
-        hasCursorCli = true;
+      if (event.data.tool === 'cursor' || event.data.tool === 'sessions_spawn') {
+        hasWorkerHarness = true;
       }
       
       // 检查验收相关
@@ -372,8 +372,8 @@ function detectSessionViolations(events) {
     });
   }
   
-  // V004: 未使用 Cursor CLI
-  if (hasDevTask && !hasCursorCli) {
+  // V004: 开发任务未走 sessions_spawn（含历史 cursor 工具日志）
+  if (hasDevTask && !hasWorkerHarness) {
     violations.push({
       ruleId: 'V004',
       ...VIOLATION_RULES.V004,
@@ -382,7 +382,7 @@ function detectSessionViolations(events) {
       sessionId: sessionId,
       evidence: {
         hasDevTask: true,
-        hasCursorCli: false
+        hasWorkerHarness: false
       },
       recommendation: VIOLATION_RULES.V004.recommendation
     });

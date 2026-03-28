@@ -94,7 +94,7 @@
 | V001 | 无规约写业务代码 | `tool="write"` + 路径包含业务代码特征 | 🔴 严重 |
 | V002 | 使用 subagent 执行开发 | `tool="sessions_spawn"` + `runtime="subagent"` + 开发类任务 | 🔴 严重 |
 | V003 | 跳过验收直接交付 | 无验收报告 + 有交付行为 | 🟡 一般 |
-| V004 | 未使用 Cursor CLI | 开发任务 + 无 cursor 工具调用 | 🟡 一般 |
+| V004 | 开发任务未走 sessions_spawn | 开发任务 + 无 sessions_spawn / cursor 工具调用 | 🟡 一般 |
 | V005 | 敏感信息泄露 | 内容包含 API Key/密码/Token 模式 | 🔴 严重 |
 
 #### 业务代码路径特征
@@ -179,7 +179,7 @@
         path: "/path/to/code.js",
         contentPreview: "function main() {..."
       },
-      recommendation: "使用 runtime=\"acp\" + Cursor CLI 开发"
+      recommendation: "使用 sessions_spawn(runtime=\"acp\"|\"subagent\") 委托 Worker 开发"
     }
   ],
   

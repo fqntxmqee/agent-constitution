@@ -22,7 +22,6 @@
 |----------|----------|
 | **进展汇报** | 每 3 分钟汇报一次（sessions_send） |
 | **OpenSpec** | 开发前必须创建 proposal/specs/design/tasks |
-| **Cursor CLI** | 代码开发必须使用 cursor agent --print |
 | **Git 提交** | 遵循 Conventional Commits 规范 |
 | **飞书文档** | 关键任务必须创建飞书文档 |
 | **测试置信度** | L1 验证必须带截图证据 |
@@ -59,14 +58,6 @@
 - [ ] 是否有 design.md
 - [ ] 是否有 tasks.md
 - [ ] DEV Agent 是否按 tasks.md 执行
-```
-
-### Cursor CLI 检查
-
-```markdown
-- [ ] DEV Agent 是否使用 cursor agent --print 创建代码
-- [ ] 是否避免了直接使用 write 工具创建代码文件
-- [ ] 编译验证是否执行（./mvnw compile 或 npm run build）
 ```
 
 ### Git 提交检查
@@ -122,7 +113,7 @@ subagents(
 
 | 时间 | Agent | 违规类型 | 处理 | 状态 |
 |------|-------|----------|------|------|
-| 08:30 | DEV-Agent | 未使用 Cursor CLI | 已 steer 纠正 | ✅ 已解决 |
+| 08:30 | DEV-Agent | 未使用 .. | 已 steer 纠正 | ✅ 已解决 |
 ```
 
 ### 4. 验证纠正
@@ -151,7 +142,6 @@ sessions_history(sessionKey="agent:main:subagent:xxx", limit=5)
 |----------|--------|------|
 | 进展汇报 | 90% | 🟡 良好 |
 | OpenSpec | 100% | ✅ 优秀 |
-| Cursor CLI | 80% | 🟡 良好 |
 | Git 提交 | N/A | ⏳ 未执行 |
 | 飞书文档 | 100% | ✅ 优秀 |
 | **总体合规率** | **92%** | 🟡 良好 |
@@ -200,7 +190,6 @@ sessions_history(sessionKey="agent:main:subagent:xxx", limit=5)
 |----------|--------|
 | 进展汇报 | 95% |
 | OpenSpec | 100% |
-| Cursor CLI | 90% |
 | Git 提交 | 100% |
 | 飞书文档 | 100% |
 | 测试置信度 | 100% |
@@ -210,7 +199,7 @@ sessions_history(sessionKey="agent:main:subagent:xxx", limit=5)
 
 | Agent | 违规次数 | 主要问题 |
 |-------|----------|----------|
-| DEV-Agent | 2 | 未使用 Cursor CLI、未发送进展 |
+| DEV-Agent | 2 | 业务代码未走 sessions_spawn、未发送进展 |
 | DELIVERY-Agent | 0 | - |
 
 ### 经验教训

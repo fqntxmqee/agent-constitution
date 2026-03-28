@@ -45,9 +45,8 @@
 
 **可用方式：**
 1. **ACP 模式**（推荐，当可用时）：`sessions_spawn(runtime="acp", agentId="cursor", ...)`
-2. **非交互 CLI**：`cursor agent --print` 或 `opencode agent --print`
-3. **Subagent 模式**：`sessions_spawn(runtime="subagent", ...)` + 工具调用
-4. **直接工具调用**：仅限非业务代码（任务状态文件、配置文件、文档）
+2. **Subagent 模式**：`sessions_spawn(runtime="subagent", ...)` + 工具调用
+3. **直接工具调用**：仅限非业务代码（任务状态文件、配置文件、文档）
 
 **⚠️ 铁律：业务代码执行边界**
 

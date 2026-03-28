@@ -27,7 +27,7 @@
 
 ---
 
-## 📋 智能体团队（8 个子智能体）
+## 📋 智能体团队（8 个智能体）
 
 | 昵称 | 智能体 ID | 核心职责 | 调用方式 |
 |------|----------|---------|---------|
@@ -36,7 +36,7 @@
 | 需求解决 🪄 | `requirement-resolution` | 架构师，方案执行 | `sessions_spawn` |
 | 需求验收 🔍 | `requirement-acceptance` | QA 负责人，验收测试 | `sessions_spawn` |
 | 需求交付 📦 | `requirement-delivery` | 交付专家，终检发布 | `sessions_spawn` |
-| 审计 🛡️ | `audit` | 合规监察、熔断仲裁 | `sessions_spawn` |
+| 智能审计 🛡️ | `audit` | 合规监察、熔断仲裁 | `sessions_spawn` |
 | 总结反思 📝 | `summary-reflection` | 复盘分析，知识沉淀 | `sessions_spawn` |
 | 调试专家 🔬 | `debugger` | 可调试性设计审查，根因分析 | `sessions_spawn` |
 
@@ -128,7 +128,7 @@ sessions_spawn(
     runtime="acp",
     agentId="requirement-resolution",
     label="resolution-REQ-001",
-    task="按 tasks.md 执行，使用 Cursor CLI",
+    task="按 tasks.md 执行",
     mode="run"
 )
 
@@ -359,7 +359,7 @@ sessions_spawn(
 | 宪法规范 | `agents/docs/specs/constitution/CONSTITUTION.md` |
 | 团队角色 | `agents/constitution/TEAM_ROLES.md` |
 | Hub-Spoke 协议 | `agents/docs/specs/constitution/HUB_SPOKE_TASK_MANAGEMENT.md` |
-| **自动化协同流程** | `agents/docs/specs/constitution/AUTOMATED_COORDINATION_FLOW.md` |
+| 自动化协同流程 | `agents/docs/specs/constitution/AUTOMATED_COORDINATION_FLOW.md` |
 | Session 管理 | `agents/docs/specs/session/SESSION_MANAGEMENT.md` |
 | 升级流程 | `agents/docs/versions/V3.15.0/constitution/upgrade/ITERATION_PROCESS.md` |
 
