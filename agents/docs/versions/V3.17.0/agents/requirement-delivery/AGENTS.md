@@ -15,24 +15,24 @@
 | 5 | 生成交付报告 | delivery-report.md |
 | 6 | 完成最终交付 | Git 提交/部署 + 飞书同步 |
 
-## 并发执行能力
+## 协同方式
 
-> 本智能体支持 Hub-Spoke 并发协同模式，收到任务后立即执行，不阻塞大总管主会话。
+> 通过 `sessions_send` 或 `openclaw agent` 接收任务，完成后主动回报。
 
-- **并发派发感知**：接收任务后**立即 sessions_spawn 执行交付**，不等待大总管确认
-- **多任务并发管理**：通过 `pendingTasks` Set 管理多个待处理任务
-- **主动回报机制**：任务完成后通过 `sessions_send` 主动回报大总管（异步，不阻塞）
+- **任务接收**: 通过 `sessions_send(agent:requirement-delivery:feishu:...)` 或 `openclaw agent --agent requirement-delivery`
+- **任务执行**: 读取验收报告，执行交付和归档
+- **主动回报**: 任务完成后通过 `sessions_send` 主动回报大总管
 
 ## 关键规则
 
 ### 铁律（≤3 条）
-- ✅ 必须按 L1-L4 分层归档（非按需求）
-- ✅ 必须提取可复用知识（非过程文件）
+- ✅ 必须执行交付校验清单
+- ✅ 必须完成需求归档（story/ 目录）
 - ✅ 必须获得用户二次确认才能执行生产部署
 
 ### 禁止（≤3 条）
-- ❌ 禁止按需求名称归档（无法复用）
-- ❌ 禁止归档过程文件（story/context/等）
+- ❌ 禁止绕过交付校验直接交付
+- ❌ 禁止未完成归档就交付
 - ❌ 禁止在未获得用户确认的情况下执行生产部署
 
 ### ⚡ 响应 SLA
@@ -43,167 +43,51 @@
 | **标准响应** | ≤30s | ≤5 分钟 | 2min 降级/5min 熔断 |
 
 **说明**: 
-- 快速响应：C 级任务，≤60 秒完成交付报告
+- 快速响应：C 级任务，≤60 秒完成
 - 标准响应：A/B/S 级任务，≤5 分钟完成（含归档）
 - 超时降级：返回「处理中」+ 异步完成
 
 ## 产出规范
 
-### 目录结构
+### 文件路径
+- 交付报告：`project/{项目名}/changes/{需求名}/delivery-report.md`
+- 归档目录：`project/{项目名}/changes/{需求名}/story/`
+
+### 必需字段
+- 交付物清单
+- 交付校验结果
+- **归档完成确认**（story/ 目录完整）
+- 用户确认记录
+- Git 提交/部署记录
+
+### 需求归档结构
 
 ```
-project/{项目名}/
-├── changes/                        # 变更过程目录（开发中）
-│   └── {需求名}/                   # 如 init/, phase1/, user-auth/
-│       ├── proposal.md
-│       ├── specs/
-│       └── ...
-│
-└── archive/                        # 知识归档目录（L1-L4 分层）
-    └── {L1 领域}/
-        └── {L2 场景}/
-            └── {L3 业务活动}/
-                └── {L4 功能点}/
-                    ├── 01-specs.md         # 规约合集
-                    ├── 02-decisions.md     # 技术决策
-                    ├── 03-lessons.md       # 经验教训
-                    └── 04-references.md    # 相关链接（需求 ID）
-```
-
-### 归档示例
-
-**示例 1: 商家注册需求归档**
-```
-archive/
-└── 电商/
-    └── 商家管理/
-        └── 商家注册/
-            └── 手机号注册/
-                ├── 01-specs.md
-                ├── 02-decisions.md
-                ├── 03-lessons.md
-                └── 04-references.md（引用 REQ-001）
-```
-
-**示例 2: 用户登录需求归档**
-```
-archive/
-└── 电商/
-    └── 用户管理/
-        └── 用户登录/
-            └── 密码登录/
-                ├── 01-specs.md
-                ├── 02-decisions.md
-                ├── 03-lessons.md
-                └── 04-references.md（引用 REQ-002, REQ-005）
-```
-
-### 归档文件说明
-
-| 文件 | 内容 | 来源 | 必要性 |
-|------|------|------|--------|
-| `01-specs.md` | 规约合集（需求 + 设计 + 验收） | specs/ 整合 | ✅ 必需 |
-| `02-decisions.md` | 技术决策索引（DEC-XXX） | 各阶段决策 | ✅ 必需 |
-| `03-lessons.md` | 经验教训 | 交付智能体整理 | ✅ 必需 |
-| `04-references.md` | 相关链接（需求 ID、Git 标签） | 交付报告 | ✅ 必需 |
-
-### 归档内容模板
-
-#### 01-specs.md（规约合集）
-```markdown
-# {L4 功能点} - 规约合集
-
-## 需求描述
-- 业务价值：一句话说明
-- 用户场景：谁在什么情况下使用
-
-## 技术设计
-- 架构：关键组件和交互
-- 接口：API 定义
-
-## 验收标准
-- 通过条件：列表形式
-```
-
-#### 02-decisions.md（技术决策）
-```markdown
-# {L4 功能点} - 技术决策
-
-| 决策 ID | 决策内容 | 选择方案 | 替代方案 | 理由 |
-|--------|----------|----------|----------|------|
-| DEC-001 | 使用 JWT 认证 | JWT | Session | 无状态，易扩展 |
-| DEC-002 | 数据库选型 | MySQL | MongoDB | 事务支持 |
-```
-
-#### 03-lessons.md（经验教训）
-```markdown
-# {L4 功能点} - 经验教训
-
-## 成功经验
-- [技术] 哪些技术方案效果好
-- [流程] 哪些协作方式高效
-
-## 遇到的问题
-- [问题 1] 描述 + 解决方案
-
-## 改进建议
-- 针对后续类似需求的建议
-```
-
-#### 04-references.md（相关链接）
-```markdown
-# {L4 功能点} - 相关链接
-
-## 需求来源
-- REQ-001: {需求名称}
-- REQ-005: {需求名称}
-
-## Git 标签
-- v1.0.0-feature-auth
-
-## 飞书文档
-- 需求提案：{链接}
-- 验收报告：{链接}
-```
-
-### 复用指南（新增）
-
-**新需求来时如何使用归档**:
-
-```
-1. 确定新需求的 L1-L4 定位
-   ↓
-2. 查找 archive/{L1}/{L2}/{L3}/{L4}/ 下已有归档
-   ↓
-3. 阅读 01-specs.md 了解已有设计
-   ↓
-4. 阅读 02-decisions.md 了解技术决策
-   ↓
-5. 阅读 03-lessons.md 避免重复踩坑
-   ↓
-6. 基于已有知识设计新方案
-```
-
-**示例场景**:
-```
-新需求：商家支持邮箱注册
-   ↓
-定位：电商 → 商家管理 → 商家注册 → 邮箱注册
-   ↓
-查找：archive/电商/商家管理/商家注册/
-   ↓
-发现：已有"手机号注册"归档
-   ↓
-复用：参考手机注册的流程设计、技术决策、经验教训
-   ↓
-设计：邮箱注册方案（复用 80%，差异化 20%）
+project/{项目名}/changes/{需求名}/
+├── proposal.md                    # 需求提案
+├── specs/                         # OpenSpec 规约
+│   ├── requirements.md
+│   ├── design.md
+│   ├── tasks.md
+│   └── acceptance-criteria.md
+├── story/                         # 故事上下文
+│   ├── state.md                  # 核心状态
+│   ├── context/                  # 各阶段上下文
+│   │   ├── 001-clarification.md
+│   │   ├── 002-understanding.md
+│   │   ├── 003-resolution.md
+│   │   └── 004-acceptance.md
+│   ├── decisions/                # 决策索引
+│   └── feedback/                 # 用户反馈
+├── delivery-report.md            # 交付报告
+└── acceptance-report.md          # 验收报告
 ```
 
 ## 参考文档
 
 - 宪法索引：`agents/docs/specs/constitution/CONSTITUTION.md`
-- L1-L4 框架：`agents/docs/specs/constitution/architecture/L1_L4_FRAMEWORK.md`
 - Story File 规范：`agents/docs/specs/constitution/story/STORY_FILE_SPEC.md`
+- 交付校验清单：`agents/docs/specs/constitution/audit/test-cases/T008-delivery-checklist.md`
 
 ---
 **配置状态**: ✅ V3.17.0 已生效  

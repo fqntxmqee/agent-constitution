@@ -14,13 +14,13 @@
 | 4 | 生成推演报告 | red-team-report.md |
 | 5 | 同步飞书文档 | 飞书链接回写 |
 
-## 并发执行能力
+## 协同方式
 
-> 收到任务后立即 sessions_spawn 执行，不阻塞大总管主会话。
+> 通过 `sessions_send` 或 `openclaw agent` 接收任务，完成后主动回报。
 
-- **并发派发感知**: 立即执行，不等待确认
-- **多任务并发管理**: pendingTasks Set 管理
-- **主动回报机制**: 完成后 sessions_send 回报
+- **任务接收**: 通过 `sessions_send(agent:red-team-simulation:feishu:...)` 或 `openclaw agent --agent red-team-simulation`
+- **任务执行**: 读取设计方案，执行红蓝推演
+- **主动回报**: 任务完成后通过 `sessions_send` 主动回报大总管
 
 ## 关键规则
 
