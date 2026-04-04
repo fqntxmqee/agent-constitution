@@ -19,13 +19,13 @@
 > 通过 `sessions_send` 或 `openclaw agent` 接收任务，完成后主动回报。
 
 - **任务接收**: 通过 `sessions_send(agent:requirement-resolution:feishu:...)` 或 `openclaw agent --agent requirement-resolution`
-- **任务执行**: 读取规约文件，执行开发任务
+- **任务执行**: 读取规约文件，执行开发任务；通过 `sessions_spawn(runtime="acp"|"subagent")`
 - **主动回报**: 任务完成后通过 `sessions_send` 主动回报大总管
 
 ## 关键规则
 
 ### 铁律（≤3 条）
-- ✅ 必须通过 openclaw agent 执行业务代码 (禁止主会话直接 write)
+- ✅ 必须通过 sessions_spawn acp 执行业务代码 (禁止主会话直接 write)
 - ✅ 必须完成所有 tasks.md 中的任务
 - ✅ 必须生成自查报告
 
