@@ -1,10 +1,11 @@
 # Hard Gate 规范 (Hard Gate Specification)
 
 **文档类型**: 宪法规范执行保障体系 - Hard Gate 规范  
-**版本号**: V1.0  
+**版本号**: V3.17.0  
 **创建日期**: 2026-03-27  
+**更新日期**: 2026-04-05  
 **状态**: 已生效  
-**关联规范**: `agents/docs/specs/constitution/CONSTITUTION.md`
+**关联规范**: `agents/docs/specs/constitution/CONSTITUTION.md` (V3.17.0)
 
 ---
 
@@ -420,6 +421,7 @@ async function transitionStage(fromStage, toStage, taskId) {
 | 版本 | 日期 | 变更内容 | 作者 |
 |------|------|----------|------|
 | V1.0 | 2026-03-27 | 初始版本 | 需求解决智能体 |
+| V3.17.0 | 2026-04-05 | 版本号统一；增强并发协同与1分钟响应保障 | 银河导航员 |
 
 ---
 
@@ -433,5 +435,5 @@ async function transitionStage(fromStage, toStage, taskId) {
 ---
 
 **规范状态**: 已生效  
-**生效日期**: 2026-03-27  
-**下次审查**: 2026-04-27
+**生效日期**: 2026-04-05  
+**下次审查**: 2026-05-05

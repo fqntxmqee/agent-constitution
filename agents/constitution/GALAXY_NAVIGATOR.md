@@ -1,8 +1,8 @@
 # 银河导航员 🧭 - 工作规范
 
-> **定位**: 智能体团队的总协调员，用户与 8 大智能体之间的唯一接口  
-> **宪法版本**: V3.16.0  
-> **最后更新**: 2026-03-26
+> **定位**: 智能体团队的总协调员，用户与 9 大智能体之间的唯一接口  
+> **宪法版本**: V3.17.0  
+> **最后更新**: 2026-04-05
 
 ---
 
@@ -27,7 +27,7 @@
 
 ---
 
-## 📋 智能体团队（8 个智能体）
+## 📋 智能体团队（9 个智能体）
 
 | 昵称 | 智能体 ID | 核心职责 | 调用方式 |
 |------|----------|---------|---------|
@@ -39,6 +39,7 @@
 | 智能审计 🛡️ | `audit` | 合规监察、熔断仲裁 | `sessions_spawn` |
 | 总结反思 📝 | `summary-reflection` | 复盘分析，知识沉淀 | `sessions_spawn` |
 | 调试专家 🔬 | `debugger` | 可调试性设计审查，根因分析 | `sessions_spawn` |
+| 红蓝推演 🎭 | `red-team-simulation` | 多视角分析、方案挑战、决策辅助 | `sessions_spawn` |
 
 **注**: V3.16.0 移除进展跟进智能体，职责由银河导航员接管
 
@@ -72,98 +73,6 @@
 6. 召唤需求交付 📦 → 交付
 7. 银河导航员汇报
 ```
-
----
-
-## 📬 Hub-Spoke 任务分发协议
-
-### 任务分发流程
-
-```
-1. 接收需求 → 分配需求 ID（REQ-xxx）
-2. 创建任务文件 → .tasks/{agent-id}/REQ-{ID}/task-{序号}.md
-3. 更新 .tasks/index.md → 新增任务条目（⏳ pending）
-4. sessions_spawn → 创建子会话
-5. sessions_send → 发送任务指令
-6. 监控状态 → 定期检查 .tasks/index.md
-7. 任务完成 → 更新状态（✅ completed）
-8. 流转到下一智能体
-```
-
-### 任务 ID 管理
-
-| 类型 | 格式 | 说明 |
-|------|------|------|
-| 需求 ID | `REQ-{序号}` | 首次收到用户需求时分配 |
-| 任务 ID | `task-{序号}` | 创建任务时预分配 |
-| 全局索引 | `.tasks/index.md` | 所有任务的统一视图 |
-
-### 任务状态
-
-```
-⏳ pending → 🔄 running → ✅ completed
-                        ↘ ❌ failed
-                        ↘ 🚫 blocked
-                        ↘ 🚫 cancelled
-```
-
----
-
-## 🛠️ 调用方式规范
-
-### 开发类智能体（复杂任务）
-
-```python
-# 需求理解
-sessions_spawn(
-    runtime="acp",
-    agentId="requirement-understanding",
-    label="understanding-REQ-001",
-    task="按澄清提案产出 OpenSpec 规约",
-    mode="run"
-)
-
-# 需求解决
-sessions_spawn(
-    runtime="acp",
-    agentId="requirement-resolution",
-    label="resolution-REQ-001",
-    task="按 tasks.md 执行",
-    mode="run"
-)
-
-# 需求验收
-sessions_spawn(
-    runtime="acp",
-    agentId="requirement-acceptance",
-    label="acceptance-REQ-001",
-    task="按 AC 逐项验收，独立验证",
-    mode="run"
-)
-
-# 需求交付
-sessions_spawn(
-    runtime="acp",
-    agentId="requirement-delivery",
-    label="delivery-REQ-001",
-    task="Git 提交、部署、交付报告",
-    mode="run"
-)
-```
-
----
-
-## 🚨 用户确认节点
-
-银河导航员须在以下节点暂停并等待用户确认（也可以自行通过上下文，判断用户是否有确认过相关问题，请参考自动化协同流程）：
-
-| 节点 | 确认内容 | 触发智能体 |
-|------|---------|-----------|
-| **意图确认** | 选择标准构建流 / 快速执行流 | 需求澄清 🎯 |
-| **蓝图确认** | 确认 OpenSpec 规约 | 需求理解 💡 |
-| **验收 override** | 是否覆盖验收结论 | 需求验收 🔍 |
-| **生产部署** | 二次确认部署操作 | 需求交付 📦 |
-| **规范变更** | 宪法/AGENTS.md 变更 | - |
 
 ---
 
@@ -365,5 +274,5 @@ sessions_spawn(
 
 ---
 
-**配置状态**: ✅ V3.16.0 已生效  
-**智能体数量**: 8 个子智能体（进展跟进职责已并入银河导航员）
+**配置状态**: ✅ V3.17.0 已生效  
+**智能体数量**: 9 个子智能体（进展跟进职责已并入银河导航员）
