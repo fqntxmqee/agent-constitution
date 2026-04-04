@@ -22,6 +22,10 @@ It has real orchestration components, but still needs hardening before fully aut
 - environment failure classification
 - supervisor auto-advance recommendations
 - supervisor auto-launch support in safe cases
+- supervisor auto-probe support for constrained repo/runtime validation
+- early review-phase formalization with dedicated review-mode briefing
+- repoPath standardization with backward compatibility for existing repo field usage
+- stage-based execution model emerging across probe / implement / review / harden
 
 ## Still rough
 

@@ -20,6 +20,8 @@ This document summarizes what the v2 scaffold can currently do.
 ## Execution layer
 
 - generate worker briefs
+- support a dedicated probe-mode brief for repo/runtime feasibility checks
+- support a dedicated review-mode brief for next-step classification
 - route prompts via `TaskFile`
 - launch workers in sync or background mode
 - reconcile background worker runs

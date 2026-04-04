@@ -1,6 +1,7 @@
 {
   "id": "feat-example",
   "repo": "my-repo",
+  "repoPath": "D:/data/code/my-repo",
   "worktree": "../worktrees/feat-example",
   "branch": "feat/example",
   "taskType": "feature",

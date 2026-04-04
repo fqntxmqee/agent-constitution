@@ -58,3 +58,15 @@ Use when:
 
 Prefer the narrowest pipeline that fits the task.
 Do not default to `parallel_compare` unless the user really wants multiple competing outputs.
+
+## Stage model
+
+The v2 scaffold now benefits from treating work as stage-based rather than as a single launch.
+
+Recommended conceptual stages:
+- `probe`
+- `implement`
+- `review`
+- `harden`
+
+Current implementation is strongest in `probe` and `implement`, and is moving toward a more formal `review` stage.

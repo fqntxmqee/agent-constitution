@@ -2,7 +2,8 @@
 
 # 支撑智能体定时任务配置
 
-> 配置 3 个独立周期性支撑智能体：进展跟进、审计、总结反思
+> 配置 2 个独立周期性支撑智能体：审计、总结反思
+> **V3.17.1 变更**: 移除 progress-tracking 智能体
 > **V3.16.0 新增**: 实时熔断监控、回归测试
 
 ---
@@ -38,12 +39,36 @@
 # 宪法规范执行保障任务（V3.16.0 新增）
 # 回归测试 - 每日 02:00 执行 (低峰期)
 0 2 * * * cd /Users/fukai/project/openclaw-workspace && bash scripts/run-regression-test.sh >> agents/constitution/audit/logs/cron-regression-test.log 2>&1
+
+# 实时熔断监控恢复 - 每 2 分钟检查一次
+*/2 * * * * cd /Users/fukai/project/openclaw-workspace && bash scripts/check-and-restore-fuse.sh >> agents/constitution/audit/logs/cron-fuse-restorer.log 2>&1
 ```
 
 **实时熔断监控**:
 - 不由 cron 调度，由审计智能体持续运行
 - 轮询频率：每 30 秒
 - 监听 `.tasks/index.md` 和各任务文件状态变化
+- **熔断恢复机制**：当 fuse-poll 日志超过 2 分钟未更新时，自动触发审计智能体恢复监控
+
+### 实时熔断监控恢复逻辑
+
+```bash
+# 检查 fuse-poll 是否超过 2 分钟未更新
+FUSE_LOG="agents/constitution/audit/logs/fuse-poll-$(date +%Y-%m-%d).jsonl"
+if [ -f "$FUSE_LOG" ]; then
+  LAST_UPDATE=$(stat -f "%Sm" -t "%s" "$FUSE_LOG" 2>/dev/null || echo "0")
+  NOW=$(date +%s)
+  DIFF=$((NOW - LAST_UPDATE))
+  if [ "$DIFF" -gt 120 ]; then
+    # 超过 2 分钟，触发审计智能体恢复监控
+    openclaw agent --agent audit --message "恢复实时熔断监控"
+  fi
+fi
+```
+
+### 支撑智能体 Heartbeat 检查
+
+各支撑智能体的 HEARTBEAT.md 为空（跳过），支撑智能体由 workspace HEARTBEAT.md 的 cron 统一调度。
 
 ---
 
@@ -55,6 +80,9 @@
 | summary-reflection | `agents/constitution/summary-reflection/reports/YYYY-MM-DD-daily.md` |
 | **实时熔断** | `agents/constitution/audit/logs/fuse-poll-YYYY-MM-DD.jsonl` |
 | **回归测试** | `agents/constitution/audit/reports/regression-test-YYYYMMDD-HHMMSS.md` |
+
+**已移除**:
+- progress-tracking（V3.17.1）
 
 ---
 
@@ -74,6 +102,7 @@
 
 ---
 
-**规范版本**: V3.17.0  
+**规范版本**: V3.17.1  
 **创建日期**: 2026-03-09  
-**最后更新**: 2026-04-05
+**最后更新**: 2026-04-04  
+**V3.17.1 变更**: 移除 progress-tracking 智能体

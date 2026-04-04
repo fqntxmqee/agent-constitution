@@ -47,9 +47,11 @@ It is now a lightweight supervisor skeleton with:
 ### 1. initialize a task
 ```powershell
 powershell -ExecutionPolicy Bypass -File assets/scripts/task-state.ps1 \
-  -Action init -TaskId feat-demo -Repo my-repo -TaskType feature \
+  -Action init -TaskId feat-demo -Repo D:/data/code/my-repo -TaskType feature \
   -Pipeline implement_and_review -Role implementer -Agent codex
 ```
+
+Prefer a concrete repo path. Internally the scaffold now standardizes toward `repoPath` while remaining backward-compatible with the `repo` field.
 
 ### 2. queue the task
 ```powershell
@@ -61,6 +63,12 @@ powershell -ExecutionPolicy Bypass -File assets/scripts/task-state.ps1 \
 ```powershell
 powershell -ExecutionPolicy Bypass -File assets/scripts/supervise-task.ps1 \
   -TaskId feat-demo -AutoLaunch -ApplyTransition -Json
+```
+
+### 3b. use auto-probe for constrained environments
+```powershell
+powershell -ExecutionPolicy Bypass -File assets/scripts/supervise-task.ps1 \
+  -TaskId feat-demo -AutoLaunch -AutoProbe -ApplyTransition -Json
 ```
 
 ### 4. reconcile background worker later

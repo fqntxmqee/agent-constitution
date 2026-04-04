@@ -28,6 +28,7 @@ Now:
 - background worker metadata
 - worker reconcile loop
 - environment-aware blocking
+- dedicated probe-mode execution path
 - partial objective-check backfill from worker summaries
 - docs and interface guide for continued iteration
 

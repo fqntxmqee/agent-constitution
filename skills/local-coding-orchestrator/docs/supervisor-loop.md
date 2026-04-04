@@ -48,7 +48,7 @@ The supervisor loop now supports optional controlled actions:
 - optionally trigger retry brief generation
 - reconcile background worker state before making the next decision
 - auto-recommend review or blocked states when worker outcomes already exist
-- optionally auto-launch and auto-block in safe cases
+- optionally auto-launch, auto-probe, and auto-block in safe cases
 
 These actions are opt-in so the default mode stays inspectable.
 

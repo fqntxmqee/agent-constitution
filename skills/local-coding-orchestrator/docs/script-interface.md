@@ -35,6 +35,7 @@ Purpose:
 ### `launch-worker.ps1`
 Purpose:
 - select the worker role
+- generate either a default brief or a probe-mode brief
 - allocate prompt/log/result artifacts
 - optionally launch sync or background worker execution
 
@@ -46,6 +47,7 @@ Purpose:
 - classify worker outcome
 - write summary/result artifacts
 - backfill some objective checks
+- interpret probe-mode results for supervisor follow-up
 
 ## Supervisor
 

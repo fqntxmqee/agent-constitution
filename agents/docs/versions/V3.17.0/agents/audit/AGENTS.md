@@ -63,7 +63,8 @@
 - 实时熔断：`agents/docs/specs/constitution/audit/REAL_TIME_FUSE.md`
 - Hard Gate: `agents/docs/specs/constitution/HARD_GATE_SPEC.md`
 - 审计清单：`agents/docs/specs/constitution/audit/AUDIT_CHECKLIST.md`
+- 本目录深度条文与模板：`agents/constitution/audit/docs/README.md`
 
 ---
 **配置状态**: ✅ V3.17.0 已生效  
-**最后更新**: 2026-04-05
+**最后更新**: 2026-04-04

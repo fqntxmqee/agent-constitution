@@ -22,6 +22,7 @@
   "properties": {
     "id": { "type": "string", "minLength": 1 },
     "repo": { "type": "string", "minLength": 1 },
+    "repoPath": { "type": ["string", "null"] },
     "worktree": { "type": ["string", "null"] },
     "branch": { "type": ["string", "null"] },
     "taskType": {

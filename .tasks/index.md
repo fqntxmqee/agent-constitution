@@ -1,5 +1,20 @@
 # 任务总览
 
+## REQ-ECOMMERCE-MVP-COMPLETE（电商 MVP 项目 - 剩余功能开发）🆕
+
+| 任务 ID | 智能体 | 状态 | 产出 |
+|--------|--------|------|------|
+| task-001 | requirement-clarification | ✅ 完成 | proposal.md |
+| task-002 | requirement-understanding | ✅ 完成 | specs/requirements-complete.md + design-complete.md + tasks-complete.md + acceptance-criteria-complete.md |
+| task-003 | requirement-resolution | 🔄 执行中 | 功能开发启动中... |
+| task-004 | requirement-acceptance | ⏳ 等待 | — |
+| task-005 | requirement-delivery | ⏳ 等待 | — |
+
+**项目状态**: 43% 完成（15/35 任务）
+**待开发**: 20 个任务（交易域 10 个 + 库存域 4 个 + 商品前端 3 个 + 联调 3 个）
+
+---
+
 ## REQ-AIOS-REFACTOR（AIOS 项目重构）✅ 完成
 
 | 任务 ID | 智能体 | 状态 | 产出 |
@@ -10,32 +25,9 @@
 
 ---
 
-## 最终方案
+## 系统状态
 
-**文档位置**: `project/aios/changes/refactor/final-plan.md`
-
-**核心内容**:
-- ✅ 重构目标：综合重构（技术债务 + 架构 + 性能 + 功能 + 安全）
-- ✅ 重构范围：全五层架构，分三阶段实施（6 个月）
-- ✅ 高风险应对：3 个高风险问题有关键应对方案
-- ✅ 实施路线：Phase 0(攻关) → Phase 1(MVP) → Phase 2(机器人) → Phase 3(内核)
-- ✅ 成功标准：性能、稳定性、资源、功能、安全 5 维度指标
-
-**红蓝推演结论**: 有条件通过 — 需优先解决 3 个高风险问题
-
----
-
-## 下一步行动
-
-| 行动 | 负责人 | 截止日期 |
-|------|--------|----------|
-| 1. 创建 GitHub 仓库 | 项目负责人 | 2026-04-05 |
-| 2. Phase 0 启动（高风险攻关） | 各团队 | 2026-04-05 |
-| 3. Phase 1 详细设计 | AI + 运行时团队 | 2026-04-12 |
-| 4. 采购设备 | 项目负责人 | 2026-04-08 |
-
----
-
-**任务状态**: ✅ 全部完成  
-**交付时间**: 2026-04-04  
-**方案状态**: 待用户确认启动 Phase 0
+- **权限模式**: `approve-reads` ✅
+- **飞书群消息**: 已配置允许列表 ✅
+- **会话锁**: 已清理 ✅
+- **文档引用规范**: VIO-008 已实施 ✅
