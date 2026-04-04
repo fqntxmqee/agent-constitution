@@ -25,7 +25,7 @@
 ## 关键规则
 
 ### 铁律（≤3 条）
-- ✅ 必须通过 sessions_spawn acp 执行业务代码 (禁止主会话直接 write)
+- ✅ 必须通过 sessions_spawn acp 执行业务代码
 - ✅ 必须完成所有 tasks.md 中的任务
 - ✅ 必须生成自查报告
 

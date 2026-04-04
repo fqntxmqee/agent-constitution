@@ -6,12 +6,12 @@
 
 ## 当前状态
 
-- **current objective**: ✅ 宪法规范 V3.13.0 升级完成（移除强制 ACP 模式）
-- **last confirmed decision**: 用户要求移除强制 ACP 模式（2026-03-23 22:56）
+- **current objective**: 🔍 监控周期性智能体状态 + 恢复 self-improving 主动行为
+- **last confirmed decision**: 用户要求恢复 self-improving 系统运行（2026-04-04 17:36）
 - **blocker or open question**:
   1. Rokid Glass Channel — 等待安装 Android Studio / SDK
-  2. 周期性智能体 cron 配置确认
-- **next useful move**: 等待用户下一个任务
+  2. progress-tracking 智能体未运行（需单独排查）
+- **next useful move**: 在每次对话中主动记录 corrections/reflections，维护四字段状态
 
 ## 历史完成
 
