@@ -165,13 +165,13 @@ agents/constitution/
 
 ### 详细规范
 
-见 `agents/docs/specs/constitution/HUB_SPOKE_TASK_MANAGEMENT.md`
+见 `HUB_SPOKE_TASK_MANAGEMENT.md`
 
 ---
 
 ## 📚 参考文档
 
-- `HUB_SPOKE_TASK_MANAGEMENT.md` - Hub-Spoke 任务协同协议
+- `HUB_SPOKE_TASK_MANAGEMENT.md` - Hub-Spoke 任务协同协议（本目录）
 - `CONSTITUTION.md` - 宪法规范索引
 - `GALAXY_NAVIGATOR.md` - 银河导航员工作规范
 

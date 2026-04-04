@@ -128,7 +128,7 @@ tasks.forEach(({ agent, task }) => {
 |------|------|
 | 宪法规范 | `agents/docs/specs/constitution/CONSTITUTION.md` |
 | 团队角色 | `TEAM_ROLES.md` |
-| Hub-Spoke 协议 | `agents/docs/specs/constitution/HUB_SPOKE_TASK_MANAGEMENT.md` |
+| Hub-Spoke 协议 | `HUB_SPOKE_TASK_MANAGEMENT.md` |
 | 智能体记忆规范 | `agents/docs/specs/constitution/CONSTITUTION.md#智能体记忆规范` |
 | Session 管理 | `agents/docs/specs/session/SESSION_MANAGEMENT.md` |
 
