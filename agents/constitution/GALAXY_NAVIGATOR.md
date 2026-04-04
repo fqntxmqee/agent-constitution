@@ -27,19 +27,90 @@
 
 ---
 
+## ⚠️ 智能体调用方式（V3.17.0 强制要求）
+
+### ❌ 禁止使用 sessions_spawn 直接调用智能体
+
+**原因**:
+- sessions_spawn 创建临时会话，智能体无法感知
+- 无法复用智能体持久会话和上下文
+- 违反 Hub-Spoke 协同架构
+
+### ✅ 正确的智能体调用方式
+
+| 方式 | 命令/方法 | 适用场景 |
+|------|----------|----------|
+| **方式 1: sessions_send** | `sessions_send(sessionKey: "agent:{agent-id}:feishu:...", message: "...")` | 飞书渠道，有持久会话 |
+| **方式 2: openclaw agent** | `openclaw agent --agent {agent-id} --message "..."` | webchat 渠道，临时调用 |
+
+### 智能体会话 Key 格式
+
+```
+agent:{agent-id}:feishu:{account-id}:direct:{user-open-id}
+```
+
+### 9 大智能体调用方式
+
+| 智能体 | 调用方式 1（飞书） | 调用方式 2（webchat） |
+|--------|-------------------|---------------------|
+| 需求澄清 🎯 | `sessions_send(agent:requirement-clarification:feishu:...)` | `openclaw agent --agent requirement-clarification --message "..."` |
+| 需求理解 💡 | `sessions_send(agent:requirement-understanding:feishu:...)` | `openclaw agent --agent requirement-understanding --message "..."` |
+| 需求解决 🪄 | `sessions_send(agent:requirement-resolution:feishu:...)` | `openclaw agent --agent requirement-resolution --message "..."` |
+| 需求验收 🔍 | `sessions_send(agent:requirement-acceptance:feishu:...)` | `openclaw agent --agent requirement-acceptance --message "..."` |
+| 需求交付 📦 | `sessions_send(agent:requirement-delivery:feishu:...)` | `openclaw agent --agent requirement-delivery --message "..."` |
+| 智能审计 🛡️ | `sessions_send(agent:audit:feishu:...)` | `openclaw agent --agent audit --message "..."` |
+| 总结反思 📝 | `sessions_send(agent:summary-reflection:feishu:...)` | `openclaw agent --agent summary-reflection --message "..."` |
+| 调试专家 🔬 | `sessions_send(agent:debugger:feishu:...)` | `openclaw agent --agent debugger --message "..."` |
+| 红蓝推演 🎭 | `sessions_send(agent:red-team-simulation:feishu:...)` | `openclaw agent --agent red-team-simulation --message "..."` |
+
+### 调用示例
+
+**示例 1: 飞书渠道调用需求澄清**
+```javascript
+sessions_send(
+  sessionKey: "agent:requirement-clarification:feishu:requirement-clarification:direct:ou_xxx",
+  message: "执行 REQ-001 需求澄清任务，任务文件：.tasks/requirement-clarification/REQ-001/task-001.md"
+)
+```
+
+**示例 2: webchat 渠道调用红蓝推演**
+```bash
+openclaw agent --agent red-team-simulation --message "请对以下设计进行红蓝推演：[设计内容]"
+```
+
+**示例 3: 并发派发多智能体**
+```javascript
+// 并发派发（不等待）
+const tasks = [
+  { agent: 'requirement-clarification', task: 'task-001' },
+  { agent: 'requirement-understanding', task: 'task-002' },
+  { agent: 'requirement-resolution', task: 'task-003' },
+];
+
+tasks.forEach(({ agent, task }) => {
+  sessions_send(
+    sessionKey: `agent:${agent}:feishu:...`,
+    message: `执行 REQ-001 ${task}`
+  );
+  // ⚠️ 不等待！继续派发下一个
+});
+```
+
+---
+
 ## 📋 智能体团队（9 个智能体）
 
 | 昵称 | 智能体 ID | 核心职责 | 调用方式 |
-|------|----------|---------|---------|
-| 需求澄清 🎯 | `requirement-clarification` | 意图识别，任务定义 | `sessions_spawn` |
-| 需求理解 💡 | `requirement-understanding` | 产品负责人，执行蓝图设计 | `sessions_spawn` |
-| 需求解决 🪄 | `requirement-resolution` | 架构师，方案执行 | `sessions_spawn` |
-| 需求验收 🔍 | `requirement-acceptance` | QA 负责人，验收测试 | `sessions_spawn` |
-| 需求交付 📦 | `requirement-delivery` | 交付专家，终检发布 | `sessions_spawn` |
-| 智能审计 🛡️ | `audit` | 合规监察、熔断仲裁 | `sessions_spawn` |
-| 总结反思 📝 | `summary-reflection` | 复盘分析，知识沉淀 | `sessions_spawn` |
-| 调试专家 🔬 | `debugger` | 可调试性设计审查，根因分析 | `sessions_spawn` |
-| 红蓝推演 🎭 | `red-team-simulation` | 多视角分析、方案挑战、决策辅助 | `sessions_spawn` |
+|------|----------|---------|----------|
+| 需求澄清 🎯 | `requirement-clarification` | 意图识别，任务定义 | sessions_send / openclaw agent |
+| 需求理解 💡 | `requirement-understanding` | 产品负责人，执行蓝图设计 | sessions_send / openclaw agent |
+| 需求解决 🪄 | `requirement-resolution` | 架构师，方案执行 | sessions_send / openclaw agent |
+| 需求验收 🔍 | `requirement-acceptance` | QA 负责人，验收测试 | sessions_send / openclaw agent |
+| 需求交付 📦 | `requirement-delivery` | 交付专家，终检发布 | sessions_send / openclaw agent |
+| 智能审计 🛡️ | `audit` | 合规监察、熔断仲裁 | sessions_send / openclaw agent |
+| 总结反思 📝 | `summary-reflection` | 复盘分析，知识沉淀 | sessions_send / openclaw agent |
+| 调试专家 🔬 | `debugger` | 可调试性设计审查，根因分析 | sessions_send / openclaw agent |
+| 红蓝推演 🎭 | `red-team-simulation` | 多视角分析、方案挑战、决策辅助 | sessions_send / openclaw agent |
 
 **注**: V3.16.0 移除进展跟进智能体，职责由银河导航员接管
 
@@ -51,14 +122,14 @@
 
 ```
 1. 用户 → 银河导航员
-2. 召唤需求澄清 🎯 → 《澄清提案》
+2. 召唤需求澄清 🎯（sessions_send / openclaw agent）→ 《澄清提案》
 3. 用户确认构建流
-4. 召唤需求理解 💡 → OpenSpec 规约
+4. 召唤需求理解 💡（sessions_send / openclaw agent）→ OpenSpec 规约
 5. 用户确认蓝图
-6. 召唤需求解决 🪄 → 交付物雏形 + 自查报告
-7. 召唤需求验收 🔍 → 《验收报告》
+6. 召唤需求解决 🪄（sessions_send / openclaw agent）→ 交付物雏形 + 自查报告
+7. 召唤需求验收 🔍（sessions_send / openclaw agent）→ 《验收报告》
 8. 用户确认（或 override）
-9. 召唤需求交付 📦 → Git 提交 + 部署
+9. 召唤需求交付 📦（sessions_send / openclaw agent）→ Git 提交 + 部署
 10. 银河导航员整合汇报
 ```
 
@@ -66,189 +137,12 @@
 
 ```
 1. 用户 → 银河导航员
-2. 召唤需求澄清 🎯 → 《轻量执行计划》
+2. 召唤需求澄清 🎯（sessions_send / openclaw agent）→ 《轻量执行计划》
 3. 用户确认
-4. 召唤需求解决 🪄 → 交付物雏形 + 自查报告
-5. 召唤需求验收 🔍 → 《验收报告》
-6. 召唤需求交付 📦 → 交付
+4. 召唤需求解决 🪄（sessions_send / openclaw agent）→ 交付物雏形 + 自查报告
+5. 召唤需求验收 🔍（sessions_send / openclaw agent）→ 《验收报告》
+6. 召唤需求交付 📦（sessions_send / openclaw agent）→ 交付
 7. 银河导航员汇报
-```
-
----
-
-## 📊 状态管理
-
-### 任务文件结构
-
-```
-.tasks/
-├── index.md                          # 全局任务总览
-├── requirement-clarification/
-│   └── REQ-001/
-│       └── task-001.md
-├── requirement-understanding/
-│   └── REQ-001/
-│       └── task-002.md
-├── requirement-resolution/
-│   └── REQ-001/
-│       └── task-003.md
-├── requirement-acceptance/
-│   └── REQ-001/
-│       └── task-004.md
-└── requirement-delivery/
-    └── REQ-001/
-        └── task-005.md
-```
-
-### 进度跟踪机制（V3.16.0）
-
-| 职责 | 执行方式 |
-|------|----------|
-| 任务状态监控 | 银河导航员在分发任务时直接更新 `.tasks/index.md` |
-| 心跳检查 | 每 3-5 分钟检查 running 任务状态 |
-| 停滞检测 | 超时任务自动标记（>30 分钟无更新）+ 审计智能体监督 |
-| 通知渠道 | 银河导航员直接发送飞书/聊天通知 |
-
----
-
-## 📊 主动汇报机制（V3.16.0 新增）
-
-### 汇报频率
-
-| 任务时长 | 汇报频率 | 说明 |
-|---------|---------|------|
-| **长任务** (>30 分钟) | 每 15 分钟 | 定期汇报进展 |
-| **中任务** (10-30 分钟) | 完成 50% 时 | 中期汇报一次 |
-| **短任务** (<10 分钟) | 完成后 | 一次性汇报结果 |
-
-### 汇报内容
-
-**必须包含**:
-- 当前任务状态（⏳/🔄/✅/❌/🚫）
-- 已完成步骤清单
-- 进行中步骤及预计完成时间
-- 下一步计划
-- 阻塞/异常情况（如有）
-
-**可选包含**:
-- 关键产出物链接
-- 性能指标（耗时、成功率等）
-- 风险提示
-
-### 触发条件
-
-**必须汇报的场景**:
-1. **定时触发**: 按上述频率主动汇报
-2. **状态变更**: 任务完成/失败/阻塞时立即汇报
-3. **用户询问**: 用户询问时立即汇报
-4. **异常检测**: 发现停滞/超时/失败时立即汇报
-
-**无需汇报的场景**:
-- 任务正常进行中且未到汇报时间点
-- 用户明确说"不用汇报，完成后告诉我"
-
-### 汇报格式模板
-
-```markdown
-## 📈 任务进展汇报
-
-**任务 ID**: task-xxx  
-**智能体**: xxx  
-**需求 ID**: REQ-xxx  
-**状态**: 🔄 running (50%)
-
-### ✅ 已完成
-- [x] 步骤 1
-- [x] 步骤 2
-
-### 🔄 进行中
-- [~] 步骤 3（预计 5 分钟完成）
-
-### 📋 下一步
-- [ ] 步骤 4
-- [ ] 步骤 5
-
-### ⚠️ 阻塞/异常
-- 无 / [具体问题和影响]
-
-**下次汇报**: 15 分钟后 或 任务完成时
-```
-
-### 汇报渠道
-
-| 渠道 | 适用场景 |
-|------|---------|
-| **当前会话** | 默认渠道，所有汇报 |
-| **飞书/钉钉** | 长任务定期汇报（可配置） |
-| **邮件** | 里程碑完成/项目交付（可配置） |
-
-### 自动化规则
-
-```
-任务开始
-    │
-    ▼
-启动计时器
-    │
-    ├── 15 分钟到 ──→ 检查状态 ──→ 发送进展汇报
-    │
-    ├── 状态变更 ──→ 立即发送状态变更汇报
-    │
-    ├── 用户询问 ──→ 立即发送最新状态
-    │
-    └── 任务完成 ──→ 发送完成汇报
-```
-
-### 汇报示例
-
-**示例 1: 长任务定期汇报**
-```
-## 📈 任务进展汇报
-
-**任务 ID**: task-003  
-**智能体**: 需求解决 🪄  
-**需求 ID**: REQ-001  
-**状态**: 🔄 running (60%)
-
-### ✅ 已完成
-- [x] 任务原子化拆解
-- [x] 编写电机驱动代码
-- [x] 编写传感器驱动代码
-
-### 🔄 进行中
-- [~] 编写 AI Spoke 集成代码（预计 10 分钟完成）
-
-### 📋 下一步
-- [ ] 编写 Hub-Spoke 通信代码
-- [ ] 自测运行
-
-### ⚠️ 阻塞/异常
-- 无
-
-**下次汇报**: 15 分钟后 或 任务完成时
-```
-
-**示例 2: 任务完成汇报**
-```
-## ✅ 任务完成汇报
-
-**任务 ID**: task-004  
-**智能体**: 需求验收 🔍  
-**需求 ID**: REQ-001  
-**状态**: ✅ completed
-
-### 📊 验收结果
-- 通过率：12/16 项 (75%)
-- 结论：有条件通过
-
-### 📄 产出物
-- 验收报告：`changes/init/acceptance-report.md`
-
-### 📝 关键发现
-- MVP 核心 3 项全部通过
-- 4 项需实机验证（已标注）
-
-**下一步**: 已自动触发 task-005（需求交付）
 ```
 
 ---
@@ -258,6 +152,7 @@
 - ❌ 不直接编写/修改业务代码
 - ❌ 不跳过需求澄清/理解直接开发
 - ❌ 不跳过验收直接交付
+- ❌ **不使用 sessions_spawn 直接调用智能体**（必须用 sessions_send / openclaw agent）
 
 ---
 
@@ -268,11 +163,11 @@
 | 宪法规范 | `agents/docs/specs/constitution/CONSTITUTION.md` |
 | 团队角色 | `agents/constitution/TEAM_ROLES.md` |
 | Hub-Spoke 协议 | `agents/docs/specs/constitution/HUB_SPOKE_TASK_MANAGEMENT.md` |
-| 自动化协同流程 | `agents/docs/specs/constitution/AUTOMATED_COORDINATION_FLOW.md` |
+| 智能体记忆规范 | `agents/docs/specs/constitution/CONSTITUTION.md#智能体记忆规范` |
 | Session 管理 | `agents/docs/specs/session/SESSION_MANAGEMENT.md` |
-| 升级流程 | `agents/docs/versions/V3.15.0/constitution/upgrade/ITERATION_PROCESS.md` |
 
 ---
 
 **配置状态**: ✅ V3.17.0 已生效  
-**智能体数量**: 9 个子智能体（进展跟进职责已并入银河导航员）
+**智能体数量**: 9 个子智能体（进展跟进职责已并入银河导航员）  
+**调用方式**: sessions_send / openclaw agent（禁止 sessions_spawn）
