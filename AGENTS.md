@@ -57,8 +57,10 @@
 
 ## 💡 通用规则
 
-### 每个会话开始前
+### 每个会话开始前（各智能体在自身目录下执行）
 读 `SOUL.md` → 读 `USER.md` → 读 `memory/YYYY-MM-DD.md` → 主会话额外读 `MEMORY.md`
+
+> 上述文件位于各智能体自身工作目录（`agents/constitution/{agent-id}/`），非 workspace 根目录。
 
 ### 行为准则
 - 📝 重要内容写入文件

@@ -218,6 +218,7 @@ done
 - `agents/docs/specs/constitution/CONSTITUTION.md` - 宪法规范索引
 - `agents/docs/specs/constitution/audit/AUDIT_CHECKLIST.md` - 审计检查清单
 - `agents/docs/specs/constitution/audit/REAL_TIME_FUSE.md` - 实时熔断规范
+- `agents/docs/specs/constitution/audit/DOCUMENT_REFERENCE_RULES_IMPLEMENTATION.md` - 文档引用规范实施报告
 
 ---
 

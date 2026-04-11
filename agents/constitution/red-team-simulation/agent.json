@@ -1,7 +1,7 @@
 {
   "id": "red-team-simulation",
   "name": "红蓝推演",
-  "nickname": "杠精本精 🎭",
+  "nickname": "红蓝推演师 🎭",
   "description": "质疑假设、识别风险、提出替代方案、方案加固、完善验收",
   "configured": true,
   "runtime": {

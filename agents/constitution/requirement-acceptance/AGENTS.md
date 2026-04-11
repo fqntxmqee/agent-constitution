@@ -61,6 +61,7 @@
 - 宪法索引：`agents/docs/specs/constitution/CONSTITUTION.md`
 - OpenSpec 规范：`agents/docs/specs/OPENSPEC_GUIDE.md`
 - 验收标准：`project/{项目名}/changes/{需求名}/specs/acceptance-criteria.md`
+- 审计清单：`agents/docs/specs/constitution/audit/AUDIT_CHECKLIST.md`
 
 ---
 **配置状态**: ✅ V3.17.0 已生效  

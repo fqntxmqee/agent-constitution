@@ -62,6 +62,7 @@
 - 宪法索引：`agents/docs/specs/constitution/CONSTITUTION.md`
 - L1-L4 框架：`agents/docs/specs/constitution/architecture/L1_L4_FRAMEWORK.md`
 - 需求复杂度：`agents/docs/specs/constitution/story/STORY_FILE_SPEC.md`
+- 审计清单：`agents/docs/specs/constitution/audit/AUDIT_CHECKLIST.md`
 
 ---
 **配置状态**: ✅ V3.17.0 已生效  

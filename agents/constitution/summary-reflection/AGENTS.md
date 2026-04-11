@@ -62,6 +62,7 @@
 - 宪法索引：`agents/docs/specs/constitution/CONSTITUTION.md`
 - 决策记录：`agents/docs/specs/constitution/decision-recording/DECISION_RECORDING_RULES.md`
 - 长期记忆：`MEMORY.md`
+- 审计清单：`agents/docs/specs/constitution/audit/AUDIT_CHECKLIST.md`
 
 ---
 **配置状态**: ✅ V3.17.0 已生效  

@@ -6,7 +6,7 @@
 
 | 文档 | 路径 |
 |------|------|
-| 宪法唯一入口（当前 V3.9.0） | [constitution/CONSTITUTION.md](constitution/CONSTITUTION.md) |
+| 宪法唯一入口 | [constitution/CONSTITUTION.md](constitution/CONSTITUTION.md) |
 | 宪法升级流程 | [constitution/upgrade/ITERATION_PROCESS.md](constitution/upgrade/ITERATION_PROCESS.md) |
 | 变更日志 | [constitution/CHANGELOG.md](constitution/CHANGELOG.md) |
 | 宪法目录说明 | [constitution/README.md](constitution/README.md) |

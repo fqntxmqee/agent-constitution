@@ -89,6 +89,7 @@
 - 红队挑战方法：`agents/docs/specs/constitution/red-team-simulation/RED_TEAM_METHOD.md`
 - 蓝队完善方法：`agents/docs/specs/constitution/red-team-simulation/BLUE_TEAM_METHOD.md`
 - 推演报告模板：`agents/docs/specs/constitution/red-team-simulation/REPORT_TEMPLATE.md`
+- 审计清单：`agents/docs/specs/constitution/audit/AUDIT_CHECKLIST.md`
 
 ---
 **配置状态**: ✅ V3.17.0 已生效  

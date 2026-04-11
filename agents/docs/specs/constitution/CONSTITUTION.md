@@ -13,7 +13,7 @@
 
 ---
 
-## 📚 核心规范文档（8 个）
+## 📚 核心规范文档（12 个）
 
 ### 1. 变更分类规范
 **文件**: [change-classification/CONSTITUTION_CHANGE_CLASSIFICATION.md](change-classification/CONSTITUTION_CHANGE_CLASSIFICATION.md)  
@@ -57,6 +57,32 @@
 - 审计 SLA（Type-A:24h / Type-B:4h）
 
 **飞书链接**: https://feishu.cn/docx/PEK8d1z6loFqY3xBiZ4cGI58nVc
+
+---
+
+### 3.1 实时熔断监控规范（V3.16.0 新增）
+**文件**: [audit/REAL_TIME_FUSE.md](audit/REAL_TIME_FUSE.md)  
+**说明**: 实时熔断监控执行规范
+
+**核心内容**:
+- 轮询频率：每 30 秒
+- 违规检测规则（VIO-001 ~ VIO-007）
+- 置信度分级与熔断决策
+- 熔断执行流程（STOP → SAVE → ALERT → WAIT）
+- 用户 Overrule 恢复机制
+- 与审计智能体集成
+
+---
+
+### 3.2 回归测试规范（V3.16.0 新增）
+**文件**: [audit/REGRESSION_TEST_SPEC.md](audit/REGRESSION_TEST_SPEC.md)  
+**说明**: 宪法规范回归测试规范
+
+**核心内容**:
+- 测试用例集（T001-T010）
+- 定时调度：每日 02:00
+- 测试报告生成
+- 失败告警机制
 
 ---
 
@@ -148,23 +174,6 @@
 **文件**: [architecture/L1_L4_FRAMEWORK.md](architecture/L1_L4_FRAMEWORK.md)  
 **说明**: AI 时代的软件需求与资产标准化框架
 
----
-
-### 11. 文档引用规范（V3.17.0 新增）
-**文件**: [audit/DOCUMENT_REFERENCE_RULES.md](audit/DOCUMENT_REFERENCE_RULES.md)  
-**说明**: 智能体文档生成后必须被正确引用的铁律
-
-**核心内容**:
-- 铁律：禁止生成未被引用的智能体文档
-- 有效引用定义（宪法索引/智能体配置/任务规约/代码引用/交叉引用）
-- 验证机制（生成时验证 + 审计验证 + Git Hook）
-- 违规处理（VIO-008 分级：A/B/C）
-- 例外情况（临时报告/日志文件/任务文件/会议纪要）
-- 审计检查清单（每 2 小时检查新增文档引用）
-
-**违规代码**: VIO-008（未引用文档违规）
-**飞书链接**: 待创建
-
 **核心内容**:
 - L1 领域层：业务边界（Bounded Context）
 - L2 场景层：业务价值流（用户完整目标）
@@ -180,7 +189,27 @@
 - 需求解决阶段：复用/扩展/新增 L4 功能点
 - 需求交付阶段：反向治理（代码 → 功能点注册）
 
-**飞书链接**: 待创建
+---
+
+### 11. 文档引用规范（V3.17.0 新增）
+**文件**: [audit/DOCUMENT_REFERENCE_RULES.md](audit/DOCUMENT_REFERENCE_RULES.md)  
+**说明**: 智能体文档生成后必须被正确引用的铁律
+
+**核心内容**:
+- 铁律：禁止生成未被引用的智能体文档
+- 有效引用定义（宪法索引/智能体配置/任务规约/代码引用/交叉引用）
+- 验证机制（生成时验证 + 审计验证 + Git Hook）
+- 违规处理（VIO-008 分级：A/B/C）
+- 例外情况（临时报告/日志文件/任务文件/会议纪要）
+- 审计检查清单（每 2 小时检查新增文档引用）
+
+**违规代码**: VIO-008（未引用文档违规）
+
+---
+
+### 12. 文档引用规范实施报告（V3.17.0 新增）
+**文件**: [audit/DOCUMENT_REFERENCE_RULES_IMPLEMENTATION.md](audit/DOCUMENT_REFERENCE_RULES_IMPLEMENTATION.md)  
+**说明**: 文档引用规范的落地实施记录与验证结果
 
 ---
 
@@ -200,43 +229,41 @@
 | 调试专家 | `agents/constitution/debugger/AGENTS.md` | ✅ V3.17.0 |
 | 红蓝推演 | `agents/constitution/red-team-simulation/AGENTS.md` | ✅ V3.17.0 |
 
+### 调试专家配套规范
+
+**文件**: [debugger/DEBUGGABILITY_CHECKLIST.md](debugger/DEBUGGABILITY_CHECKLIST.md)  
+**说明**: 可调试性审查清单
+
+**核心内容**:
+- 代码可调试性检查项
+- 日志记录规范
+- 断点调试支持
+- 错误追踪机制
+
+### 红蓝推演配套规范
+
+| 规范 | 文件 | 说明 |
+|------|------|------|
+| 红队方法 | [red-team-simulation/RED_TEAM_METHOD.md](red-team-simulation/RED_TEAM_METHOD.md) | 红队挑战方法论 |
+| 蓝队方法 | [red-team-simulation/BLUE_TEAM_METHOD.md](red-team-simulation/BLUE_TEAM_METHOD.md) | 蓝队防御与加固方法 |
+| 报告模板 | [red-team-simulation/REPORT_TEMPLATE.md](red-team-simulation/REPORT_TEMPLATE.md) | 推演报告标准模板 |
+
 **注**: V3.16.0 移除进展跟进智能体，职责由银河导航员接管
 
-### 多主 Agent 配置（V3.16.1 新增）
+### 多主 Agent 配置（V3.16.1 新增，部分计划中）
 
 **混合模式**: Hub-Spoke + 多主 Agent
 
-| 主 Agent | Label | 专长 | 运行时 |
-|----------|-------|------|--------|
-| 银河导航员 🧭 | `navigator` | 复杂任务协调 | subagent |
-| 代码专家 💻 | `code-expert` | 专业开发 | acp (Cursor) |
-| 数据分析师 📊 | `data-analyst` | 数据分析 | subagent |
-| 写作助手 ✍️ | `writing-assistant` | 内容创作 | subagent |
+| 主 Agent | Label | 专长 | 运行时 | 状态 |
+|----------|-------|------|--------|------|
+| 银河导航员 🧭 | `navigator` | 复杂任务协调 | subagent | ✅ 已配置 |
+| 代码专家 💻 | `code-expert` | 专业开发 | acp (Cursor) | 📋 计划中 |
+| 数据分析师 📊 | `data-analyst` | 数据分析 | subagent | 📋 计划中 |
+| 写作助手 ✍️ | `writing-assistant` | 内容创作 | subagent | 📋 计划中 |
 
 **路由策略**: 显式 > LLM 语义 > 关键词 > 默认
 
 **详见**: [agents/docs/multi-agent/HYBRID_MODE_CONFIG.md](../../../docs/multi-agent/HYBRID_MODE_CONFIG.md)
-
-### L1-L4 框架使用指南
-
-**需求澄清阶段**：
-- 识别 L1 领域 + L2 场景
-- 产出：《已确认提案》（含 L1/L2 定位）
-
-**需求理解阶段**：
-- 拆解 L3 业务活动
-- 编排 L4 功能点
-- 产出：L2→L3 映射表 + L3→L4 映射表
-
-**需求解决阶段**：
-- 复用/扩展/新增 L4 功能点
-- 按编排 DSL 生成代码
-
-**需求交付阶段**：
-- 反向治理（代码扫描 → 功能点注册）
-- 更新功能点向量库
-
-**详见**: [architecture/L1_L4_FRAMEWORK.md](architecture/L1_L4_FRAMEWORK.md)
 
 ### 决策记录（30 项）
 
@@ -293,26 +320,26 @@
 
 ---
 
-## 🎭 智能体团队（9 大智能体 + 2 个辅助）
+## 🎭 智能体团队（7 核心 + 2 辅助 = 9 个）
 
 **银河导航员** 🧭 - 总协调员（Hub）
 
 **核心智能体（7 个）**:
 | 昵称 | 智能体目录 | 职责 |
 |------|-----------|------|
-| **规则守护者** 🛡️ | `audit/` | 合规监察、熔断仲裁 |
+| **迷糊粉碎机** 🎯 | `requirement-clarification/` | 意图识别 |
 | **脑洞整理师** 💡 | `requirement-understanding/` | 产品设计、蓝图设计 |
 | **功能魔法师** 🪄 | `requirement-resolution/` | 架构师、方案执行 |
 | **挑刺小能手** 🔍 | `requirement-acceptance/` | QA、验收测试 |
 | **最后一公里** 📦 | `requirement-delivery/` | 交付专家 |
+| **规则守护者** 🛡️ | `audit/` | 合规监察、熔断仲裁 |
 | **事后诸葛亮** 📝 | `summary-reflection/` | 复盘分析 |
-| **需求澄清** 🎯 | `requirement-clarification/` | 意图识别 |
 
 **辅助智能体（2 个）**:
 | 昵称 | 智能体目录 | 职责 | 触发方式 |
 |------|-----------|------|---------|
-| **Bug 猎人** 🏹 | `debugger/` | 可调试性审查 + 根因分析 | 需求理解/解决阶段触发 |
-| **杠精本精** 🎭 | `red-team-simulation/` | 多视角分析 + 方案挑战 | 复杂度≥B 级自动触发 |
+| **Bug 猎人** 🔬 | `debugger/` | 可调试性审查 + 根因分析 | 需求理解/解决阶段触发 |
+| **红蓝推演师** 🎭 | `red-team-simulation/` | 多视角分析 + 方案挑战 | 复杂度≥B 级自动触发 |
 
 **详见**: [agents/constitution/TEAM_ROLES.md](../../../constitution/TEAM_ROLES.md)
 

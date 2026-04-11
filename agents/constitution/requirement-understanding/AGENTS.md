@@ -38,12 +38,12 @@
 
 | 模式 | 确认时限 | 完成时限 | 超时处理 |
 |------|---------|---------|----------|
-| **快速响应** | ≤10s | ≤60s | 60s 超时→熔断 |
-| **标准响应** | ≤30s | ≤5 分钟 | 2min 降级/5min 熔断 |
+| **快速响应** | ≤10s | ≤2 分钟 | 2min 超时→熔断 |
+| **标准响应** | ≤30s | ≤10 分钟 | 5min 降级/10min 熔断 |
 
 **说明**: 
-- 快速响应：B 级任务，≤60 秒完成
-- 标准响应：A/S 级任务，≤5 分钟完成
+- 快速响应：B 级任务（需生成完整 OpenSpec 四件套，60s 不现实）
+- 标准响应：A/S 级任务，含 L2→L3→L4 完整映射
 - 超时降级：返回「处理中」+ 异步完成
 
 ## 产出规范
@@ -62,6 +62,7 @@
 - 宪法索引：`agents/docs/specs/constitution/CONSTITUTION.md`
 - OpenSpec 规范：`agents/docs/specs/OPENSPEC_GUIDE.md`
 - L1-L4 框架：`agents/docs/specs/constitution/architecture/L1_L4_FRAMEWORK.md`
+- 审计清单：`agents/docs/specs/constitution/audit/AUDIT_CHECKLIST.md`
 
 ---
 **配置状态**: ✅ V3.17.0 已生效  
