@@ -3,6 +3,7 @@
 # 支撑智能体定时任务配置
 
 > 配置 2 个独立周期性支撑智能体：审计、总结反思
+> **V3.17.2 变更**: 新增银河导航员定时进展同步（每 2 小时，飞书投递）
 > **V3.17.1 变更**: 移除 progress-tracking 智能体
 > **V3.16.0 新增**: 实时熔断监控、回归测试
 
@@ -12,8 +13,9 @@
 
 | 智能体 | 周期 | 职责 | 配置文档 | 飞书推送 |
 |--------|------|------|----------|---------|
-| `audit` | 每 2 小时 | 合规检查，规约先行验证 | `agents/constitution/audit/AGENTS.md` | ✅ 消息 + 文档 |
+| `audit` | 每 2 小时（整点） | 合规检查，规约先行验证 | `agents/constitution/audit/AGENTS.md` | ✅ 消息 + 文档 |
 | `summary-reflection` | 每日 23:00 + 任务完成 | 复盘分析，知识沉淀 | `agents/constitution/summary-reflection/AGENTS.md` | ✅ 消息 + 文档 |
+| `main`（银河导航员） | 每 2 小时（奇数小时 :30） | 任务进展同步汇报 | `agents/constitution/GALAXY_NAVIGATOR.md` | ✅ 飞书私聊 |
 
 ---
 
@@ -36,12 +38,17 @@
 0 */2 * * * openclaw agent --agent audit --message "执行合规审计"
 0 23 * * * openclaw agent --agent summary-reflection --message "执行每日总结"
 
-# 宪法规范执行保障任务（V3.16.0 新增）
-# 回归测试 - 每日 02:00 执行 (低峰期)
-0 2 * * * cd /Users/fukai/project/openclaw-workspace && bash scripts/run-regression-test.sh >> agents/constitution/audit/logs/cron-regression-test.log 2>&1
+# 银河导航员定时进展同步（V3.17.2 新增）
+# 奇数小时 :30 执行（1:30, 3:30, ..., 19:30, 21:30），与 audit 偶数整点错开
+30 1-23/2 * * * openclaw agent --agent main --message "【定时同步】请汇报多智能体系统开发进展" --deliver --channel feishu --reply-to "user:ou_bb71789cc6f5dfec51e6603c6dace502"
 
-# 实时熔断监控恢复 - 每 2 分钟检查一次
-*/2 * * * * cd /Users/fukai/project/openclaw-workspace && bash scripts/check-and-restore-fuse.sh >> agents/constitution/audit/logs/cron-fuse-restorer.log 2>&1
+# 宪法规范执行保障任务（V3.16.0 新增）
+# 每日协同测试 - 每日 00:00
+0 0 * * * bash scripts/daily-collab-test.sh
+# 每周完整验证 - 每周日 03:00
+0 3 * * 0 bash scripts/weekly-full-validation.sh
+# 实时熔断监控 - 开机自启
+@reboot nohup bash scripts/real-time-fuse-monitor.sh > /dev/null 2>&1 &
 ```
 
 **实时熔断监控**:
@@ -79,10 +86,12 @@ fi
 | audit | `agents/constitution/audit/reports/YYYY-MM-DD-HHMM.md` |
 | summary-reflection | `agents/constitution/summary-reflection/reports/YYYY-MM-DD-daily.md` |
 | **实时熔断** | `agents/constitution/audit/logs/fuse-poll-YYYY-MM-DD.jsonl` |
-| **回归测试** | `agents/constitution/audit/reports/regression-test-YYYYMMDD-HHMMSS.md` |
+| **每日协同测试** | `agents/constitution/audit/logs/cron-daily-collab-test.log` |
+| **每周完整验证** | `agents/constitution/audit/logs/cron-weekly-full-validation.log` |
+| main（进展同步） | `~/.openclaw/logs/main-progress-sync.log` |
 
 **已移除**:
-- progress-tracking（V3.17.1）
+- progress-tracking（V3.17.1，职责由银河导航员定时同步接管）
 
 ---
 
@@ -102,7 +111,8 @@ fi
 
 ---
 
-**规范版本**: V3.17.1  
+**规范版本**: V3.17.2  
 **创建日期**: 2026-03-09  
-**最后更新**: 2026-04-04  
+**最后更新**: 2026-04-11  
+**V3.17.2 变更**: 新增银河导航员定时进展同步，同步实际 cron 配置  
 **V3.17.1 变更**: 移除 progress-tracking 智能体

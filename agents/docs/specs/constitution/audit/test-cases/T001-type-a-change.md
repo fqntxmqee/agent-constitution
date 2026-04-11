@@ -41,12 +41,12 @@ version: 1.0
 
 2. **执行需求澄清阶段**
    - 需求澄清智能体生成 clarification-report.md
-   - 包含 L1-L4 定位
+   - 包含 L1-L5 定位
    - 获取用户确认
 
 3. **执行 Gate #1 检查**
    - 检查 clarification-report.md 存在
-   - 检查 L1-L4 定位完整
+   - 检查 L1-L5 定位完整
    - 检查用户确认已获取
    - 记录 gate-records.md
 
@@ -110,7 +110,7 @@ version: 1.0
 
 ## 验收标准 (Checklist)
 
-- [ ] clarification-report.md 存在且包含 L1-L4 定位
+- [ ] clarification-report.md 存在且包含 L1-L5 定位
 - [ ] specs/requirements.md 存在且内容完整
 - [ ] specs/design.md 存在且内容完整
 - [ ] specs/tasks.md 存在且内容完整

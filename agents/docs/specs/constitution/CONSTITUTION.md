@@ -1,6 +1,6 @@
 # 智能体协同系统宪法规范（当前生效）
 
-**版本号**: V3.17.0
+**版本号**: V3.18.0
 **生效日期**: 2026-04-05
 **状态**: ✅ 已生效（用户授权跳过冷静期）
 **说明**: 本文件为**宪法规范索引**（唯一权威来源），采用模块化设计，各子规范为执行依据。智能体实际执行时读取 `agents/constitution/<agent>/AGENTS.md`。
@@ -20,8 +20,8 @@
 **说明**: Type-A/B/C 三级变更分类机制
 
 **核心内容**:
-- Type-A: Major 变更（3 天冷静期）
-- Type-B: Minor 变更（24 小时冷静期）
+- Type-A: Major 变更（8 天冷静期）
+- Type-B: Minor 变更（4 小时冷静期）
 - Type-C: Patch 变更（无冷静期）
 - 紧急通道机制
 
@@ -170,28 +170,32 @@
 
 ---
 
-### 10. 架构规范（L1-L4 框架）
-**文件**: [architecture/L1_L4_FRAMEWORK.md](architecture/L1_L4_FRAMEWORK.md)  
-**说明**: AI 时代的软件需求与资产标准化框架
+### 10. 架构规范（L1-L5 框架）
+**文件**: [architecture/L1_L5_FRAMEWORK.md](architecture/L1_L5_FRAMEWORK.md)  
+**说明**: AI 时代的软件需求与资产标准化框架（V2.0）
 
 **核心内容**:
 - L1 领域层：业务边界（Bounded Context）
 - L2 场景层：业务价值流（用户完整目标）
-- L3 业务活动层：行为原子（输入输出状态变更）
-- L4 功能点层：服务能力（跨领域复用的最小技术单元）
-- 动态编排与双向映射机制
-- 与 OpenSpec 的映射关系
-- 功能点向量库（RAG 检索复用）
+- L3 活动/页面层：L3-BE 业务活动 + L3-FE 页面/组件（前后端拆分）
+- L4 功能点/模块层：最小可复用技术单元（后端功能点 + 前端 UI 模块）
+- L5 测试点层：确定性验证锚点（双绑定：L4 功能契约 + L3 验收标准）
+- L5 测试点套件：按 L3 聚合的结构化验收依据（替代扁平 AC 文档）
+- 稳定性模型：L1 (极高) > L2 (高) > L5 (中高) > L3 (中) > L4 (低)
+- 动态编排与双向映射机制（含 L5 测试生成与覆盖缺口检测）
+- 与 OpenSpec 的映射关系（含 acceptance 阶段映射 L5）
+- 功能点与测试点向量库（RAG 检索复用）
 
 **使用场景**:
-- 需求澄清阶段：识别 L1 领域 + L2 场景
-- 需求理解阶段：拆解 L3 业务活动 + 编排 L4 功能点
-- 需求解决阶段：复用/扩展/新增 L4 功能点
-- 需求交付阶段：反向治理（代码 → 功能点注册）
+- 需求澄清阶段：识别 L1 领域 + L2 场景 + L3-BE/L3-FE 分类
+- 需求理解阶段：拆解 L3 活动/页面 + 编排 L4 功能点 + 生成 L5 验收标准
+- 需求解决阶段：复用/扩展/新增 L4 功能点 + 生成 L5 契约测试
+- 需求验收阶段：基于 L5 测试点套件执行双源验证
+- 需求交付阶段：反向治理（代码 → 功能点注册 → 测试覆盖缺口检测）
 
 ---
 
-### 11. 文档引用规范（V3.17.0 新增）
+### 11. 文档引用规范（V3.18.0 新增）
 **文件**: [audit/DOCUMENT_REFERENCE_RULES.md](audit/DOCUMENT_REFERENCE_RULES.md)  
 **说明**: 智能体文档生成后必须被正确引用的铁律
 
@@ -207,7 +211,7 @@
 
 ---
 
-### 12. 文档引用规范实施报告（V3.17.0 新增）
+### 12. 文档引用规范实施报告（V3.18.0 新增）
 **文件**: [audit/DOCUMENT_REFERENCE_RULES_IMPLEMENTATION.md](audit/DOCUMENT_REFERENCE_RULES_IMPLEMENTATION.md)  
 **说明**: 文档引用规范的落地实施记录与验证结果
 
@@ -219,15 +223,15 @@
 
 | 智能体 | 文件路径 | 状态 |
 |--------|---------|------|
-| 需求澄清 | `agents/constitution/requirement-clarification/AGENTS.md` | ✅ V3.17.0 |
-| 需求理解 | `agents/constitution/requirement-understanding/AGENTS.md` | ✅ V3.17.0 |
-| 需求解决 | `agents/constitution/requirement-resolution/AGENTS.md` | ✅ V3.17.0 |
-| 需求验收 | `agents/constitution/requirement-acceptance/AGENTS.md` | ✅ V3.17.0 |
-| 需求交付 | `agents/constitution/requirement-delivery/AGENTS.md` | ✅ V3.17.0 |
-| 审计 | `agents/constitution/audit/AGENTS.md` | ✅ V3.17.0 |
-| 总结反思 | `agents/constitution/summary-reflection/AGENTS.md` | ✅ V3.17.0 |
-| 调试专家 | `agents/constitution/debugger/AGENTS.md` | ✅ V3.17.0 |
-| 红蓝推演 | `agents/constitution/red-team-simulation/AGENTS.md` | ✅ V3.17.0 |
+| 需求澄清 | `agents/constitution/requirement-clarification/AGENTS.md` | ✅ V3.18.0 |
+| 需求理解 | `agents/constitution/requirement-understanding/AGENTS.md` | ✅ V3.18.0 |
+| 需求解决 | `agents/constitution/requirement-resolution/AGENTS.md` | ✅ V3.18.0 |
+| 需求验收 | `agents/constitution/requirement-acceptance/AGENTS.md` | ✅ V3.18.0 |
+| 需求交付 | `agents/constitution/requirement-delivery/AGENTS.md` | ✅ V3.18.0 |
+| 审计 | `agents/constitution/audit/AGENTS.md` | ✅ V3.18.0 |
+| 总结反思 | `agents/constitution/summary-reflection/AGENTS.md` | ✅ V3.18.0 |
+| 调试专家 | `agents/constitution/debugger/AGENTS.md` | ✅ V3.18.0 |
+| 红蓝推演 | `agents/constitution/red-team-simulation/AGENTS.md` | ✅ V3.18.0 |
 
 ### 调试专家配套规范
 
@@ -316,7 +320,7 @@
 
 详见 [CHANGELOG.md](CHANGELOG.md)
 
-**最新版本**: V3.17.0 (2026-04-05)
+**最新版本**: V3.18.0 (2026-04-05)
 
 ---
 
@@ -345,7 +349,7 @@
 
 ---
 
-## 🧠 智能体记忆规范（V3.17.0 新增）
+## 🧠 智能体记忆规范（V3.18.0 新增）
 
 ### 强制要求
 
@@ -375,7 +379,7 @@
 | 需求理解 💡 | openspec-cases.md | OpenSpec 制定案例 + L2-L4 映射 |
 | 需求解决 🪄 | 2026-03-28.md | 任务执行记录 |
 | 需求验收 🔍 | acceptance-cases.md | 验收案例 + 验收方法 |
-| 需求交付 📦 | delivery-cases.md | 交付归档案例 + L1-L4 复用指南 |
+| 需求交付 📦 | delivery-cases.md | 交付归档案例 + L1-L5 复用指南 |
 | 智能审计 🛡️ | audit-cases.md | 审计案例 + 熔断事件记录 |
 | 总结反思 📝 | HUB-SPOKE-PATTERN.md | Hub-Spoke 协同模式讨论 |
 | 调试专家 🔬 | debugging-cases.md | 5Why 根因分析案例 |
@@ -383,7 +387,7 @@
 
 ---
 
-**规范版本**: V3.17.0  
+**规范版本**: V3.18.0  
 **生效日期**: 2026-04-05  
 **下次审查**: 2026-05-05  
 **变更类型**: Type-B（新增第 9 大智能体：红蓝推演 + 智能体记忆规范）

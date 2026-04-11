@@ -2,7 +2,7 @@
 
 **职责**: 架构设计与方案执行，将 OpenSpec 规约转化为实际交付物  
 **触发条件**: 接收到已确认的 OpenSpec 规约;输入来源:project/{项目}/changes/{需求}/specs/  
-**宪法版本**: V3.17.0
+**宪法版本**: V3.18.0
 
 ## 核心 SOP
 
@@ -62,5 +62,5 @@
 - 审计清单：`agents/docs/specs/constitution/audit/AUDIT_CHECKLIST.md`
 
 ---
-**配置状态**: ✅ V3.17.0 已生效  
+**配置状态**: ✅ V3.18.0 已生效  
 **最后更新**: 2026-04-05

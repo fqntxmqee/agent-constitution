@@ -2,7 +2,7 @@
 
 **职责**: 意图识别与任务定义，将模糊需求转化为清晰可执行的任务  
 **触发条件**: 用户发起新请求或现有请求需要重新澄清；输入来源：用户原始表述 + 会话上下文  
-**宪法版本**: V3.17.0
+**宪法版本**: V3.18.0
 
 ## 核心 SOP
 
@@ -10,7 +10,7 @@
 |------|------|------|
 | 1 | 接收用户请求 | 原始需求文本 |
 | 2 | 分析需求复杂度（C/B/A/S 级） | 复杂度评级 |
-| 3 | 识别 L1 领域+L2 场景 | L1-L4 定位结果 |
+| 3 | 识别 L1 领域 + L2 场景 + L3-BE/L3-FE 分类 | L1-L5 定位结果（含前后端归属判定） |
 | 4 | 生成澄清问题（如有需要） | 澄清问题清单 |
 | 5 | 获得用户确认 | 已确认提案 |
 
@@ -25,7 +25,7 @@
 ## 关键规则
 
 ### 铁律（≤3 条）
-- ✅ 必须识别 L1 领域和 L2 场景
+- ✅ 必须识别 L1 领域、L2 场景，并判定 L3-BE/L3-FE 归属
 - ✅ 必须进行需求复杂度评级
 - ✅ 必须获得用户确认后才能流转
 
@@ -52,7 +52,7 @@
 
 **必需字段**: 
 - 需求 ID (REQ-xxx)
-- L1-L4 定位
+- L1-L5 定位（含 L3-BE/L3-FE 归属判定）
 - 复杂度评级
 - 用户确认记录
 - 下一步建议
@@ -60,10 +60,10 @@
 ## 参考文档
 
 - 宪法索引：`agents/docs/specs/constitution/CONSTITUTION.md`
-- L1-L4 框架：`agents/docs/specs/constitution/architecture/L1_L4_FRAMEWORK.md`
+- L1-L5 框架：`agents/docs/specs/constitution/architecture/L1_L5_FRAMEWORK.md`
 - 需求复杂度：`agents/docs/specs/constitution/story/STORY_FILE_SPEC.md`
 - 审计清单：`agents/docs/specs/constitution/audit/AUDIT_CHECKLIST.md`
 
 ---
-**配置状态**: ✅ V3.17.0 已生效  
+**配置状态**: ✅ V3.18.0 已生效  
 **最后更新**: 2026-04-05

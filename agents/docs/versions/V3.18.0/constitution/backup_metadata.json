@@ -1,0 +1,6 @@
+{
+  "version": "V3.18.0",
+  "backup_date": "2026-04-11",
+  "previous_version": "V3.17.0",
+  "change_summary": "L1-L5 架构框架升级：L3 拆分、L5 测试点层、稳定性模型、验收智能体 SOP 重构"
+}

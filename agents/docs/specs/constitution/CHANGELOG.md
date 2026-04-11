@@ -1,5 +1,77 @@
 # 宪法规范变更日志
 
+## V3.18.0 (2026-04-11)
+
+**状态**: ✅ 已生效
+
+### 核心变更：L1-L5 架构框架升级
+
+**从 L1-L4 四层架构升级为 L1-L5 五层架构**
+
+### 新增
+
+**L5 测试点层 (Test Point)**
+- 确定性验证锚点，三层结构：L3/L4 → L5 测试点（按分类聚合）→ 测试用例
+- 双绑定模式：绑定 L4（功能契约）+ 绑定 L3（验收标准）
+- 测试点分类维度：交互类、性能类、逻辑类、安全类（可扩展）
+- 跨域引用规则：L5 测试点归属跟随 L4 所属域
+
+**L5 测试点套件与验收关联**
+- 按 L3 聚合的测试点集合，替代原有扁平 acceptance-criteria.md
+- 跨迭代累积机制（追加/修订/废弃）
+- 验收智能体双源验证（AC 人工比对 + CT 测试通过率）
+
+**稳定性模型**
+- 五级稳定性梯度：L1 (极高) > L2 (高) > L5 (中高) > L3 (中) > L4 (低)
+- 变更影响链与审批要求
+
+**新增框架文档**
+- `architecture/L1_L5_FRAMEWORK.md`（V2.0，402 行，替代原 L1_L4_FRAMEWORK.md）
+
+### 修订
+
+**L3 前后端拆分**
+- L3-BE：后端业务活动（输入/输出/状态变更）
+- L3-FE：前端页面/组件（用户交互 + 渲染逻辑）
+
+**智能体 SOP 升级**
+- 需求澄清：SOP 步骤 3 增加 L3-BE/L3-FE 归属判定
+- 需求理解：新增步骤 4「生成 L5 验收标准」；铁律增加 L5 必需产出
+- 需求验收：SOP 重构为 L5 双源验证；验收报告增加套件覆盖度和分类维度通过率
+- 需求交付：归档结构升级为 L3-{BE|FE}；L4 功能点为核心归档物，L5 套件为附属
+
+**Hard Gate 检查清单升级**
+- Gate #1：L1-L4 定位 → L1-L5 定位（含 L3-BE/FE 归属）
+- Gate #2：新增「L5 验收级测试点已生成」检查项
+- Gate #3：新增「L5 契约测试通过」检查项
+
+**银河导航员输入输出契约**
+- 功能魔法师产出增加 L5 契约测试
+- 挑刺小能手产出增加 L5 套件覆盖度
+- 最后一公里产出增加 L5 测试产物归档
+
+### 删除
+
+- `architecture/L1_L4_FRAMEWORK.md`（已被 L1_L5_FRAMEWORK.md 替代）
+
+### 受影响文件
+
+1. `agents/docs/specs/constitution/architecture/L1_L5_FRAMEWORK.md`（新建）
+2. `agents/docs/specs/constitution/CONSTITUTION.md`
+3. `agents/constitution/GALAXY_NAVIGATOR.md`
+4. `agents/constitution/requirement-clarification/AGENTS.md`
+5. `agents/constitution/requirement-understanding/AGENTS.md`
+6. `agents/constitution/requirement-acceptance/AGENTS.md`
+7. `agents/constitution/requirement-delivery/AGENTS.md`
+8. `agents/docs/specs/constitution/HARD_GATE_SPEC.md`
+9. `agents/docs/specs/constitution/audit/test-cases/T001-type-a-change.md`
+10. `agents/docs/specs/constitution/audit/test-cases/T009-l1-l4-framework.md`
+11. `agents/docs/specs/constitution/audit/test-cases/T010-multi-agent-collab.md`
+12. `agents/docs/specs/constitution/audit/REGRESSION_TEST_SPEC.md`
+13. 全部 9 个智能体 AGENTS.md + 根 AGENTS.md + 所有规范文档（版本号升级）
+
+---
+
 ## V3.17.0 (2026-03-28 11:52)
 
 **状态**: ✅ 已交付（Git 提交 + 标签 v1.0.0-red-team-simulation）
